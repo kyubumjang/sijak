@@ -1,3 +1,5 @@
+import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: (config, { isServer }) => {
@@ -16,5 +18,9 @@ const nextConfig = {
     domains: ["images.unsplash.com", "plus.unsplash.com", "www.50plus.or.kr"],
   },
 };
+
+if (process.env.NODE_ENV === "development") {
+  await setupDevPlatform();
+}
 
 export default nextConfig;
