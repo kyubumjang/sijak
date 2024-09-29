@@ -21,6 +21,8 @@ import { toast } from "sonner";
 import useClassInfo from "@/entities/class/api/useClassInfo";
 import { useParams } from "next/navigation";
 
+export const runtime = "edge";
+
 const ClassInfoPage = () => {
   const [classInfo, setClassInfo] = useState<Class>();
   const tempApplyStatus = true;

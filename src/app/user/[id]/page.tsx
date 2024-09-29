@@ -8,6 +8,8 @@ import { User } from "@/entities/user/model/user";
 import { useGeoLocation } from "@/shared/lib/useGeolocation";
 import { useState } from "react";
 
+export const runtime = "edge";
+
 const UserInfoPage = () => {
   // TODO: 전역 로그인된 유저 정보로 수정
   const [loginedUser, setLoginedUser] = useState<User>({
