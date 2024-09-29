@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import useGetLoginUserInfo from "@/features/login/api/useGetLoginUserInfo";
 import usePostKakaoCode from "@/features/login/api/usePostKakaoCode";
 
-const LoginCallbackPage = () => {
+const LoginCallback = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
@@ -47,10 +47,16 @@ const LoginCallbackPage = () => {
   }, [code]);
 
   return (
+    <div className="flex w-full h-screen justify-center items-center">
+      <ScaleLoader color="#4F118C" />
+    </div>
+  );
+};
+
+const LoginCallbackPage = () => {
+  return (
     <Suspense>
-      <div className="flex w-full h-screen justify-center items-center">
-        <ScaleLoader color="#4F118C" />
-      </div>
+      <LoginCallback />
     </Suspense>
   );
 };
