@@ -65,6 +65,11 @@ const config: Config = {
           "5": "hsl(var(--chart-5))",
         },
       },
+      screens: {
+        mobile: "360px",
+        tablet: "768px",
+        desktop: "1440px",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

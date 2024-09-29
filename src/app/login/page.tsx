@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Button,
   Tooltip,
@@ -7,38 +9,42 @@ import {
 } from "@/shared/ui";
 
 import Image from "next/image";
-import { RiKakaoTalkFill } from "react-icons/ri";
 
 const LoginPage = () => {
+  const REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
+  const REDIRECT_URI = process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI;
+  const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const handleKakaoLogin = () => {
+    window.location.href = link;
+  };
+
   return (
-    <div className="flex flex-col w-full h-full justify-center items-center pb-4">
-      <div className="flex flex-col gap-24">
+    <div className="flex flex-col w-full h-[calc(100vh-64px)] justify-center items-center pb-4">
+      <div className="flex flex-col w-full gap-24">
         <div className="flex flex-col gap-10">
-          <div className="flex w-full flex-col justify-center items-center gap-2">
-            <div className="text-gray-700 text-2xl">반가워요!</div>
-            <div className="text-gray-900 font-bold text-3xl">
-              오늘부터 시ː작해요!
-            </div>
+          <div className="flex w-full flex-col justify-center items-center">
+            <div className="text-gray-700 text-4xl font-bold ">반가워요!</div>
+            <div className="text-gray-900 text-3xl">오늘부터 시ː작해요!</div>
           </div>
-          <Image
-            src="https://plus.unsplash.com/premium_photo-1687203673190-d39c3719123a?q=80&w=3028&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="hello"
-            width={351}
-            height={158}
-            priority
-            className="w-auto h-auto"
-          />
         </div>
         <div className="flex flex-col items-center justify-center gap-4">
           <TooltipProvider>
+            {/* TODO: TOOLTIP ARROW */}
             <Tooltip>
               <TooltipTrigger asChild>
+                {/* TODO: 카카오 색상으로 변경 */}
                 <Button
-                  className="bg-amber-300 hover:bg-amber-400 text-black"
+                  className="bg-yellow-300 hover:bg-yellow-400 text-black w-[351px] h-[61px]"
                   size="lg"
+                  onClick={handleKakaoLogin}
                 >
-                  <div className="flex gap-2 items-center justify-center">
-                    <RiKakaoTalkFill />
+                  <div className="flex gap-2 items-center justify-center text-base">
+                    <Image
+                      src={"/icons/kakao_logo.svg"}
+                      alt="kakao logo"
+                      width={18}
+                      height={18}
+                    />
                     카카오톡 간편 로그인
                   </div>
                 </Button>

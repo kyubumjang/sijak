@@ -2,10 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { Class } from "@/entities/class/model/class";
 import { ClassList } from "@/entities/class/ui";
-import Link from "next/link";
+import SkeletonCard from "@/entities/class/ui/Class/SkeletonCard/SkeletonCard";
 import useLikeClassList from "@/features/like/api/useLikeClassList";
 
 const LikePage = () => {
@@ -27,25 +26,25 @@ const LikePage = () => {
   }, [handleLikeClassDataList, isSuccess]);
 
   return (
-    <div className="flex flex-col w-full h-full justify-start items-center p-4 min-h-[336px]">
+    <div className="flex flex-col w-full h-screen justify-start items-center p-4 min-h-[336px] pt-20 bg-[#E9E8EC]">
       <div className="flex flex-row w-full h-12 items-start justify-center">
-        <div className="absolute left-32">
-          <Link href="/">
-            <div className="flex flex-col items-center justify-center">
-              <ArrowLeftIcon width={32} height={32} />
-              <div className="text-xs">뒤로가기</div>
-            </div>
-          </Link>
+        <div className="flex flew-row gap-1">
+          <div className="text-gray-900 text-[32px] font-bold">
+            내가 찜한 클래스
+          </div>
+          <div className="text-gray-900 text-[32px]">한번에 보기</div>
         </div>
-        <div className="text-gray-900 text-3xl pb-15 ">내가 찜한 클래스</div>
       </div>
-      <div className="flex flex-col pt-14">
+      <div className="flex flex-col pt-14 pb-[209px]">
         <div className="flex px-[120px]">
-          {/* FIXME: 수정 필요 */}
           {isLoading ? (
-            <div>loading...</div>
+            <div className="flex flex-row space-x-6">
+              <SkeletonCard type="col" />
+              <SkeletonCard type="col" />
+              <SkeletonCard type="col" />
+            </div>
           ) : classListData && isSuccess ? (
-            <ClassList classListData={classListData} />
+            <ClassList classListData={classListData} type="col" />
           ) : (
             <div>클래스가 존재하지 않습니다</div>
           )}

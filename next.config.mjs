@@ -13,7 +13,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ["images.unsplash.com", "plus.unsplash.com"],
+    domains: ["images.unsplash.com", "plus.unsplash.com", "www.50plus.or.kr"],
   },
 };
 

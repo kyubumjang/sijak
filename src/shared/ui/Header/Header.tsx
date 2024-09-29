@@ -7,10 +7,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../Dialog";
-import { HeartIcon, PersonIcon } from "@radix-ui/react-icons";
+import { HeartFilledIcon, PersonIcon } from "@radix-ui/react-icons";
 
 import { Button } from "../Button";
+import Image from "next/image";
 import Link from "next/link";
+import { MdPerson } from "react-icons/md";
 import { User } from "@/entities/user/model/user";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -18,6 +20,9 @@ import { useState } from "react";
 const Header = () => {
   // TODO: 전역 상태 관리 - 로그인 된 유저 여부 판단
   const [loginedUser, setLoginedUser] = useState<User>();
+
+  /* FIXME: isLogin 개발 편의상 임시 처리 */
+  const [isLogin, setIsLogin] = useState(false);
   const [openLike, setOpenLike] = useState(false);
   const [openUser, setOpenUser] = useState(false);
   const router = useRouter();
@@ -42,74 +47,83 @@ const Header = () => {
   };
 
   return (
-    <div className="flex w-full h-16 justify-between items-center gap-2 p-2 fixed top-0 bg-white z-10">
-      <div className="flex flex-col w-20 justify-center items-center gap-2">
+    <div className="flex w-full h-16 justify-between items-center gap-2 p-2 fixed top-0 bg-white z-10 px-[120px] mobile:px-4">
+      <div className="flex flex-col w-20 min-w-[55px] justify-center items-center gap-2">
         <Link href="/">
-          <h1 className="font-bold text-2xl">시ː작</h1>
+          <Image
+            src="/images/sijak_logo.png"
+            alt="sijak_logo"
+            width={94}
+            height={80}
+          />
         </Link>
       </div>
+      {/* FIXME: 수정 필요 */}
       <div className="flex w-full">
-        <span className="flex w-full text-xl">
-          50+ 시ː니어를 위한 문화생활 플랫폼
-        </span>
+        <div className="desktop:flex tablet:flex mobile:hidden flex-row items-center justify-center w-full gap-0">
+          <div className="flex min-w-[80px] text-md text-[#4F118C]">
+            50+ 시ː니어
+          </div>
+          <div className="flex w-full min-w-44 text-md text-gray-600">
+            를 위한 문화생활 플랫폼
+          </div>
+        </div>
       </div>
       <div className="flex flex-row items-start justify-center gap-2 h-full">
-        {loginedUser ? (
-          <div
-            className="flex flex-col items-center justify-center w-[94px] h-full cursor-pointer"
-            onClick={handleLogout}
-          >
-            <div className="flex justify-center text-sm">로그아웃</div>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center w-[94px] h-full cursor-pointer">
-            <Link href="/login">
-              <div className="flex justify-center text-sm">로그인</div>
-            </Link>
-          </div>
-        )}
-        {loginedUser ? (
+        {/* FIXME: isLogin 개발 편의상 임시 처리 */}
+        {loginedUser && isLogin ? (
           <Link href="/like">
-            <div className="flex flex-col items-center justify-center w-[32px] h-[58px]">
-              <HeartIcon className="text-gray-600" width={24} height={24} />
-              <div className="flex justify-center text-sm">찜</div>
+            <div className="flex flex-col items-center justify-center w-[38px] h-[52px]">
+              <Image
+                src={"/icons/heart_default.svg"}
+                alt="heart-icons"
+                width={28}
+                height={28}
+              />
+              <div className="flex justify-center text-sm text-gray-400">
+                찜
+              </div>
             </div>
           </Link>
         ) : (
           <Dialog open={openLike} onOpenChange={setOpenLike}>
             <DialogTrigger>
               <div
-                className="flex flex-col items-center justify-center w-[32px] h-[58px] cursor-pointer"
+                className="flex flex-col items-center justify-center w-[38px] h-[52px] cursor-pointer"
                 onClick={handleOpenLikeDialog}
               >
-                <HeartIcon className="text-gray-600" width={24} height={24} />
-                <div className="flex justify-center text-sm">찜</div>
+                <Image
+                  src={"/icons/heart_default.svg"}
+                  alt="heart-icons"
+                  width={28}
+                  height={28}
+                />
+                <div className="flex justify-center text-sm text-gray-400">
+                  찜
+                </div>
               </div>
             </DialogTrigger>
             <DialogPortal>
-              <DialogTitle>로그인</DialogTitle>
               <DialogContent>
-                <div className="flex flex-col gap-[60px]">
-                  <div className="flex flex-col items-center justify-center gap-5">
-                    <div className="text-gray-900 font-bold text-3xl">
-                      로그인이 필요해요!
+                <div className="flex flex-col gap-[19px] py-10">
+                  <div className="flex flex-col items-center justify-center">
+                    <div className="font-bold text-[28px] h-[71px] content-center">
+                      로그인이 필요한 서비스 입니다.
                     </div>
-                    <div className="flex flex-col items-center justify-center">
-                      <div className="text-gray-700 text-lg">
-                        카카오 간편 로그인을 통해
-                      </div>
-                      <div className="text-gray-700 text-lg">
-                        편하게 이용해보세요!
-                      </div>
+                    <div
+                      className="text-[#737373] text-base underline cursor-pointer"
+                      onClick={linkToLogin}
+                    >
+                      간편 회원가입
                     </div>
                   </div>
                   <div className="flex items-center justify-center ">
                     <Button
-                      className="w-[334px] h-[66px] text-lg"
+                      className="w-[410px] h-[56px] text-2xl font-semibold bg-[#4F118C]"
                       type="submit"
                       onClick={linkToLogin}
                     >
-                      간편 로그인 하러 가기
+                      로그인 하기
                     </Button>
                   </div>
                 </div>
@@ -117,11 +131,17 @@ const Header = () => {
             </DialogPortal>
           </Dialog>
         )}
-        {loginedUser ? (
+        {/* FIXME: isLogin 개발 편의상 임시 처리 */}
+        {loginedUser && isLogin ? (
           <Link href={`/user/${loginedUser.id}`}>
-            <div className="flex flex-col items-center justify-center w-[70px] h-[58px]">
-              <PersonIcon className="text-gray-600" width={24} height={24} />
-              <div className="flex w-[70px] justify-center text-sm">
+            <div className="flex flex-col items-center justify-center w-[70px] h-[52px]">
+              <Image
+                src={"/icons/user_default.svg"}
+                alt="user-icons"
+                width={28}
+                height={28}
+              />
+              <div className="flex w-[70px] justify-center text-sm text-gray-400">
                 마이페이지
               </div>
             </div>
@@ -130,11 +150,16 @@ const Header = () => {
           <Dialog open={openUser} onOpenChange={setOpenUser}>
             <DialogTrigger>
               <div
-                className="flex flex-col items-center justify-center w-[70px] h-[58px]"
+                className="flex flex-col items-center justify-center w-[70px] h-[52px]"
                 onClick={handleOpenUserDialog}
               >
-                <PersonIcon className="text-gray-600" width={24} height={24} />
-                <div className="flex w-[70px] justify-center text-sm">
+                <Image
+                  src={"/icons/user_default.svg"}
+                  alt="user-icons"
+                  width={28}
+                  height={28}
+                />
+                <div className="flex w-[70px] justify-center text-sm text-gray-400">
                   마이페이지
                 </div>
               </div>
@@ -142,27 +167,25 @@ const Header = () => {
             <DialogPortal>
               <DialogTitle>마이페이지</DialogTitle>
               <DialogContent>
-                <div className="flex flex-col gap-[60px]">
-                  <div className="flex flex-col items-center justify-center gap-5">
-                    <div className="text-gray-900 font-bold text-3xl">
-                      로그인이 필요해요!
+                <div className="flex flex-col gap-[19px] py-10">
+                  <div className="flex flex-col items-center justify-center">
+                    <div className="font-bold text-[28px] h-[71px] content-center">
+                      로그인이 필요한 서비스 입니다.
                     </div>
-                    <div className="flex flex-col items-center justify-center">
-                      <div className="text-gray-700 text-lg">
-                        카카오 간편 로그인을 통해
-                      </div>
-                      <div className="text-gray-700 text-lg">
-                        편하게 이용해보세요!
-                      </div>
+                    <div
+                      className="text-[#737373] text-base underline cursor-pointer"
+                      onClick={linkToLogin}
+                    >
+                      간편 회원가입
                     </div>
                   </div>
                   <div className="flex items-center justify-center ">
                     <Button
-                      className="w-[334px] h-[66px] text-lg"
+                      className="w-[410px] h-[56px] text-2xl font-semibold bg-[#4F118C]"
                       type="submit"
                       onClick={linkToLogin}
                     >
-                      간편 로그인 하러 가기
+                      로그인 하기
                     </Button>
                   </div>
                 </div>

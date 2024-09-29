@@ -3,16 +3,28 @@ import { ClassCard } from "../ClassCard";
 
 interface ClassListProps {
   classListData: Class[];
+  type: "row" | "col";
 }
 
 const ClassList = (props: ClassListProps) => {
-  const { classListData } = props;
+  const { classListData, type } = props;
 
-  return (
-    <div className="grid grid-cols-3 gap-4">
+  return type === "col" ? (
+    <div className="w-full grid grid-cols-3 gap-6 mobile:grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3">
       {classListData &&
         classListData.map((classData) => {
-          return <ClassCard key={classData.id} classData={classData} />;
+          return (
+            <ClassCard key={classData.id} classData={classData} type={type} />
+          );
+        })}
+    </div>
+  ) : (
+    <div className="w-full grid grid-cols-2 gap-6 mobile:grid-cols-1 tablet:grid-cols-1 desktop:grid-cols-2 pb-[265px]">
+      {classListData &&
+        classListData.map((classData) => {
+          return (
+            <ClassCard key={classData.id} classData={classData} type={type} />
+          );
         })}
     </div>
   );
