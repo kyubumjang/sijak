@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { ScaleLoader } from "react-spinners";
+import { Suspense } from "react";
 import { toast } from "sonner";
 import { useEffect } from "react";
 import useGetLoginUserInfo from "@/features/login/api/useGetLoginUserInfo";
@@ -46,9 +47,11 @@ const LoginCallbackPage = () => {
   }, [code]);
 
   return (
-    <div className="flex w-full h-screen justify-center items-center">
-      <ScaleLoader color="#4F118C" />
-    </div>
+    <Suspense>
+      <div className="flex w-full h-screen justify-center items-center">
+        <ScaleLoader color="#4F118C" />
+      </div>
+    </Suspense>
   );
 };
 
