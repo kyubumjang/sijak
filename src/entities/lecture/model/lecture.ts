@@ -1,0 +1,281 @@
+import { Payload } from "@/shared/model/api";
+
+export interface LectureImage {
+  id: number;
+  url: string;
+}
+
+export interface LectureInstructorHistory {
+  id: number;
+  content: string;
+}
+export interface LectureInstructor {
+  id: number;
+  name: string;
+  instructor_history: LectureInstructorHistory[];
+}
+
+export interface LecturePeriod {
+  startDate: string;
+  endDate: string;
+  total: number;
+}
+export interface Lecture {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  time: string;
+  capacity: number;
+  link: string;
+  location: string;
+  status: boolean;
+  thumbnail: string;
+  heart: boolean;
+  address: string;
+  period: LecturePeriod[];
+  division: string;
+  category: string;
+  condition: string;
+  detail: string;
+  certification: string;
+  need: string;
+  distance: string;
+  estimatedTime: string;
+  images: LectureImage[];
+  day_of_week: string;
+  hosted_by: string;
+  d_day: number;
+  text_book_name: string;
+  text_book_price: number;
+  instructor_name: LectureInstructor[];
+  latitude: number;
+  longitude: number;
+  // educationPlan: string;
+}
+
+type LectureTitleType =
+  | "capacity"
+  | "hosted_by"
+  | "division"
+  | "period"
+  | "time"
+  | "price"
+  | "location";
+
+export const LectureTitleEnum = {
+  capacity: "인원",
+  hosted_by: "주최",
+  division: "구분",
+  period: "기간",
+  time: "시간",
+  price: "가격",
+  location: "장소",
+} as const;
+
+export interface LectureSummaryListProps<
+  T extends LectureTitleType = LectureTitleType,
+> {
+  src: string;
+  type: T;
+  render: (content: Lecture[T]) => string;
+}
+
+export const lectureSummaryList: Array<LectureSummaryListProps> = [
+  {
+    src: "/icons/division.svg",
+    type: "division",
+    render: (content) => `${content}`,
+  },
+  {
+    src: "/icons/capacity.svg",
+    type: "capacity",
+    render: (content) => `정원 ${content}명`,
+  },
+  {
+    src: "/icons/hosted_by.svg",
+    type: "hosted_by",
+    render: (content) => `${content}`,
+  },
+  {
+    src: "/icons/period.svg",
+    type: "period",
+    render: (content) => {
+      const lectureContent = content as LecturePeriod[];
+
+      if (lectureContent[0].startDate === lectureContent[0].endDate) {
+        return `${lectureContent[0].startDate}`;
+      }
+
+      return `${lectureContent[0].startDate}~${lectureContent[0].endDate} 총 ${lectureContent[0].total}회`;
+    },
+  },
+  {
+    src: "/icons/time.svg",
+    type: "time",
+    render: (content) => `${content}`,
+  },
+  {
+    src: "/icons/price.svg",
+    type: "price",
+    render: (content) => `${content}`,
+  },
+  {
+    src: "/icons/location.svg",
+    type: "location",
+    render: (content) => `${content}`,
+  },
+];
+
+type LectureDetailTitleType =
+  | "condition"
+  | "description"
+  | "certification"
+  | "text_book_name"
+  | "text_book_price"
+  | "need";
+
+export const LectureDetailTitleEnum = {
+  condition: "수강자격",
+  description: "교육내용",
+  certification: "자격증 관련사항",
+  text_book_name: "교재명",
+  text_book_price: "교재비",
+  need: "준비물",
+} as const;
+
+export interface LectureDetailListProps {
+  type: LectureDetailTitleType;
+  render: (content: Lecture[keyof Lecture]) => string;
+}
+
+export const lectureDetailList: Array<LectureDetailListProps> = [
+  {
+    type: "condition",
+    render: (content) => `${content}`,
+  },
+  {
+    type: "description",
+    render: (content) => `${content}`,
+  },
+  {
+    type: "certification",
+    render: (content) => `${content}`,
+  },
+  {
+    type: "text_book_name",
+    render: (content) => `${content}`,
+  },
+  {
+    type: "text_book_price",
+    render: (content) => `${content}`,
+  },
+  {
+    type: "need",
+    render: (content) => `${content}`,
+  },
+];
+
+export interface GetLectureListDto {
+  params: LectureSize;
+  payload: LecturePayload;
+}
+
+export interface LectureInfo {
+  id: number;
+  thumbnail: string;
+  name: string;
+  time: string;
+  target: string;
+  status: boolean;
+  address: string;
+  link: string;
+  heart: boolean;
+  start_date: string;
+  end_date: string;
+  day_of_week: string;
+  hosted_by: string;
+  latitude: number;
+  longitude: number;
+  division: string;
+}
+
+export interface LectureListResData {
+  data: LectureInfo[];
+  hasNext: boolean;
+}
+export interface GetLectureListRes {
+  data: LectureListResData;
+  message: string;
+  status: string;
+}
+
+export type GetLectureList = Payload<
+  undefined,
+  undefined,
+  GetLectureListDto,
+  GetLectureListRes
+>;
+
+export interface LectureSize {
+  page: number;
+  size: number;
+  dist: number;
+}
+
+export interface LecturePayload {
+  latitude: number;
+  longitude: number;
+}
+
+export interface PickLectureInfo {
+  id: number;
+  view: number;
+  thumbnail: string;
+  name: string;
+  time: string;
+  target: string;
+  status: boolean;
+  heart: boolean;
+  address: string | null;
+  link: string;
+  start_date: string;
+  end_date: string;
+  day_of_week: string;
+  division: string;
+}
+
+export interface LectureListResData {
+  data: LectureInfo[];
+  pickClasses: PickLectureInfo[];
+  hasNext: boolean;
+}
+export interface GetHomeLectureListRes {
+  data: LectureListResData;
+  message: string;
+  status: string;
+}
+
+export type GetHomeLectureList = Payload<
+  undefined,
+  undefined,
+  GetLectureListDto,
+  GetHomeLectureListRes
+>;
+
+export interface GetLectureDto {
+  latitude: number;
+  longitude: number;
+}
+export interface GetLectureRes {
+  data: Lecture;
+  message: string;
+  status: string;
+}
+
+export type GetLecture = Payload<
+  undefined,
+  undefined,
+  GetLectureDto,
+  GetLectureRes
+>;

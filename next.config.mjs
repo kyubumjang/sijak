@@ -15,7 +15,13 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ["images.unsplash.com", "plus.unsplash.com", "www.50plus.or.kr"],
+    domains: [
+      "images.unsplash.com",
+      "plus.unsplash.com",
+      "www.50plus.or.kr",
+      "s3.ap-northeast-2.amazonaws.com",
+      "www.songpawoman.org",
+    ],
   },
 };
 

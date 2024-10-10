@@ -1,6 +1,6 @@
 "use client";
 
-import { handlers } from "./handlers";
+import handlers from "./handlers";
 import { setupWorker } from "msw/browser";
 
 export const worker = setupWorker(...handlers);

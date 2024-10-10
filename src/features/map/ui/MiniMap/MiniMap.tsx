@@ -5,9 +5,7 @@ interface MiniMapProps {
   longitude: number;
 }
 
-const MiniMap = (props: MiniMapProps) => {
-  const { latitude, longitude } = props;
-
+const MiniMap = ({ latitude, longitude }: MiniMapProps) => {
   const initMap = useCallback(() => {
     const location = new naver.maps.LatLng(latitude, longitude);
 
@@ -38,14 +36,26 @@ const MiniMap = (props: MiniMapProps) => {
   }, [latitude, longitude]);
 
   useEffect(() => {
-    initMap();
+    if (typeof naver !== "undefined") {
+      initMap();
+    } else {
+      // naver 객체가 정의되지 않은 경우, 스크립트 로드 후 재시도
+      const checkNaver = setInterval(() => {
+        if (typeof naver !== "undefined") {
+          clearInterval(checkNaver);
+          initMap();
+        }
+      }, 100); // 100ms마다 체크
+
+      return () => clearInterval(checkNaver);
+    }
   }, [initMap]);
 
   return (
-    <div className="overflow-hidden">
+    <div>
       <div
         id="mini_map_id"
-        style={{ height: "218px", borderRadius: "4px" }}
+        className="desktop:w-[572px] tablet:w-[704px] mobile:w-[312px] desktop:h-[143px] tablet:h-[228px] mobile:h-[122px]"
       ></div>
     </div>
   );

@@ -1,166 +1,375 @@
 "use client";
 
-import { Button, Input } from "@/shared/ui";
+import { BackToPrevious, Button, InputLabel, UnifiedDialog } from "@/shared/ui";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { LoginUserInfo, PatchUserAddress } from "@/entities/user/model/user";
+import { debounce, isEmpty } from "lodash";
+import { useEffect, useState } from "react";
 
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
-import { User } from "@/entities/user/model/user";
+import Image from "next/image";
+import { InputLabelStatus } from "@/shared/ui/InputLabel/InputLabel";
+import { SquareLoader } from "react-spinners";
+import axios from "axios";
+import { deleteCookie } from "cookies-next";
+import { toast } from "sonner";
 import { useGeoLocation } from "@/shared/lib/useGeolocation";
-import { useState } from "react";
+import useGetLoginUserInfo from "@/entities/user/api/useGetLoginUserInfo";
+import usePatchUserAddress from "@/entities/user/api/usePatchUserAddress";
+import usePatchUserInfo from "@/entities/user/api/usePatchUserInfo";
+import usePostLogout from "@/features/authentication/api/usePostLogout";
+import { useRouter } from "next/navigation";
+import useValidateNickname from "@/entities/user/api/useValidateNickname";
 
 export const runtime = "edge";
 
+type UserInfoForm = {
+  nickname: string;
+  address: string;
+};
+
 const UserInfoPage = () => {
-  // TODO: 전역 로그인된 유저 정보로 수정
-  const [loginedUser, setLoginedUser] = useState<User>({
-    id: 1,
-    account_email: "jkb2221@gmail.com",
-    profile_image:
-      "https://avatars.githubusercontent.com/u/33307948?s=400&u=a642bbeb47b47e203f37b47db12d2d92d8f98580&v=4",
-    name: "kyubumjang",
+  const [loginedUser, setLoginedUser] = useState<LoginUserInfo>({
+    id: 0,
+    email: "",
+    nickname: "",
     gender: "male",
-    age_range: "20~29",
-    applied_class: [
-      {
-        id: 1,
-        name: "디지털카메라초급(눈으로 사진찍기)",
-        description:
-          "컴팩트 카메라부터 DSLR 카메라까지 디지털 카메라에 대해서 이해하고 카메라의 모든 기능을 200% 활용하는데 목적을 둔다 ** 사진입문자를 위한 수업입니다. ** 3개월 동안 사진 완전초보를 벗어날 수 있도록 도와드립니다. **야외수업시 보험가입 필수 (1일 보험료 별도) 보험가입증서 제출 또는 동의서 작성",
-        price: 90000,
-        day_of_week: "수",
-        time: "2024-09-16 18:00:00",
-        capacity: 15,
-        link: "https://www.songpawoman.org/2024/epit_contents.asp?epit_num=10501042&om=202410&ucode=&period=3",
-        location: "서울 송파",
-        latitude: 108,
-        longitude: 108,
-        target: "사진 입문자",
-        status: "모집 중",
-        thumbnail:
-          "https://images.unsplash.com/photo-1601134991665-a020399422e3?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        like: true,
-        location_detail: "송파여성문화회관 미디어1실(101호)",
-        hosted_by: "송파여성문화회관",
-        address: "서울특별시 송파구 백제고분로42길 5",
-      },
-    ],
-    latitude: 37.5059054977082,
-    longitude: 127.109788230628,
-    city: "서울특별시",
+    age_range: "",
+    birth: "",
+    phone_number: "",
+    latitude: 0,
+    longitude: 0,
+    location: "",
   });
+  const [user, setUser] = useState<PatchUserAddress["Request"]["body"]>();
+  const [openLogoutDialog, setOpenLogoutDialog] = useState<boolean>(false);
+
+  const router = useRouter();
+  const geolocation = useGeoLocation();
+
+  const { data, isLoading, isSuccess } = useGetLoginUserInfo();
+  const postLogout = usePostLogout();
+
+  const validateNickname = useValidateNickname();
+  const patchUserAddress = usePatchUserAddress();
+  const patchUserInfo = usePatchUserInfo();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    setValue,
+    clearErrors,
+  } = useForm<UserInfoForm>({
+    defaultValues: {
+      nickname: data?.data.data.nickname,
+      address: data?.data.data.location,
+    },
+  });
+
+  const [status, setStatus] = useState<InputLabelStatus>("default");
+  const [message, setMessage] = useState<string>("");
+
+  const validationCheckNickname = debounce((nickname: string) => {
+    validateNickname.mutate(
+      { nickname },
+      {
+        onSuccess: (data) => {
+          const validateCheck = data.data;
+          if (validateCheck && validateCheck.status === 200) {
+            clearErrors("nickname"); // 유효성 검사 성공 시 에러 지우기
+            setStatus("correct");
+            setMessage("사용 가능한 닉네임입니다.");
+          }
+        },
+        onError: (error) => {
+          console.error(error);
+          if (axios.isAxiosError(error)) {
+            const errorMessage =
+              error.response?.data?.message || "서버 오류가 발생했습니다.";
+            setError("nickname", {
+              type: "manual",
+              message: errorMessage,
+            });
+            setStatus("error");
+          } else {
+            setError("nickname", {
+              type: "manual",
+              message: "알 수 없는 오류가 발생했습니다.",
+            });
+          }
+        },
+      },
+    );
+  }, 500);
+
+  const handleChangeNickname = (nickname: string) => {
+    validationCheckNickname(nickname);
+  };
+
+  const updateCurrentPosition = () => {
+    if (user) {
+      patchUserAddress.mutate(
+        {
+          latitude: user.latitude,
+          longitude: user.longitude,
+        },
+        {
+          onSuccess: (data) => {
+            setValue("address", data.data.data.address);
+          },
+        },
+      );
+    }
+  };
+
+  const updateUserInfo: SubmitHandler<UserInfoForm> = (data) => {
+    patchUserInfo.mutate(
+      {
+        address: data.address,
+        nickname: data.nickname,
+      },
+      {
+        onSuccess: () => {
+          toast("유저 정보 업데이트가 성공적으로 됐어요.");
+          window.location.reload();
+        },
+      },
+    );
+  };
+
+  const logout = () => {
+    postLogout.mutate(undefined, {
+      onSuccess: () => {
+        deleteCookie("accessToken");
+        deleteCookie("refreshToken");
+        toast("로그아웃 성공");
+        router.push("/");
+      },
+    });
+  };
+
+  const handleLogout = () => {
+    logout();
+  };
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      setLoginedUser(data.data.data);
+    }
+  }, [data, isSuccess]);
+
+  useEffect(() => {
+    if (
+      geolocation.curLocation &&
+      geolocation.curLocation.latitude &&
+      geolocation.curLocation.longitude
+    ) {
+      setUser((prev) => {
+        return {
+          ...prev,
+          latitude: geolocation.curLocation
+            ? geolocation.curLocation.latitude
+            : 0,
+          longitude: geolocation.curLocation
+            ? geolocation.curLocation.longitude
+            : 0,
+        };
+      });
+    }
+  }, [geolocation.curLocation]);
+
+  const triggerItem = () => {
+    return (
+      <div className="flex items-center justify-center">
+        <div className="flex justify-center items-center text-center desktop:w-[400px] tablet:w-[400px] mobile:w-[260px] max-w-[400px] h-14 bg-white hover:bg-gray-300 text-custom-textGrayColor text-xl font-semibold border border-custom-disabled rounded-md">
+          로그아웃
+        </div>
+      </div>
+    );
+  };
+
+  const dialogContent = () => {
+    return (
+      <div className="flex flex-col items-center justify-center h-[238px] gap-[69px]">
+        <div className="text-xl font-semibold">로그아웃 하시겠어요?</div>
+        <div className="flex flex-row gap-2.5">
+          <div>
+            <Button
+              variant="outline"
+              className="w-[125px] h-[52px] text-base font-semibold"
+              onClick={() => setOpenLogoutDialog(false)}
+            >
+              취소
+            </Button>
+          </div>
+          <div>
+            <Button
+              className="w-[125px] h-[52px] bg-custom-purple hover:bg-purple-950 text-base font-semibold"
+              onClick={handleLogout}
+            >
+              로그아웃
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex w-full h-screen justify-center items-center">
+        <SquareLoader color="#4F118C" />
+      </div>
+    );
+  }
 
   return (
     loginedUser && (
-      <div className="flex flex-col w-full h-full justify-start items-star pt-[79px] gap-[51px] pb-80">
-        <div className="flex flex-row justify-center items-center h-14 px-[120px]">
-          <div className="text-[32px]">마이페이지</div>
+      <div className="flex flex-col w-full h-full justify-start items-star desktop:pt-[79px] tablet:pt-8 mobile:pt-6 desktop:gap-[50px] tablet:gap-5 desktop:pb-[323px] tablet:pb-[208px] mobile:pb-[73px] relative">
+        <div className="desktop:hidden tablet:flex mobile:hidden absolute top-8 left-4">
+          <BackToPrevious />
         </div>
-        <div className="flex flex-col justify-center items-center gap-14">
-          <div className="flex flex-col justify-center items-center gap-4">
-            <div className="flex flex-col justify-center items-center gap-1">
-              <div className="font-bold text-2xl ">{loginedUser.name}님</div>
-              {/* TODO: 연령대, 주소 조건문 처리 */}
-              <div className="text-lg text-gray-500">
-                {loginedUser.age_range}대, {loginedUser.city}
+        <div className="desktop:flex tablet:flex mobile:hidden flex-row justify-center items-center h-14 desktop:px-[120px] tablet:px-[184px] mobile:px-[50px]">
+          <div className="desktop:text-[32px] tablet:text-[28px]">
+            마이페이지
+          </div>
+        </div>
+        <div className="flex flex-col justify-center items-center desktop:gap-6 tablet:gap-2 mobile:gap-2">
+          <div className="flex flex-col desktop:gap-14 tablet:gap-5 mobile:gap-6">
+            <div className="flex flex-col justify-center items-center gap-4">
+              <div className="flex flex-col justify-center items-center gap-1">
+                <div className="font-bold desktop:h-12 tablet:h-[42px] mobile:h-6 desktop:text-[32px] tablet:text-[28px] mobile:text-base leading-[42px]">
+                  {loginedUser.nickname}님
+                </div>
+                {/* TODO: 연령대, 주소 조건문 처리 */}
+                <div className="desktop:h-[33px] tablet:h-[30px] mobile:h-[21px] desktop:text-[22px] tablet:text-[20px] mobile:text-sm text-custom-textGrayColor">
+                  {loginedUser.age_range}대, {loginedUser.location}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex flex-col h-full">
-            {/* TODO: 컴포넌트화 InputLabel */}
-            <div className="flex flex-col w-[400px] gap-6">
-              <div className="flex flex-col">
-                <div className="text-base h-[21px] text-[#4F118C]">닉네임</div>
-                <div className={`border-b-2 border-[#4F118C]`}>
-                  <Input
-                    placeholder={loginedUser.name}
-                    className="text-xl border-none shadow-none h-14 focus-visible:ring-0"
+            <form
+              className="flex flex-col h-full desktop:gap-16 tablet:gap-16 mobile:gap-[42px]"
+              onSubmit={handleSubmit(updateUserInfo)}
+            >
+              <div className="flex flex-col items-center justify-center h-full">
+                <div className="flex flex-col desktop:w-[400px] tablet:w-[400px] mobile:w-[260px] gap-6">
+                  <Controller
+                    name="nickname"
+                    control={control}
+                    defaultValue={data?.data.data.nickname}
+                    rules={{
+                      required: "닉네임은 필수로 작성해주셔야 해요.",
+                      minLength: {
+                        value: 2,
+                        message: "띄어쓰기 없이 2자 ~ 12자까지 가능해요.",
+                      },
+                      maxLength: {
+                        value: 12,
+                        message: "닉네임은 최대 12자까지 설정 가능합니다.",
+                      },
+                    }}
+                    render={({ field }) => (
+                      <InputLabel
+                        labelContent="닉네임 입력"
+                        placeholder="띄어쓰기 없이 2자 ~ 12자까지 가능해요."
+                        error={!!errors.nickname}
+                        onChange={(e) => {
+                          field.onChange(e.target.value); // react-hook-form의 onChange 호출
+                          handleChangeNickname(e.target.value); // 디바운스된 유효성 검사 호출
+                        }}
+                        onBlur={field.onBlur}
+                        value={field.value}
+                        status={status}
+                        message={errors.nickname?.message || message} // 메시지 처리
+                      />
+                    )}
                   />
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <div className="text-base h-[21px] text-[#4F118C]">지역</div>
-                <div className="flex flex-row gap-4">
-                  <div className={`border-b-2 border-[#4F118C]`}>
-                    <Input
-                      placeholder={loginedUser.city}
-                      className="text-xl border-none shadow-none w-[292px] h-14 focus-visible:ring-0"
+                  <div className="flex flex-row gap-4">
+                    <Controller
+                      name="address"
+                      control={control}
+                      defaultValue={data?.data.data.location}
+                      render={({ field }) => (
+                        <InputLabel
+                          labelContent="지역"
+                          placeholder={
+                            loginedUser.location ? loginedUser.location : ""
+                          }
+                          onChange={(e) => {
+                            field.onChange(e.target.value); // react-hook-form의 onChange 호출
+                          }}
+                          onBlur={field.onBlur}
+                          value={field.value}
+                        />
+                      )}
                     />
+                    <div className="flex items-end">
+                      <Button
+                        variant="ghost"
+                        type="button"
+                        className="desktop:w-[112px] tablet:w-[112px] mobile:w-[92px] desktop:h-14 tablet:h-14 mobile:h-[41px] bg-custom-buttonGrayBackground hover:bg-gray-300 text-base font-semibold px-3 py-4 rounded-md"
+                        onClick={updateCurrentPosition}
+                      >
+                        <div className="flex flex-row gap-1 mobile:text-sm">
+                          <div className="desktop:w-6 tablet:w-6 mobile:w-5 desktop:h-6 tablet:h-6 mobile:h-5">
+                            <Image
+                              src="/icons/current_location.svg"
+                              alt="current_location"
+                              width={24}
+                              height={24}
+                            />
+                          </div>
+                          현재 위치
+                        </div>
+                      </Button>
+                    </div>
                   </div>
-                  <div>
-                    <Button
-                      variant="ghost"
-                      className="w-[92px] h-14 bg-[#F5F5F5] hover:bg-gray-300 text-[#171717] text-base font-semibold"
-                    >
-                      현재 위치
-                    </Button>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <div className="text-base h-[21px] text-[#404040]">이메일</div>
-                <div className={`border-b-2 border-[#D4D4D4]`}>
-                  <Input
-                    type="email"
-                    placeholder={loginedUser.account_email}
+                  <InputLabel
+                    labelContent="이메일"
+                    placeholder={loginedUser.email}
                     disabled
-                    className="text-xl border-none shadow-none h-14 focus-visible:ring-0 text-[#A3A3A3]"
                   />
-                </div>
-              </div>
-              {/* TODO: 휴대폰 번호, 생년월일 필요한지 물어볼 것 */}
-              <div className="flex flex-col">
-                <div className="text-base h-[21px] text-[#404040]">
-                  휴대폰 번호
-                </div>
-                <div className={`border-b-2 border-[#D4D4D4]`}>
-                  <Input
-                    type="tel"
-                    placeholder="010-0000-0000"
+                  <InputLabel
+                    labelContent="휴대폰 번호"
+                    placeholder={loginedUser.phone_number}
                     disabled
-                    className="text-xl border-none shadow-none h-14 focus-visible:ring-0 text-[#A3A3A3]"
                   />
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <div className="text-base h-[21px] text-[#404040]">
-                  생년월일
-                </div>
-                <div className={`border-b-2 border-[#D4D4D4]`}>
-                  <Input
-                    placeholder="1900.01.01"
+                  <InputLabel
+                    labelContent="생년월일"
+                    placeholder={loginedUser.birth}
                     disabled
-                    className="text-xl border-none shadow-none h-14 focus-visible:ring-0 text-[#A3A3A3]"
                   />
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <div className="text-base h-[21px] text-[#404040]">성별</div>
-                <div className={`border-b-2 border-[#D4D4D4]`}>
-                  <Input
+                  <InputLabel
+                    labelContent="성별"
                     placeholder={
                       loginedUser.gender === "male" ? "남성" : "여성"
                     }
                     disabled
-                    className="text-xl border-none shadow-none h-14 focus-visible:ring-0 text-[#A3A3A3]"
                   />
                 </div>
               </div>
-            </div>
+              <div>
+                <Button
+                  disabled={
+                    !isEmpty(errors.nickname) || !isEmpty(errors.address)
+                  }
+                  className="desktop:w-[400px] tablet:w-[400px] mobile:w-[260px] h-14 font-semibold text-2xl bg-custom-purple hover:bg-purple-950 rounded-md"
+                >
+                  저장하기
+                </Button>
+              </div>
+            </form>
           </div>
-          <div className="flex flex-col gap-6">
-            <div className="">
-              <Button className="w-[400px] h-14 font-semibold text-2xl bg-[#4F118C] hover:bg-purple-950">
-                저장하기
-              </Button>
-            </div>
-            <div className="">
-              <Button
-                variant="outline"
-                className="w-[400px] h-14 text-2xl text-[#737373]"
-              >
-                로그아웃
-              </Button>
-            </div>
+          <div>
+            <UnifiedDialog
+              open={openLogoutDialog}
+              setOpen={setOpenLogoutDialog}
+              triggerItem={triggerItem()}
+              dialogTitle="로그아웃 다이얼로그"
+              dialogDescription="로그아웃 확인 다이얼로그"
+              dialogContent={dialogContent()}
+            />
           </div>
         </div>
       </div>

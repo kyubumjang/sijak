@@ -2,12 +2,12 @@
 "use client";
 
 import * as React from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react";
 import { Button } from "../Button";
 import { cn } from "@/shared/lib/utils";
+import Image from "next/image";
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -206,7 +206,7 @@ const CarouselPrevious = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        "absolute h-8 w-8 rounded-full ml-10 bg-gray-300",
+        "desktop:flex tablet:flex mobile:hidden absolute h-8 w-8 rounded-full desktop:ml-[120px] tablet:ml-8",
         orientation === "horizontal"
           ? "-left-0 top-1/2 -translate-y-1/2"
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -216,7 +216,12 @@ const CarouselPrevious = React.forwardRef<
       onClick={scrollPrev}
       {...props}
     >
-      <ChevronLeftIcon className="h-6 w-6" />
+      <Image
+        src="/icons/arrow_left.svg"
+        alt="arrow left"
+        width={24}
+        height={24}
+      />
       <span className="sr-only">Previous slide</span>
     </Button>
   );
@@ -235,7 +240,7 @@ const CarouselNext = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        "absolute h-8 w-8 rounded-full mr-10 bg-gray-300",
+        "desktop:flex tablet:flex mobile:hidden absolute h-8 w-8 rounded-full desktop:mr-[120px] tablet:mr-8",
         orientation === "horizontal"
           ? "-right-0 top-1/2 -translate-y-1/2"
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -245,7 +250,12 @@ const CarouselNext = React.forwardRef<
       onClick={scrollNext}
       {...props}
     >
-      <ChevronRightIcon className="h-6 w-6" />
+      <Image
+        src="/icons/arrow_right.svg"
+        alt="arrow right"
+        width={24}
+        height={24}
+      />
       <span className="sr-only">Next slide</span>
     </Button>
   );
