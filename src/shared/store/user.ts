@@ -1,5 +1,6 @@
 import { LoginUserInfo } from "@/entities/user/model/user";
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 // 상태와 액션의 타입 정의
 export interface LoginedUserState {
@@ -25,9 +26,17 @@ const initialState: LoginedUserState = {
 };
 
 // Zustand 스토어 생성
-const useLoginedUserStore = create<LoginedUserState>((set) => ({
-  ...initialState,
-  setLoginedUser: (loginedUserInfo) => set({ loginedUser: loginedUserInfo }),
-}));
+const useLoginedUserStore = create(
+  persist<LoginedUserState>(
+    (set) => ({
+      ...initialState,
+      setLoginedUser: (loginedUserInfo) =>
+        set({ loginedUser: loginedUserInfo }),
+    }),
+    {
+      name: "loginedUserInfo",
+    },
+  ),
+);
 
 export default useLoginedUserStore;

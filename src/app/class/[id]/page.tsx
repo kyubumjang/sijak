@@ -1,5 +1,6 @@
 "use client";
 
+import { IconButton, Skeleton } from "@/shared/ui";
 import { Lecture, LecturePayload } from "@/entities/lecture/model/lecture";
 import {
   LectureDetail,
@@ -22,6 +23,7 @@ const LectureInfoPage = () => {
   const [lectureInfo, setLectureInfo] = useState<Lecture>();
   const [user, setUser] = useState<LecturePayload>();
   const [windowInnerWidth, setWindowInnerWidth] = useState<string>();
+  const [heart, setHeart] = useState<boolean>(false);
 
   const { id } = useParams();
 
@@ -54,6 +56,7 @@ const LectureInfoPage = () => {
         {
           onSuccess: (data) => {
             setLectureInfo(data.data.data);
+            setHeart(data.data.data.heart);
           },
         },
       );
@@ -106,7 +109,17 @@ const LectureInfoPage = () => {
     return (
       <div className="desktop:flex tablet:hidden mobile:hidden w-full">
         <div className="flex flex-row w-full desktop:px-[120px] desktop:pt-[80px] gap-10">
-          <LectureImageInfo lectureInfo={lectureInfo} isLoading={isLoading} />
+          {isLoading && (
+            <Skeleton className="desktop:w-[588px] tablet:w-[330px] desktop:h-[588px] tablet:h-[330px]" />
+          )}
+          {lectureInfo && (
+            <LectureImageInfo
+              lectureInfo={lectureInfo}
+              isLoading={isLoading}
+              heart={heart}
+              setHeart={setHeart}
+            />
+          )}
           <div className="flex flex-col gap-6">
             <LectureSummary lectureInfo={lectureInfo} isLoading={isLoading} />
             <LectureMinimap lectureInfo={lectureInfo} isLoading={isLoading} />
@@ -121,7 +134,17 @@ const LectureInfoPage = () => {
       <div className="desktop:hidden tablet:flex mobile:hidden">
         <div className="flex flex-col tablet:px-8 gap-[35px]">
           <div className="flex flex-row w-full gap-[31px]">
-            <LectureImageInfo lectureInfo={lectureInfo} isLoading={isLoading} />
+            {isLoading && (
+              <Skeleton className="desktop:w-[588px] tablet:w-[330px] desktop:h-[588px] tablet:h-[330px]" />
+            )}
+            {lectureInfo && (
+              <LectureImageInfo
+                lectureInfo={lectureInfo}
+                isLoading={isLoading}
+                heart={heart}
+                setHeart={setHeart}
+              />
+            )}
             <LectureSummary lectureInfo={lectureInfo} isLoading={isLoading} />
           </div>
           <div>
@@ -136,7 +159,17 @@ const LectureInfoPage = () => {
     return (
       <div className="desktop:hidden tablet:hidden mobile:flex">
         <div className="flex flex-col w-full mobile:px-6 gap-8">
-          <LectureImageInfo lectureInfo={lectureInfo} isLoading={isLoading} />
+          {isLoading && (
+            <Skeleton className="desktop:w-[588px] tablet:w-[330px] desktop:h-[588px] tablet:h-[330px]" />
+          )}
+          {lectureInfo && (
+            <LectureImageInfo
+              lectureInfo={lectureInfo}
+              isLoading={isLoading}
+              heart={heart}
+              setHeart={setHeart}
+            />
+          )}
           <LectureMinimap lectureInfo={lectureInfo} isLoading={isLoading} />
           <LectureSummary lectureInfo={lectureInfo} isLoading={isLoading} />
         </div>
@@ -158,7 +191,33 @@ const LectureInfoPage = () => {
       </div>
       {renderSummary()}
       <LectureDetail lectureInfo={lectureInfo} isLoading={isLoading} />
-      <LectureFooter lectureInfo={lectureInfo} isLoading={isLoading} />
+      {isLoading && (
+        <div className="flex flex-row items-center w-full desktop:h-[70px] tablet:h-[70px] mobile:h-[55px] desktop:px-[120px] bg-white fixed bottom-0 border-t border-custom-disabled z-10">
+          <div className="flex desktop:w-[98px] tablet:min-w-[98px] mobile:min-w-[76px] desktop:h-[69px] tablet:h-[69px] mobile:h-[54px] border-r border-custom-disabled justify-center items-center">
+            <Skeleton>
+              <IconButton
+                src="/icons/like.svg"
+                alt="heart"
+                iconWidth={32}
+                iconHeight={32}
+                loading={isLoading}
+              />
+            </Skeleton>
+          </div>
+          <div className="flex desktop:w-[190px] tablet:min-w-[190px] mobile:min-w-[111px] desktop:h-[69px] tablet:h-[69px] mobile:h-[54px] justify-center items-center text-xl font-bold">
+            <Skeleton className="w-[100px] h-[33px]" />
+          </div>
+          <Skeleton className="desktop:w-[917px] tablet:w-[560px] h-[56px]" />
+        </div>
+      )}
+      {lectureInfo && (
+        <LectureFooter
+          lectureInfo={lectureInfo}
+          isLoading={isLoading}
+          heart={heart}
+          setHeart={setHeart}
+        />
+      )}
     </div>
   );
 };

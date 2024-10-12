@@ -33,6 +33,8 @@ export interface Lecture {
   thumbnail: string;
   heart: boolean;
   address: string;
+  long_address: string;
+  short_address: string;
   period: LecturePeriod[];
   division: string;
   category: string;
@@ -188,7 +190,8 @@ export interface LectureInfo {
   time: string;
   target: string;
   status: boolean;
-  address: string;
+  long_address: string;
+  short_address: string;
   link: string;
   heart: boolean;
   start_date: string;
@@ -220,7 +223,6 @@ export type GetLectureList = Payload<
 export interface LectureSize {
   page: number;
   size: number;
-  dist: number;
 }
 
 export interface LecturePayload {
@@ -237,7 +239,8 @@ export interface PickLectureInfo {
   target: string;
   status: boolean;
   heart: boolean;
-  address: string | null;
+  long_address: string;
+  short_address: string;
   link: string;
   start_date: string;
   end_date: string;

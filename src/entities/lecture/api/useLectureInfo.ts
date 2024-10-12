@@ -1,6 +1,6 @@
-import { GetLecture, GetLectureDto } from "../model/lecture";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+import { GetLecture } from "../model/lecture";
 import { LECTURE_KEYS } from "@/shared/api/keyFactory";
 import { getLectureInfo } from ".";
 

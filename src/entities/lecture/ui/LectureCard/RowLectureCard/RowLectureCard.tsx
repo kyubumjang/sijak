@@ -12,7 +12,7 @@ interface RowLectureCardProps {
 const RowLectureCard = (props: RowLectureCardProps) => {
   const { lectureData, type } = props;
 
-  const { id, thumbnail, name, time, target, address } = lectureData;
+  const { id, thumbnail, name, time, target, short_address } = lectureData;
 
   return (
     <Link href={`/class/${id}`}>
@@ -44,7 +44,7 @@ const RowLectureCard = (props: RowLectureCardProps) => {
           <div className="flex justify-between w-[368px] max-w-[368px] max-h-[27px]">
             {/* FIXME: 색상 추가 */}
             <div className="text-lg text-custom-textSemiBoldBlackColor font-semibold">
-              {address}
+              {short_address}
             </div>
             <div className="text-lg text-custom-textGrayColor">
               {time.split(" ")[0].replaceAll("-", ".")}

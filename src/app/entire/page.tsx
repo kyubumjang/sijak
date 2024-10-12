@@ -21,7 +21,7 @@ const EntirePage = () => {
   const [lectureSize, setLectureSize] = useState<LectureSize>({
     page: 0,
     size: 9,
-    dist: 500,
+    // dist: 500,
   });
   const [hasNext, setHasNext] = useState(true);
 
@@ -41,7 +41,7 @@ const EntirePage = () => {
           params: {
             page: lectureSize.page,
             size: lectureSize.size,
-            dist: lectureSize.dist,
+            // dist: lectureSize.dist,
           },
           payload: { latitude: user.latitude, longitude: user.longitude },
         },

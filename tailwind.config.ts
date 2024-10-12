@@ -36,6 +36,8 @@ const config: Config = {
           footerBackground: "#3E3E3E",
           kakao: "#FEE500",
           purple: "#4F118C",
+          hoverPurple: "#2B0253",
+          orange: "#FF501A",
           textBlackColor: "#171717",
           textSemiBoldBlackColor: "#404040",
           textGrayColor: "#737373",

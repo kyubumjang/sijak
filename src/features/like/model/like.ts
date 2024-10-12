@@ -13,6 +13,8 @@ export interface HeartsLectureListResDataInfo {
   latitude: number;
   longitude: number;
   address: string;
+  long_address: string;
+  short_address: string;
   link: string;
   heart: boolean;
   start_date: string;

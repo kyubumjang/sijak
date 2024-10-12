@@ -136,7 +136,7 @@ const SignUpPage = () => {
           )}
         />
         <Button
-          className="flex justify-center items-center desktop:w-[400px] tablet:w-[260px] mobile:w-[260px] h-14 bg-custom-purple rounded-sm"
+          className="flex justify-center items-center desktop:w-[400px] tablet:w-[260px] mobile:w-[260px] h-14 bg-custom-purple hover:bg-custom-hoverPurple rounded-sm"
           disabled={
             (!!errors.nickname && status !== "correct") || status === "default"
           } // 오류가 있을 경우 버튼 비활성화

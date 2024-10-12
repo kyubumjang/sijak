@@ -2,7 +2,11 @@
 
 import { BackToPrevious, Button, InputLabel, UnifiedDialog } from "@/shared/ui";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { LoginUserInfo, PatchUserAddress } from "@/entities/user/model/user";
+import {
+  LoginUserInfo,
+  PatchUserAddress,
+  userAgeMap,
+} from "@/entities/user/model/user";
 import { debounce, isEmpty } from "lodash";
 import { useEffect, useState } from "react";
 
@@ -191,7 +195,7 @@ const UserInfoPage = () => {
 
   const dialogContent = () => {
     return (
-      <div className="flex flex-col items-center justify-center h-[238px] gap-[69px]">
+      <div className="flex flex-col items-center justify-center gap-[69px]">
         <div className="text-xl font-semibold">로그아웃 하시겠어요?</div>
         <div className="flex flex-row gap-2.5">
           <div>
@@ -205,7 +209,7 @@ const UserInfoPage = () => {
           </div>
           <div>
             <Button
-              className="w-[125px] h-[52px] bg-custom-purple hover:bg-purple-950 text-base font-semibold"
+              className="w-[125px] h-[52px] bg-custom-purple hover:bg-custom-hoverPurple text-base font-semibold"
               onClick={handleLogout}
             >
               로그아웃
@@ -244,7 +248,7 @@ const UserInfoPage = () => {
                 </div>
                 {/* TODO: 연령대, 주소 조건문 처리 */}
                 <div className="desktop:h-[33px] tablet:h-[30px] mobile:h-[21px] desktop:text-[22px] tablet:text-[20px] mobile:text-sm text-custom-textGrayColor">
-                  {loginedUser.age_range}대, {loginedUser.location}
+                  {userAgeMap[loginedUser.age_range]}대, {loginedUser.location}
                 </div>
               </div>
             </div>
@@ -354,7 +358,7 @@ const UserInfoPage = () => {
                   disabled={
                     !isEmpty(errors.nickname) || !isEmpty(errors.address)
                   }
-                  className="desktop:w-[400px] tablet:w-[400px] mobile:w-[260px] h-14 font-semibold text-2xl bg-custom-purple hover:bg-purple-950 rounded-md"
+                  className="desktop:w-[400px] tablet:w-[400px] mobile:w-[260px] h-14 font-semibold text-2xl bg-custom-purple hover:bg-custom-hoverPurple rounded-md"
                 >
                   저장하기
                 </Button>

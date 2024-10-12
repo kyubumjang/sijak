@@ -52,7 +52,7 @@ const HeaderFeatures = () => {
         </div>
         <div className="flex items-center justify-center ">
           <Button
-            className="w-[300px] h-[52px] text-base font-semibold bg-custom-purple rounded"
+            className="desktop:w-[300px] tablet:w-[260px] mobile:w-[260px] h-[52px] text-base font-semibold bg-custom-purple hover:bg-custom-hoverPurple rounded"
             type="submit"
             onClick={linkToLogin}
           >

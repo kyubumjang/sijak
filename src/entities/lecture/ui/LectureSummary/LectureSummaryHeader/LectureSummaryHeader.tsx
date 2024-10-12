@@ -18,9 +18,8 @@ const LectureSummaryHeader = ({
   };
 
   const shareLinkToURL = () => {
-    if (lectureInfo) {
-      handleCopyClipBoard(lectureInfo.link);
-    }
+    const currentUrl = window.location.href;
+    handleCopyClipBoard(currentUrl);
   };
 
   const renderDialogTriggerItem = () => {
@@ -47,7 +46,7 @@ const LectureSummaryHeader = ({
         <ImageDescription
           containerWidth={115}
           containerHeight={96}
-          src="/icons/Copy_link.svg"
+          src="/icons/copy_link.svg"
           alt="copy_link"
           width={60}
           height={60}

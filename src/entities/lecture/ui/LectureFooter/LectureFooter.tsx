@@ -1,23 +1,33 @@
 "use client";
 
 import { Button, IconButton, Skeleton, UnifiedDialog } from "@/shared/ui";
+import { Dispatch, SetStateAction, useState } from "react";
 
-import Image from "next/image";
 import { Lecture } from "../../model/lecture";
 import { getCookie } from "cookies-next";
 import { toast } from "sonner";
 import useDeleteLikeLecture from "@/features/like/api/useDeleteLikeLecture";
 import usePostLikeLecture from "@/features/like/api/usePostLikeLecture";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 interface LectureFooterProps {
-  lectureInfo?: Lecture;
+  lectureInfo: Lecture;
   isLoading: boolean;
+  heart: boolean;
+  setHeart: Dispatch<SetStateAction<boolean>>;
 }
 
-const LectureFooter = ({ lectureInfo, isLoading }: LectureFooterProps) => {
-  const [open, setOpen] = useState<boolean>(false);
+const LectureFooter = ({
+  lectureInfo,
+  isLoading,
+  heart,
+  setHeart,
+}: LectureFooterProps) => {
+  const [openApplyDialog, setOpenApplyDialog] = useState<boolean>(false);
+  const [openApplyLoginDialog, setOpenApplyLoginDialog] =
+    useState<boolean>(false);
+  const [openLoginDialog, setOpenLoginDialog] = useState<boolean>(false);
+
   const token = getCookie("accessToken");
   const router = useRouter();
 
@@ -39,39 +49,64 @@ const LectureFooter = ({ lectureInfo, isLoading }: LectureFooterProps) => {
   };
 
   const handleLikeLecture = () => {
-    if (lectureInfo) {
-      // TODO: 좋아요 API TEST
-      if (lectureInfo.heart === true) {
-        deleteLikeLecture.mutate(
-          {
-            lectureId: lectureInfo.id,
+    if (heart === true) {
+      setHeart(false);
+      deleteLikeLecture.mutate(
+        {
+          lectureId: lectureInfo.id,
+        },
+        {
+          onSuccess: () => {
+            toast("좋아요 삭제 성공");
           },
-          {
-            onSuccess: () => {
-              toast("좋아요 삭제 성공");
-            },
+          onError: () => {
+            setHeart(true);
           },
-        );
-      }
-      if (lectureInfo.heart === false) {
-        postLikeLecture.mutate(
-          {
-            lectureId: lectureInfo.id,
-          },
-          {
-            onSuccess: () => {
-              toast("좋아요 성공");
-            },
-          },
-        );
-      }
+        },
+      );
     }
+    if (heart === false) {
+      setHeart(true);
+      postLikeLecture.mutate(
+        {
+          lectureId: lectureInfo.id,
+        },
+        {
+          onSuccess: () => {
+            toast("좋아요 성공");
+          },
+          onError: () => {
+            setHeart(false);
+          },
+        },
+      );
+    }
+  };
+
+  const triggerLoginItem = () => {
+    return heart ? (
+      <IconButton
+        src="/icons/like_filled.svg"
+        alt="like_filled"
+        iconWidth={32}
+        iconHeight={32}
+        handleClick={handleLikeLecture}
+      />
+    ) : (
+      <IconButton
+        src="/icons/like.svg"
+        alt="heart"
+        iconWidth={32}
+        iconHeight={32}
+        handleClick={handleLikeLecture}
+      />
+    );
   };
 
   const triggerItem = () => {
     return (
       <div className="flex items-center justify-center">
-        <div className="flex justify-center items-center text-center desktop:w-[912px] tablet:w-[481px] mobile:w-[173px] max-w-[912px] h-[69px] bg-custom-purple hover:bg-purple-900 text-white text-xl font-bold">
+        <div className="flex justify-center items-center text-center desktop:w-[912px] tablet:w-[481px] mobile:w-[173px] max-w-[912px] h-[69px] bg-custom-purple hover:bg-custom-hoverPurple text-white text-xl font-bold">
           신청하러 가기
         </div>
       </div>
@@ -87,7 +122,7 @@ const LectureFooter = ({ lectureInfo, isLoading }: LectureFooterProps) => {
         </div>
         <div>
           <Button
-            className="w-[260px] h-[52px] bg-custom-purple hover:bg-purple-950 text-base font-semibold rounded"
+            className="w-[260px] h-[52px] bg-custom-purple hover:bg-custom-hoverPurple text-base font-semibold rounded"
             onClick={linkToHomePage}
           >
             목록으로 돌아가기
@@ -108,7 +143,7 @@ const LectureFooter = ({ lectureInfo, isLoading }: LectureFooterProps) => {
         </div>
         <div className="flex items-center justify-center ">
           <Button
-            className="w-[300px] h-[52px] text-base font-semibold bg-custom-purple rounded"
+            className="desktop:w-[300px] tablet:w-[260px] mobile:w-[260px] h-[52px] text-base font-semibold bg-custom-purple hover:bg-custom-hoverPurple rounded"
             type="submit"
             onClick={linkToLogin}
           >
@@ -119,22 +154,31 @@ const LectureFooter = ({ lectureInfo, isLoading }: LectureFooterProps) => {
     );
   };
 
-  const renderApplyButton = () => {
-    if (lectureInfo && lectureInfo.link && token) {
-      return (
-        <Button
-          className="flex desktop:w-[912px] tablet:w-[481px] mobile:w-[173px] max-w-[912px] desktop:h-[69px] tablet:h-[69px] mobile:h-[54px] bg-custom-purple text-xl font-bold rounded-none"
-          onClick={() => linkToApplyPage(lectureInfo.link)}
-        >
-          신청하러 가기
-        </Button>
-      );
-    }
+  const renderLikeIcon = () => {
     if (!token) {
       return (
         <UnifiedDialog
-          open={open}
-          setOpen={setOpen}
+          dialogTitle="로그인 오류"
+          dialogDescription="로그인 오류 Dialog"
+          triggerItem={triggerLoginItem()}
+          dialogContent={needLoginDialogContent()}
+          open={openLoginDialog}
+          setOpen={setOpenLoginDialog}
+        />
+      );
+    }
+
+    if (token) {
+      return triggerLoginItem();
+    }
+  };
+
+  const renderApplyButton = () => {
+    if (!token) {
+      return (
+        <UnifiedDialog
+          open={openApplyLoginDialog}
+          setOpen={setOpenApplyLoginDialog}
           triggerItem={triggerItem()}
           dialogTitle="로그인 필요"
           dialogDescription="로그인 필요"
@@ -142,11 +186,11 @@ const LectureFooter = ({ lectureInfo, isLoading }: LectureFooterProps) => {
         />
       );
     }
-    if (!token && lectureInfo && lectureInfo.status === false) {
+    if (token && lectureInfo && lectureInfo.status === false) {
       return (
         <UnifiedDialog
-          open={open}
-          setOpen={setOpen}
+          open={openApplyDialog}
+          setOpen={setOpenApplyDialog}
           triggerItem={triggerItem()}
           dialogTitle="신청 페이지 불가"
           dialogDescription="신청 페이지 불가 설명"
@@ -154,37 +198,27 @@ const LectureFooter = ({ lectureInfo, isLoading }: LectureFooterProps) => {
         />
       );
     }
+    if (lectureInfo && lectureInfo.link && token && lectureInfo.status) {
+      return (
+        <Button
+          className="flex desktop:w-[912px] tablet:w-[481px] mobile:w-[173px] max-w-[912px] desktop:h-[69px] tablet:h-[69px] mobile:h-[54px] bg-custom-purple hover:bg-custom-hoverPurple text-xl font-bold rounded-none"
+          onClick={() => linkToApplyPage(lectureInfo.link)}
+        >
+          신청하러 가기
+        </Button>
+      );
+    }
   };
 
   return (
-    <div className="flex flex-row items-center w-full desktop:h-[70px] tablet:h-[70px] mobile:h-[55px] desktop:px-[120px] bg-white fixed bottom-0 border-t border-custom-disabled overflow-x-hidden z-10">
+    <div className="flex flex-row items-center w-full desktop:h-[70px] tablet:h-[70px] mobile:h-[55px] desktop:px-[120px] bg-white fixed bottom-0 border-t border-custom-disabled z-10">
       <div className="flex desktop:w-[98px] tablet:min-w-[98px] mobile:min-w-[76px] desktop:h-[69px] tablet:h-[69px] mobile:h-[54px] border-r border-custom-disabled justify-center items-center">
-        {lectureInfo && lectureInfo.heart === true ? (
-          <IconButton
-            src="/icons/like_filled.svg"
-            alt="like_filled"
-            iconWidth={32}
-            iconHeight={32}
-            handleClick={handleLikeLecture}
-          />
-        ) : (
-          <IconButton
-            src="/icons/heart.svg"
-            alt="heart"
-            iconWidth={32}
-            iconHeight={32}
-            handleClick={handleLikeLecture}
-          />
-        )}
+        {renderLikeIcon()}
       </div>
-      {isLoading && <Skeleton className="w-[100px] h-[33px]" />}
       {lectureInfo && (
         <div className="flex desktop:w-[190px] tablet:min-w-[190px] mobile:min-w-[111px] desktop:h-[69px] tablet:h-[69px] mobile:h-[54px] justify-center items-center text-xl font-bold">
           {lectureInfo.price}
         </div>
-      )}
-      {isLoading && (
-        <Skeleton className="desktop:w-[917px] tablet:w-[560px] h-[56px]" />
       )}
       {renderApplyButton()}
     </div>

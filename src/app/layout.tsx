@@ -37,7 +37,7 @@ export default function RootLayout({
         <Providers>
           <main className="flex w-full h-full flex-1">
             <div className="flex flex-col w-full h-full justify-start items-start relative">
-              <div className="flex flex-col w-full h-full justify-start items-start relative">
+              <div className="flex flex-col w-full h-full justify-start items-start relative max-w-[1440px] mx-auto my-0">
                 <Header />
                 <div className="flex flex-col w-full h-full justify-start items-start desktop:pt-[70px] tablet:pt-[70px] mobile:pt-12">
                   {children}

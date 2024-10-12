@@ -65,25 +65,25 @@ const Map = ({ latitude, longitude, lectureListData }: MapProps) => {
           clickable: true,
           map: map,
           icon: {
-            content: `<img src="/images/marker_icon.png" width="44" height="51" alt="클래스 위치" />`,
+            content: `<img src="/icons/marker.svg" width="44" height="51" alt="클래스 위치" />`,
             size: new naver.maps.Size(35, 35),
             anchor: new naver.maps.Point(11, 35),
           },
         });
 
         const hostedBy = lectureData.hosted_by;
-        const address = lectureData.address;
+        const address = lectureData.long_address;
 
         // InfoWindow 생성
         const infoWindow = new naver.maps.InfoWindow({
           content: `
-            <div style="display: flex; flex-direction: column; width: 284px; height: 81px; gap: 2px; background: #4F118C; border-radius: 12px; padding: 11px 24px 11px 24px;">
+            <div style="display: flex; flex-direction: column; width: 300px; gap: 2px; background: #4F118C; border-radius: 12px; padding: 11px 24px 11px 24px;">
               <div style="display: flex; flex-direction: row; align-items: center; justify-items: center; gap: 5px;">
-                <div style="width: 236px; height: 33px; font-size: 20px; font-weight: 700; color: #fff;">
+                <div style="width: 250px; font-size: 20px; font-weight: 700; color: #fff;">
                   ${hostedBy}
                 </div>
               </div>
-              <div style="width: 236px; height: 24px; font-size: 14px; color: #fff;">
+              <div style="width: 250px; font-size: 14px; color: #fff;">
                 ${address}
               </div>
             </div>`,

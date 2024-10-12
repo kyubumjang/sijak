@@ -95,3 +95,15 @@ export type PatchUserInfo = Payload<
   PatchUserInfoDto,
   PatchUserInfoRes
 >;
+
+export const userAgeMap: Record<string, number> = {
+  "10~19": 10,
+  "20~29": 20,
+  "30~39": 30,
+  "40~49": 40,
+  "50~59": 50,
+  "60~69": 60,
+  "70~79": 70,
+  "80~89": 80,
+  "90~99": 90,
+};

@@ -1,13 +1,17 @@
+import { Button, UnifiedDialog } from "@/shared/ui";
 import { LectureInfo, PickLectureInfo } from "@/entities/lecture/model/lecture";
 import { MouseEvent, useEffect, useState } from "react";
 
-import { Button } from "@/shared/ui";
+import { DisabledHomeLectureCard } from "../HomeLectureCard/DisabledHomeLectureCard";
+import { DisabledPickLectureCard } from "./DisabledPickLectureCard";
 import { HeartsLectureListResDataInfo } from "@/features/like/model/like";
 import Image from "next/image";
 import Link from "next/link";
+import { getCookie } from "cookies-next";
 import { toast } from "sonner";
 import useDeleteLikeLecture from "@/features/like/api/useDeleteLikeLecture";
 import usePostLikeLecture from "@/features/like/api/usePostLikeLecture";
+import { useRouter } from "next/navigation";
 
 interface PickLectureCardProps {
   lectureData: LectureInfo | PickLectureInfo | HeartsLectureListResDataInfo;
@@ -24,9 +28,10 @@ const PickLectureCard = (props: PickLectureCardProps) => {
     time,
     target,
     status,
-    address,
+    long_address,
+    short_address,
     link,
-    heart,
+    heart: initialHeart,
     start_date,
     end_date,
     day_of_week,
@@ -34,9 +39,16 @@ const PickLectureCard = (props: PickLectureCardProps) => {
   } = lectureData;
 
   const [dimensions, setDimensions] = useState({ width: 384, height: 280 });
+  const [openLoginDialog, setOpenLoginDialog] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isHoveredFilled, setIsHoveredFilled] = useState(true);
+  const [heart, setHeart] = useState(initialHeart);
 
   const postLikeLecture = usePostLikeLecture(id);
   const deleteLikeLecture = useDeleteLikeLecture(id);
+
+  const router = useRouter();
+  const token = getCookie("accessToken");
 
   useEffect(() => {
     const handleResize = () => {
@@ -59,11 +71,21 @@ const PickLectureCard = (props: PickLectureCardProps) => {
     };
   }, []);
 
+  const linkToLogin = () => {
+    setOpenLoginDialog(false);
+    router.push("/login");
+  };
+
   const handleLikeClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
-
-    if (lectureData.heart === true) {
+    if (!token) {
+      // DIALOG OPEN
+      setOpenLoginDialog(true);
+      return;
+    }
+    if (heart === true) {
+      setHeart(false);
       deleteLikeLecture.mutate(
         {
           lectureId: id,
@@ -72,10 +94,14 @@ const PickLectureCard = (props: PickLectureCardProps) => {
           onSuccess: () => {
             toast("좋아요 삭제 성공");
           },
+          onError: () => {
+            setHeart(true);
+          },
         },
       );
     }
-    if (lectureData.heart === false) {
+    if (heart === false) {
+      setHeart(true);
       postLikeLecture.mutate(
         {
           lectureId: id,
@@ -84,10 +110,71 @@ const PickLectureCard = (props: PickLectureCardProps) => {
           onSuccess: () => {
             toast("좋아요 성공");
           },
+          onError: () => {
+            setHeart(false);
+          },
         },
       );
     }
   };
+
+  const triggerItem = () => {
+    return (
+      <Button
+        variant="ghost"
+        size="icon"
+        className="flex items-center justify-center desktop:w-[32px] tablet:w-[24px] mobile:w-[24px] desktop:h-[32px] tablet:h-[24px] mobile:h-[24px] hover:bg-transparent"
+        onClick={(e) => handleLikeClick(e)}
+      >
+        {heart ? (
+          <Image
+            src={isHoveredFilled ? "/icons/like_filled.svg" : "/icons/like.svg"}
+            alt="heart"
+            width={32}
+            height={32}
+            onMouseEnter={() => setIsHoveredFilled(false)}
+            onMouseLeave={() => setIsHoveredFilled(true)}
+          />
+        ) : (
+          <Image
+            src={isHovered ? "/icons/like_filled.svg" : "/icons/like.svg"}
+            alt="heart"
+            width={32}
+            height={32}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          />
+        )}
+      </Button>
+    );
+  };
+
+  const dialogContent = () => {
+    return (
+      <div className="flex flex-col gap-[55px] pt-[30px] pb-5">
+        <div className="flex flex-col items-center justify-center">
+          <div className="font-bold text-[28px] content-center">
+            로그인이 필요한
+          </div>
+          <div className="font-bold text-[28px] content-center">서비스에요</div>
+        </div>
+        <div className="flex items-center justify-center ">
+          <Button
+            className="desktop:w-[300px] tablet:w-[260px] mobile:w-[260px] h-[52px] text-base font-semibold bg-custom-purple hover:bg-custom-hoverPurple rounded"
+            type="submit"
+            onClick={linkToLogin}
+          >
+            회원가입 / 로그인 하기
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  if (lectureData.status === false) {
+    return <DisabledPickLectureCard lectureData={lectureData} />;
+  }
+
   return (
     <Link
       href={`/class/${id}`}
@@ -105,29 +192,21 @@ const PickLectureCard = (props: PickLectureCardProps) => {
                 className="object-cover desktop:w-[384px] tablet:w-[344px] mobile:w-[312px] desktop:h-[280px] tablet:h-[256px] mobile:h-[190px]"
               />
               <div className="flex items-center justify-center absolute top-3 left-3 desktop:w-16 tablet:w-[52px] mobile:w-[52px] desktop:h-[34px] tablet:h-[27px] mobile:h-[27px] rounded-sm bg-custom-purple content-center text-white text-base font-semibold">{`문화`}</div>
-              <div className="absolute top-3 right-3">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="flex items-center justify-center desktop:w-[32px] tablet:w-[24px] mobile:w-[24px] desktop:h-[32px] tablet:h-[24px] mobile:h-[24px]"
-                  onClick={(e) => handleLikeClick(e)}
-                >
-                  {heart ? (
-                    <Image
-                      src="/icons/like_filled.svg"
-                      alt="heart"
-                      width={32}
-                      height={32}
-                    />
-                  ) : (
-                    <Image
-                      src="/icons/like.svg"
-                      alt="heart filled"
-                      width={32}
-                      height={32}
-                    />
-                  )}
-                </Button>
+              <div
+                className="absolute top-3 right-3"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                }}
+              >
+                <UnifiedDialog
+                  dialogTitle="로그인 오류"
+                  dialogDescription="로그인 오류 Dialog"
+                  triggerItem={triggerItem()}
+                  dialogContent={dialogContent()}
+                  open={openLoginDialog}
+                  setOpen={setOpenLoginDialog}
+                />
               </div>
             </div>
             <div className="flex flex-col desktop:px-[22px] tablet:px-4 mobile:px-4 desktop:py-5 tablet:pt-3 tablet:pb-[14px] mobile:pt-3 mobile:pb-[14px] desktop:gap-7 tablet:gap-4 mobile:gap-4">
@@ -146,11 +225,12 @@ const PickLectureCard = (props: PickLectureCardProps) => {
               <div className="flex flex-row justify-between desktop:w-[340px] tablet:w-[304px] mobile:w-[272px] desktop:h-[27px] tablet:h-[24px] mobile:h-[24px]">
                 {/* FIXME: 색상 추가 */}
                 <div className="text-custom-textGrayColor desktop:text-lg tablet:text-base mobile:text-base desktop:font-semibold tablet:font-medium mobile:font-medium">
-                  {address}
+                  {short_address}
                 </div>
                 <div className="text-custom-textGrayColor desktop:text-lg tablet:text-base mobile:text-base desktop:font-bold tablet:font-medium mobile:font-medium ">
                   {start_date.replaceAll("-", ".").split(".")[1]}.
-                  {start_date.replaceAll("-", ".").split(".")[2]}({day_of_week}){" "}
+                  {start_date.replaceAll("-", ".").split(".")[2]}{" "}
+                  {/* TODO: ({day_of_week}){" "} */}
                   {/* TODO: time to 오전 오후 시간 */}
                   {Number(time.split(":")[0]) / 12 ? "오후" : "오전"}{" "}
                   {Number(time.split(":")[0]) % 12}:

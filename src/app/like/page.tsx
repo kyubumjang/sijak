@@ -15,9 +15,9 @@ const LikePage = () => {
   const [lectureListData, setLectureListData] =
     useState<HeartsLectureListResDataInfo[]>();
   const [lectureSize, setLectureSize] = useState<LectureSize>({
-    page: 1,
-    size: 2,
-    dist: 500,
+    page: 0,
+    size: 9,
+    // dist: 500,
   });
   const [hasNext, setHasNext] = useState(true);
 
@@ -28,7 +28,7 @@ const LikePage = () => {
   const { data, isLoading, isSuccess } = useLikeLectureList({
     page: lectureSize.page,
     size: lectureSize.size,
-    dist: lectureSize.dist,
+    // dist: lectureSize.dist,
   });
 
   useEffect(() => {

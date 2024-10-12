@@ -8,7 +8,6 @@ export const baseInstance = axios.create({
   headers: {
     "Access-Control-Allow-Origin": `${process.env.NEXT_PUBLIC_ACCESS_CONTROL_ALLOW_ORIGIN_URL}`,
     Authorization: ``,
-    // TODO:  Bearer ${token} 처리 필요
   },
 });
 

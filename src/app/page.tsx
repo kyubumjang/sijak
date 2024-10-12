@@ -23,6 +23,7 @@ import { useCarouselApi } from "@/shared/lib/useCarouselApi";
 import { useGeoLocation } from "@/shared/lib/useGeolocation";
 import useHomeLectureList from "@/entities/lecture/api/useHomeLectureList";
 import useLoginedUserStore from "@/shared/store/user";
+import usePostLikeLecture from "@/features/like/api/usePostLikeLecture";
 import { useRouter } from "next/navigation";
 
 const Home = () => {
@@ -32,7 +33,7 @@ const Home = () => {
   const [lectureSize, setLectureSize] = useState<LectureSize>({
     page: 0,
     size: 9,
-    dist: 500,
+    // dist: 500,
   });
   const [user, setUser] = useState<LoginUserInfo>({
     id: 0,
@@ -95,6 +96,7 @@ const Home = () => {
         };
       });
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [geolocation.curLocation]);
 
@@ -105,7 +107,7 @@ const Home = () => {
           params: {
             page: lectureSize.page,
             size: lectureSize.size,
-            dist: lectureSize.dist,
+            // dist: lectureSize.dist,
           },
           payload: {
             latitude: user.latitude,
@@ -158,7 +160,10 @@ const Home = () => {
             isPreviousIcon
           />
           <div className="flex flex-row items-center justify-center gap-[18px]">
-            <Progress value={calculateProgressBar()} />
+            <Progress
+              value={calculateProgressBar()}
+              className="h-[3px] rounded-none"
+            />
             <div className="flex flex-row items-center justify-center w-[60px] h-[38px] gap-1">
               <div className="text-custom-textBlackColor text-sm font-bold">{`${current}`}</div>
               <div className="text-custom-textDescriptionGrayColor text-sm font-bold">{`/ ${count}`}</div>
@@ -193,9 +198,6 @@ const Home = () => {
       <div className="text-2xl font-semibold">클래스가 존재하지 않습니다</div>
     );
   };
-
-  // TODO: 캐러셀
-  // TODO: 캐러셀 더 불러오기 상태관리
 
   return (
     <div className="flex w-full h-full flex-col 16">

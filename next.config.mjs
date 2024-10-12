@@ -12,6 +12,19 @@ const nextConfig = {
         config.resolve.alias.push({ name: "msw/node", alias: false });
       else config.resolve.alias["msw/node"] = false;
     }
+
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: [
+        {
+          loader: "@svgr/webpack",
+          options: {
+            // 원하는 옵션 추가
+          },
+        },
+      ],
+    });
+
     return config;
   },
   images: {
