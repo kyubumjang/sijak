@@ -1,20 +1,52 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import {
+  GetLocationLectureListParams,
+  LectureInfo,
+  MarkerLectureInfo,
+  shortAddressList,
+} from "@/entities/lecture/model/lecture";
 
-import { LectureInfo } from "@/entities/lecture/model/lecture";
+import { ChipStatus } from "@/shared/ui/Chip/Chip";
 
 export type NaverMap = naver.maps.Map;
 
 interface MapProps {
   latitude: number;
   longitude: number;
+  markerLatitude?: number;
+  markerLongitude?: number;
+  setChipStatus: Dispatch<SetStateAction<Record<shortAddressList, ChipStatus>>>;
   lectureListData: LectureInfo[];
+  markerLectureListData: MarkerLectureInfo[];
+  setLocationLectureParams: Dispatch<
+    SetStateAction<GetLocationLectureListParams>
+  >;
 }
 
-const Map = ({ latitude, longitude, lectureListData }: MapProps) => {
+const Map = ({
+  latitude,
+  longitude,
+  markerLatitude,
+  markerLongitude,
+  setChipStatus,
+  setLocationLectureParams,
+  lectureListData,
+  markerLectureListData,
+}: MapProps) => {
   const [selectedLectureId, setSelectedLectureId] = useState<number | null>();
-
+  // TODO: Center 값 상태관리 필요(* Chip 클릭 시 중앙 값 해당 구 위도 경도로 바뀌게 처리 필요)
+  const [center, setCenter] = useState<naver.maps.LatLng>(
+    new naver.maps.LatLng(latitude, longitude),
+  );
   const markers: Array<naver.maps.Marker> = useMemo(() => {
     return [];
   }, []);
@@ -25,10 +57,10 @@ const Map = ({ latitude, longitude, lectureListData }: MapProps) => {
 
   // 커스텀 훅을 만들어서 useMapInit() -> createPositionMarker 현재 위치 마커, 함수로 ClassMarker 클래스 마커 생성, infoWindow 도 훅으로 그 아래 마커 업데이트는 함수로 생성, 언마운트 하는 코드도 작성 필요성이 있음
   const initMap = useCallback(() => {
-    const location = new naver.maps.LatLng(latitude, longitude);
+    // const location = new naver.maps.LatLng(latitude, longitude);
 
     const mapOptions: naver.maps.MapOptions = {
-      center: location,
+      center: center,
       logoControl: true, // 네이버 로고 표시 X
       mapDataControl: false, // 지도 데이터 저작권 컨트롤 표시 X
       scaleControl: true, // 지도 축척 컨트롤의 표시 여부
@@ -54,7 +86,7 @@ const Map = ({ latitude, longitude, lectureListData }: MapProps) => {
 
     // 클래스 Marker
 
-    lectureListData.forEach((lectureData) => {
+    markerLectureListData.forEach((lectureData) => {
       if (lectureData.latitude && lectureData.longitude) {
         const classMarker = new naver.maps.Marker({
           position: new naver.maps.LatLng(
@@ -97,12 +129,39 @@ const Map = ({ latitude, longitude, lectureListData }: MapProps) => {
         infoWindows.push(infoWindow);
 
         // 마커 클릭 시 InfoWindow 열기
-        naver.maps.Event.addListener(classMarker, "click", function () {
+        naver.maps.Event.addListener(classMarker, "click", function (e) {
           // 이미 열려있는 InfoWindow가 있다면 닫기
           infoWindows.forEach((iw) => iw.close());
 
           // 클릭한 마커에 해당하는 InfoWindow 열기
           infoWindow.open(map, classMarker);
+          setChipStatus(() => {
+            return {
+              "서울 송파구":
+                lectureData.short_address === "서울특별시 송파구"
+                  ? "active"
+                  : "default",
+              "서울 마포구":
+                lectureData.short_address === "서울특별시 마포구"
+                  ? "active"
+                  : "default",
+              "서울 노원구":
+                lectureData.short_address === "서울특별시 노원구"
+                  ? "active"
+                  : "default",
+              "서울 강서구":
+                lectureData.short_address === "서울특별시 강서구"
+                  ? "active"
+                  : "default",
+            };
+          });
+          setLocationLectureParams((prev) => {
+            return {
+              ...prev,
+              location: lectureData.short_address,
+            };
+          });
+          setCenter(e.coord);
         });
       }
     });
@@ -145,6 +204,12 @@ const Map = ({ latitude, longitude, lectureListData }: MapProps) => {
       initMap();
     }
   }, [initMap]);
+
+  useEffect(() => {
+    if (markerLatitude && markerLongitude) {
+      setCenter(new naver.maps.LatLng(markerLatitude, markerLongitude));
+    }
+  }, [markerLatitude, markerLongitude]);
 
   return (
     <div className="rounded-lg overflow-hidden">

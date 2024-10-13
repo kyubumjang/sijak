@@ -10,7 +10,9 @@ const LectureDetailItem = ({ title, content }: LectureDetailItemProps) => {
         {title}
       </div>
       {content && (
-        <div className="flex desktop:text-xl tablet:text-base">{content}</div>
+        <div className="flex desktop:text-xl tablet:text-base whitespace-pre-line">
+          {content}
+        </div>
       )}
     </div>
   );

@@ -29,12 +29,14 @@ const config: Config = {
           homeMapBackground: "#F0F0F0",
           entireLikeBackground: "#E9E8EC",
           tooltipBackground: "#525252",
+          homeTooltipBackground: "#262626",
           buttonGrayBackground: "#F5F5F5",
           divGrayBackground: "#E5E5E5",
           blackBackground: "#060606",
           bannerBackground: "#CCCCCC",
           footerBackground: "#3E3E3E",
           kakao: "#FEE500",
+          hoverKakao: "#FADB0C",
           purple: "#4F118C",
           hoverPurple: "#2B0253",
           orange: "#FF501A",
@@ -98,6 +100,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar-hide")],
 };
 export default config;

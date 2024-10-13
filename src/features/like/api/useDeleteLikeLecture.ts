@@ -1,6 +1,6 @@
+import { LECTURE_KEYS, LIKE_LECTURE_KEYS } from "@/shared/api/keyFactory";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { LECTURE_KEYS } from "@/shared/api/keyFactory";
 import { LikeLecture } from "../model/like";
 import { deleteLikeLecture } from ".";
 
@@ -20,6 +20,9 @@ const useDeleteLikeLecture = (lectureId: number) => {
       });
       queryClient.invalidateQueries({
         queryKey: LECTURE_KEYS.lists(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: LIKE_LECTURE_KEYS.list(),
       });
     },
   });

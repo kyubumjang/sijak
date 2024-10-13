@@ -57,9 +57,9 @@ const LikePage = () => {
           <div ref={ref} className="h-[200px]" /> {/* 스크롤 감지 요소 */}
           {isLoading && (
             <div className="flex flex-row space-x-6">
-              <SkeletonCard type="col" />
-              <SkeletonCard type="col" />
-              <SkeletonCard type="col" />
+              <SkeletonCard type="pickLecture" />
+              <SkeletonCard type="pickLecture" />
+              <SkeletonCard type="pickLecture" />
             </div>
           )}
         </div>

@@ -55,7 +55,8 @@ const MiniMap = ({ latitude, longitude }: MiniMapProps) => {
     <div>
       <div
         id="mini_map_id"
-        className="desktop:w-[572px] tablet:w-[704px] mobile:w-[312px] desktop:h-[143px] tablet:h-[228px] mobile:h-[122px]"
+        className="desktop:w-[572px] tablet:w-[704px] mobile:w-[312px] desktop:h-[186px] tablet:h-[228px] mobile:h-[144px]"
+        // desktop:h-[143px] tablet:h-[228px] mobile:h-[122px]
       ></div>
     </div>
   );

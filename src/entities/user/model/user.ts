@@ -96,6 +96,22 @@ export type PatchUserInfo = Payload<
   PatchUserInfoRes
 >;
 
+export interface PostUserAgreeDto {
+  agreeItems: string[];
+}
+export interface PostUserAgreeRes {
+  status: number;
+  message: string;
+  data: string;
+}
+
+export type PostUserAgree = Payload<
+  BearerAccessTokenHeader,
+  undefined,
+  PostUserAgreeDto,
+  PostUserAgreeRes
+>;
+
 export const userAgeMap: Record<string, number> = {
   "10~19": 10,
   "20~29": 20,

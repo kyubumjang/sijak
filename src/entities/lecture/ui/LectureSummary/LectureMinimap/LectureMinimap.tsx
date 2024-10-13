@@ -23,7 +23,7 @@ const LectureMinimap = (props: LectureMinimapProps) => {
           latitude={lectureInfo.latitude}
           longitude={lectureInfo.longitude}
         />
-        <div className="flex flex-row desktop:w-[572px] tablet:w-[400px] mobile:w-[312px] desktop:h-[43px] tablet:h-[43px] mobile:h-[22px] items-center gap-[2.5px] bg-custom-purple desktop:pl-5 tablet:pl-5 mobile:pl-[15px]">
+        {/* <div className="flex flex-row desktop:w-[572px] tablet:w-[400px] mobile:w-[312px] desktop:h-[43px] tablet:h-[43px] mobile:h-[22px] items-center gap-[2.5px] bg-custom-purple desktop:pl-5 tablet:pl-5 mobile:pl-[15px]">
           <div>
             <Image
               src="/icons/map_pin.svg"
@@ -38,7 +38,7 @@ const LectureMinimap = (props: LectureMinimapProps) => {
             내 위치에서 {lectureInfo.distance} ∙{lectureInfo.estimatedTime}분
             이내
           </div>
-        </div>
+        </div> */}
       </div>
     )
   );

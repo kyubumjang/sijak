@@ -186,7 +186,7 @@ const UserInfoPage = () => {
   const triggerItem = () => {
     return (
       <div className="flex items-center justify-center">
-        <div className="flex justify-center items-center text-center desktop:w-[400px] tablet:w-[400px] mobile:w-[260px] max-w-[400px] h-14 bg-white hover:bg-gray-300 text-custom-textGrayColor text-xl font-semibold border border-custom-disabled rounded-md">
+        <div className="flex justify-center items-center text-center  desktop:w-[400px] tablet:w-[400px] mobile:w-[260px] max-w-[400px] h-14 bg-white hover:bg-custom-buttonGrayBackground text-xl font-semibold border border-custom-disabled rounded-md">
           로그아웃
         </div>
       </div>
@@ -312,7 +312,7 @@ const UserInfoPage = () => {
                       <Button
                         variant="ghost"
                         type="button"
-                        className="desktop:w-[112px] tablet:w-[112px] mobile:w-[92px] desktop:h-14 tablet:h-14 mobile:h-[41px] bg-custom-buttonGrayBackground hover:bg-gray-300 text-base font-semibold px-3 py-4 rounded-md"
+                        className="desktop:w-[112px] tablet:w-[112px] mobile:w-[92px] desktop:h-14 tablet:h-14 mobile:h-[41px] bg-custom-buttonGrayBackground hover:bg-custom-divGrayBackground text-base font-semibold px-3 py-4 rounded-md"
                         onClick={updateCurrentPosition}
                       >
                         <div className="flex flex-row gap-1 mobile:text-sm">

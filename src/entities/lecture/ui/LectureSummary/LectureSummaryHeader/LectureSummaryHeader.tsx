@@ -24,7 +24,7 @@ const LectureSummaryHeader = ({
 
   const renderDialogTriggerItem = () => {
     return (
-      <div className="flex items-center justify-center cursor-pointer hover:bg-gray-100 rounded p-1">
+      <div className="flex items-center justify-center cursor-pointer rounded p-1">
         <Image src="/icons/share.svg" alt="share" width={24} height={24} />
       </div>
     );
@@ -33,7 +33,7 @@ const LectureSummaryHeader = ({
   const renderDialogContent = () => {
     return (
       <div className="flex flex-row items-center justify-center py-[46px] gap-7">
-        <ImageDescription
+        {/* <ImageDescription
           containerWidth={115}
           containerHeight={96}
           src="/icons/kakao.svg"
@@ -42,7 +42,7 @@ const LectureSummaryHeader = ({
           height={60}
           imageDescription="카카오톡 공유하기"
           handleClick={shareLinkToKakao}
-        />
+        /> */}
         <ImageDescription
           containerWidth={115}
           containerHeight={96}

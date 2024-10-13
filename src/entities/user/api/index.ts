@@ -3,6 +3,7 @@ import {
   PatchUserAddress,
   PatchUserInfo,
   PostNickname,
+  PostUserAgree,
   ValidateNickname,
 } from "../model/user";
 
@@ -11,6 +12,7 @@ import { getCookie } from "cookies-next";
 
 const BASE_PATH = "/api/mypage";
 const NICKNAME_BASE_PATH = "/api/nickname";
+const AGREE_BASE_PATH = "/api/agree";
 
 // FIXME: 테스트 필요
 export const getLoginUserInfo = () =>
@@ -65,3 +67,10 @@ export const postNickname = (params: PostNickname["Request"]["query"]) =>
       params,
     },
   );
+
+export const postUserAgree = (payload: PostUserAgree["Request"]["body"]) =>
+  apiRequest.post<PostUserAgree["Response"]>(`${AGREE_BASE_PATH}`, payload, {
+    headers: {
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+  });

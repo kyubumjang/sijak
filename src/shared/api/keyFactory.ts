@@ -3,6 +3,7 @@ const KEY_DOMAINS = {
   logout: "logout",
   lecture: "lecture",
   homeLecture: "homeLecture",
+  locationLecture: "locationLecture",
   likeClass: "likeClass",
   user: "user",
   you: "you",
@@ -16,7 +17,6 @@ export const AUTH_KEYS = {
 export const LECTURE_KEYS = {
   all: [KEY_DOMAINS.lecture],
   lists: () => [...LECTURE_KEYS.all, "list"],
-  // FIXME: lecture 타입 전체 수정됨, 업데이트 필요
   list: (filters?: {
     id?: number;
     thumbnail?: string;
@@ -24,12 +24,17 @@ export const LECTURE_KEYS = {
     time?: string;
     target?: string;
     status?: boolean;
-    address?: string;
+    latitude?: string;
+    longitude?: string;
+    long_address?: string;
+    short_address?: string;
     link?: string;
+    division?: string;
     heart?: boolean;
     start_date?: string;
     end_date?: string;
     day_of_week?: string;
+    hosted_by?: string;
     page?: number;
     size?: number;
   }) => [...LECTURE_KEYS.all, "list", filters],
@@ -43,7 +48,6 @@ export const LECTURE_KEYS = {
 export const HOME_LECTURE_KEYS = {
   all: [KEY_DOMAINS.homeLecture],
   lists: () => [...HOME_LECTURE_KEYS.all, "list"],
-  // FIXME: lecture 타입 전체 수정됨, 업데이트 필요
   list: (filters?: {
     id?: number;
     thumbnail?: string;
@@ -51,18 +55,55 @@ export const HOME_LECTURE_KEYS = {
     time?: string;
     target?: string;
     status?: boolean;
-    address?: string;
+    latitude?: string;
+    longitude?: string;
+    long_address?: string;
+    short_address?: string;
     link?: string;
+    division?: string;
     heart?: boolean;
     start_date?: string;
     end_date?: string;
     day_of_week?: string;
+    hosted_by?: string;
     page?: number;
     size?: number;
   }) => [...HOME_LECTURE_KEYS.all, "list", filters],
   details: () => [...HOME_LECTURE_KEYS.all, "detail"],
   detail: (filters: { lectureId: number }) => [
     ...HOME_LECTURE_KEYS.details(),
+    filters,
+  ],
+};
+
+export const LOCATION_LECTURE_KEYS = {
+  all: [KEY_DOMAINS.homeLecture],
+  lists: () => [...LOCATION_LECTURE_KEYS.all, "list"],
+  list: (filters?: {
+    id?: number;
+    thumbnail?: string;
+    name?: string;
+    time?: string;
+    target?: string;
+    status?: boolean;
+    latitude?: string;
+    longitude?: string;
+    long_address?: string;
+    short_address?: string;
+    link?: string;
+    division?: string;
+    heart?: boolean;
+    start_date?: string;
+    end_date?: string;
+    day_of_week?: string;
+    hosted_by?: string;
+    page?: number;
+    size?: number;
+    location?: string;
+  }) => [...LOCATION_LECTURE_KEYS.all, "list", filters],
+  details: () => [...LOCATION_LECTURE_KEYS.all, "detail"],
+  detail: (filters: { lectureId: number }) => [
+    ...LOCATION_LECTURE_KEYS.details(),
     filters,
   ],
 };

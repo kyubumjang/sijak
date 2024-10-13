@@ -2,7 +2,7 @@ import {
   GetHomeLectureList,
   GetLecture,
   GetLectureList,
-  Lecture,
+  GetLocationLectureList,
 } from "@/entities/lecture/model/lecture";
 
 import apiRequest from "@/shared/api";
@@ -10,6 +10,7 @@ import { getCookie } from "cookies-next";
 
 const BASE_PATH = "/api/lectures";
 const HOME_BASE_PATH = "/api/home";
+const LOCATION_BASE_PATH = "/api/location";
 
 const accessToken = getCookie("accessToken");
 
@@ -37,6 +38,22 @@ export const getHomeLectureList = ({
   apiRequest.post<GetHomeLectureList["Response"]>(
     `${HOME_BASE_PATH}`,
     payload,
+    {
+      headers: {
+        Authorization: accessToken ? `Bearer ${accessToken}` : "",
+      },
+      params,
+    },
+  );
+
+export const getLocationLectureList = ({
+  params,
+}: {
+  params: GetLocationLectureList["Request"]["query"];
+}) =>
+  apiRequest.post<GetLocationLectureList["Response"]>(
+    `${LOCATION_BASE_PATH}`,
+    {},
     {
       headers: {
         Authorization: accessToken ? `Bearer ${accessToken}` : "",

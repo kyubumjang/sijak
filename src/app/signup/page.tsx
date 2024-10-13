@@ -5,6 +5,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useCallback, useState } from "react";
 
 import { InputLabelStatus } from "@/shared/ui/InputLabel/InputLabel";
+import { UserServiceAgreeDialog } from "@/entities/user/ui";
 import axios from "axios";
 import { debounce } from "lodash";
 import { toast } from "sonner";
@@ -25,6 +26,7 @@ const SignUpPage = () => {
     clearErrors,
   } = useForm<SignUpForm>();
 
+  const [agree, setAgree] = useState<boolean>(false);
   const [status, setStatus] = useState<InputLabelStatus>("default");
   const [message, setMessage] = useState<string>("");
 
@@ -84,6 +86,10 @@ const SignUpPage = () => {
       },
     );
   };
+
+  if (!agree) {
+    return <UserServiceAgreeDialog setAgree={setAgree} />;
+  }
 
   return (
     <div className="flex flex-col w-full h-[calc(100vh-70px)] justify-center items-center p-4 gap-12">

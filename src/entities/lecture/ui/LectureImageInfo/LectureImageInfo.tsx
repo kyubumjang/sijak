@@ -50,7 +50,7 @@ const LectureImageInfo = ({
           },
           {
             onSuccess: () => {
-              toast("좋아요 삭제 성공");
+              toast("찜한 클래스를 삭제했어요");
             },
             onError: () => {
               setHeart(true);
@@ -66,7 +66,7 @@ const LectureImageInfo = ({
           },
           {
             onSuccess: () => {
-              toast("좋아요 성공");
+              toast("클래스를 찜 했어요");
             },
             onError: () => {
               setHeart(false);
@@ -82,6 +82,18 @@ const LectureImageInfo = ({
     router.push("/login");
   };
 
+  const calculateDDay = () => {
+    if (lectureInfo.d_day === 0) {
+      return `오늘 마감`;
+    }
+    if (lectureInfo.d_day > 0) {
+      return `${lectureInfo.d_day}일 지남`;
+    }
+    if (lectureInfo.d_day < 0) {
+      return `${Math.abs(lectureInfo.d_day)}일 남음`;
+    }
+  };
+
   const triggerItem = () => {
     return (
       <div
@@ -94,7 +106,7 @@ const LectureImageInfo = ({
         <Button
           variant="ghost"
           size="icon"
-          className="flex items-center justify-center desktop:w-[32px] tablet:w-[24px] mobile:w-[24px] desktop:h-[32px] tablet:h-[24px] mobile:h-[24px] bg-transparent"
+          className="flex items-center justify-center desktop:w-[32px] tablet:w-[24px] mobile:w-[24px] desktop:h-[32px] tablet:h-[24px] mobile:h-[24px] bg-transparent hover:bg-transparent"
           onClick={() => handleLikeLecture()}
         >
           {heart ? (
@@ -105,8 +117,6 @@ const LectureImageInfo = ({
               alt="heart"
               width={32}
               height={32}
-              onMouseEnter={() => setIsHoveredFilled(false)}
-              onMouseLeave={() => setIsHoveredFilled(true)}
             />
           ) : (
             <Image
@@ -114,8 +124,6 @@ const LectureImageInfo = ({
               alt="heart filled"
               width={32}
               height={32}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
             />
           )}
         </Button>
@@ -156,7 +164,7 @@ const LectureImageInfo = ({
       )}
       {lectureInfo && (
         <div className="absolute top-5 left-[88px] w-[79px] h-8 content-center text-center text-white text-base font-semibold rounded bg-custom-textSemiBoldBlackColor">
-          {lectureInfo.d_day}일 남음
+          {calculateDDay()}
         </div>
       )}
       <UnifiedDialog

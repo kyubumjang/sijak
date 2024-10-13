@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { Button } from "@/shared/ui";
 import { HeartsLectureListResDataInfo } from "@/features/like/model/like";
 import Image from "next/image";
-import Link from "next/link";
+import moment from "moment";
+
+moment.locale("ko");
 
 interface PickLectureCardProps {
   lectureData: LectureInfo | PickLectureInfo | HeartsLectureListResDataInfo;
@@ -17,6 +19,10 @@ const DisabledPickLectureCard = (props: PickLectureCardProps) => {
     lectureData;
 
   const [dimensions, setDimensions] = useState({ width: 384, height: 280 });
+
+  const dateString = start_date.replaceAll("-", ".");
+  const date = moment(dateString, "YYYY.MM.DD");
+  const shortDayOfWeek = date.format("ddd");
 
   useEffect(() => {
     const handleResize = () => {
@@ -76,7 +82,7 @@ const DisabledPickLectureCard = (props: PickLectureCardProps) => {
                 )}
               </Button>
             </div>
-            <div className="absolute inset-0 bg-black opacity-70 rounded-lg">
+            <div className="absolute inset-0 bg-black opacity-60 rounded-lg">
               <div className="flex justify-center items-center w-full h-full text-white text-[28px] opacity-100 font-bold">
                 마감
               </div>
@@ -85,26 +91,24 @@ const DisabledPickLectureCard = (props: PickLectureCardProps) => {
           <div className="flex flex-col desktop:px-[22px] tablet:px-4 mobile:px-4 desktop:py-5 tablet:pt-3 tablet:pb-[14px] mobile:pt-3 mobile:pb-[14px] desktop:gap-7 tablet:gap-4 mobile:gap-4">
             <div className="flex flex-col desktop:w-[340px] tablet:w-[304px] mobile:w-[272px] desktop:h-[93px] tablet:h-[67px] mobile:h-[67px]">
               <div className="flex flex-col gap-1">
-                <div className="text-custom-disabled desktop:text-lg tablet:text-sm mobile:text-sm desktop:font-bold tablet:font-medium mobile:font-medium whitespace-nowrap text-ellipsis overflow-hidden">
+                <div className="text-custom-textDescriptionGrayColor desktop:text-lg tablet:text-sm mobile:text-sm desktop:font-bold tablet:font-medium mobile:font-medium whitespace-nowrap text-ellipsis overflow-hidden">
                   {division}
                 </div>
                 <div className="flex justify-between items-center desktop:w-[340px] tablet:w-[304px] mobile:w-[272px]">
-                  <div className="text-custom-disabled desktop:text-2xl tablet:text-base mobile:text-base font-semibold desktop:w-[340px] tablet:w-[248px] mobile:w-[208px] min-w-[208px] max-w-[340px] desktop:min-h-[62px] tablet:min-h-[42px] mobile:min-h-[42px]">
+                  <div className="text-custom-textDescriptionGrayColor desktop:text-2xl tablet:text-base mobile:text-base font-semibold desktop:w-[340px] tablet:w-[248px] mobile:w-[208px] min-w-[208px] max-w-[340px] desktop:min-h-[62px] tablet:min-h-[42px] mobile:min-h-[42px]">
                     [{name}]
                   </div>
                 </div>
               </div>
             </div>
             <div className="flex flex-row justify-between desktop:w-[340px] tablet:w-[304px] mobile:w-[272px] desktop:h-[27px] tablet:h-[24px] mobile:h-[24px]">
-              {/* FIXME: 색상 추가 */}
-              <div className="text-custom-disabled desktop:text-lg tablet:text-base mobile:text-base desktop:font-semibold tablet:font-medium mobile:font-medium">
+              <div className="text-custom-textDescriptionGrayColor desktop:text-lg tablet:text-base mobile:text-base desktop:font-semibold tablet:font-medium mobile:font-medium">
                 {short_address}
               </div>
-              <div className="text-custom-disabled desktop:text-lg tablet:text-base mobile:text-base desktop:font-bold tablet:font-medium mobile:font-medium ">
+              <div className="text-custom-textDescriptionGrayColor desktop:text-lg tablet:text-base mobile:text-base desktop:font-bold tablet:font-medium mobile:font-medium ">
                 {start_date.replaceAll("-", ".").split(".")[1]}.
-                {start_date.replaceAll("-", ".").split(".")[2]}{" "}
-                {/* TODO: ({day_of_week}){" "} */}
-                {/* TODO: time to 오전 오후 시간 */}
+                {start_date.replaceAll("-", ".").split(".")[2]}
+                {`(${shortDayOfWeek})`}
                 {Number(time.split(":")[0]) / 12 ? "오후" : "오전"}{" "}
                 {Number(time.split(":")[0]) % 12}:
                 {time.split(":")[1].slice(0, 2)}

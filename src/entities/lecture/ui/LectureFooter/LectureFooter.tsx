@@ -57,7 +57,7 @@ const LectureFooter = ({
         },
         {
           onSuccess: () => {
-            toast("좋아요 삭제 성공");
+            toast("찜한 클래스를 삭제했어요");
           },
           onError: () => {
             setHeart(true);
@@ -73,7 +73,7 @@ const LectureFooter = ({
         },
         {
           onSuccess: () => {
-            toast("좋아요 성공");
+            toast("클래스를 찜 했어요");
           },
           onError: () => {
             setHeart(false);
@@ -211,7 +211,7 @@ const LectureFooter = ({
   };
 
   return (
-    <div className="flex flex-row items-center w-full desktop:h-[70px] tablet:h-[70px] mobile:h-[55px] desktop:px-[120px] bg-white fixed bottom-0 border-t border-custom-disabled z-10">
+    <div className="flex flex-row items-center w-full desktop:h-[70px] tablet:h-[70px] mobile:h-[55px] desktop:px-[120px] bg-white fixed bottom-0 border-t border-custom-disabled z-[101]">
       <div className="flex desktop:w-[98px] tablet:min-w-[98px] mobile:min-w-[76px] desktop:h-[69px] tablet:h-[69px] mobile:h-[54px] border-r border-custom-disabled justify-center items-center">
         {renderLikeIcon()}
       </div>
