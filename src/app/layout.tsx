@@ -1,8 +1,8 @@
 import "./globals.css";
 
 import { Footer, Header, ToastToaster, Toaster } from "@/shared/ui";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 
-import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import Providers from "@/features/provider/Provider";
 import Script from "next/script";
@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${pretendard.variable}`}>
       <head>
         <Script
           type="text/javascript"
@@ -34,7 +34,7 @@ export default function RootLayout({
           src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_NAVER_API_CLIENT_ID}&submodules=geocoder`}
         />
       </head>
-      <body className={`${pretendard.variable} flex flex-col w-full h-full`}>
+      <body className={`${pretendard.className} flex flex-col w-full h-full`}>
         <Providers>
           <main className="flex w-full h-full flex-1">
             <div className="flex flex-col w-full h-full justify-start items-start relative">
@@ -51,6 +51,9 @@ export default function RootLayout({
           <ToastToaster />
         </Providers>
       </body>
+      <GoogleTagManager
+        gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_GTM_ID ?? ""}
+      />
       <GoogleAnalytics
         gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_GA_ID ?? ""}
       />
