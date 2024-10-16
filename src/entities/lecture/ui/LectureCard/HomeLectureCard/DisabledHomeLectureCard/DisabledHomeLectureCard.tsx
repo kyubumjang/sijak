@@ -44,7 +44,7 @@ const DisabledHomeLectureCard = (props: DisabledHomeLectureCardProps) => {
   }, []);
 
   return (
-    <div className="flex flex-col desktop:w-[384px] tablet:w-[280px] mobile:w-[240px] desktop:h-[468px] tablet:h-[343px] mobile:h-[323px] bg-white rounded-lg overflow-hidden">
+    <div className="flex flex-col desktop:w-[384px] tablet:w-[280px] mobile:w-[240px] desktop:h-[468px] tablet:h-[343px] mobile:h-[323px] bg-white rounded-lg overflow-hidden cursor-not-allowed">
       <div className="flex flex-col">
         <div className="flex flex-col">
           <div className="relative desktop:w-[384px] tablet:w-[280px] mobile:w-[240px] desktop:h-[280px] tablet:h-[188px] mobile:h-[168px]">
@@ -81,7 +81,7 @@ const DisabledHomeLectureCard = (props: DisabledHomeLectureCardProps) => {
               </Button>
             </div>
             <div className="absolute inset-0 rounded-lg bg-black opacity-60" />
-            <div className="absolute inset-0 flex justify-center items-center text-white text-[28px] font-bold">
+            <div className="absolute inset-0 flex justify-center items-center text-white text-[28px] font-bold cursor-not-allowed">
               마감
             </div>
           </div>

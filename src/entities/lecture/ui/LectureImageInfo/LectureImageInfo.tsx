@@ -97,7 +97,7 @@ const LectureImageInfo = ({
   const triggerItem = () => {
     return (
       <div
-        className="absolute top-5 right-5"
+        className="absolute desktop:top-5 tablet:top-3 mobile:top-3 desktop:right-5 tablet:right-3 mobile:right-3"
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
@@ -106,7 +106,7 @@ const LectureImageInfo = ({
         <Button
           variant="ghost"
           size="icon"
-          className="flex items-center justify-center desktop:w-[32px] tablet:w-[24px] mobile:w-[24px] desktop:h-[32px] tablet:h-[24px] mobile:h-[24px] bg-transparent hover:bg-transparent"
+          className="flex items-center justify-center desktop:w-[36px] tablet:w-[36px] mobile:w-[36px] desktop:h-[32px] tablet:h-[24px] mobile:h-[24px] bg-transparent hover:bg-transparent"
           onClick={() => handleLikeLecture()}
         >
           {heart ? (
@@ -115,15 +115,15 @@ const LectureImageInfo = ({
                 isHoveredFilled ? "/icons/like_filled.svg" : "/icons/like.svg"
               }
               alt="heart"
-              width={32}
-              height={32}
+              width={36}
+              height={36}
             />
           ) : (
             <Image
               src={isHovered ? "/icons/like_filled.svg" : "/icons/like.svg"}
               alt="heart filled"
-              width={32}
-              height={32}
+              width={36}
+              height={36}
             />
           )}
         </Button>
@@ -133,7 +133,7 @@ const LectureImageInfo = ({
 
   const dialogContent = () => {
     return (
-      <div className="flex flex-col gap-[55px] pt-[30px] pb-5">
+      <div className="flex flex-col gap-[55px] desktop:pt-[35px] tablet:pt-5 mobile:pt-5">
         <div className="flex flex-col items-center justify-center">
           <div className="font-bold text-[28px] content-center">
             로그인이 필요한
@@ -156,14 +156,14 @@ const LectureImageInfo = ({
   return (
     <div className="relative flex flex-col desktop:w-[588px] tablet:w-[330px] mobile:w-[312px] desktop:h-[588px] tablet:h-[330px] mobile:h-[316px] rounded-lg  overflow-hidden">
       {lectureInfo && (
-        <div className="absolute top-5 left-5 w-16 h-[34px] content-center text-center text-white text-base font-semibold rounded bg-custom-purple">
+        <div className="absolute desktop:top-5 tablet:top-3 mobile:top-3 desktop:left-5 tablet:left-3 mobile:left-3 w-16 h-[34px] content-center text-center text-white text-base font-semibold rounded bg-custom-purple">
           {lectureInfo.category && lectureInfo.category !== "미정"
             ? lectureInfo.category
             : "문화"}
         </div>
       )}
       {lectureInfo && (
-        <div className="absolute top-5 left-[88px] w-[79px] h-8 content-center text-center text-white text-base font-semibold rounded bg-custom-textSemiBoldBlackColor">
+        <div className="absolute desktop:top-5 tablet:top-3 mobile:top-3 left-[80px] w-[79px] h-[34px] content-center text-center text-white text-base font-semibold rounded bg-custom-textSemiBoldBlackColor">
           {calculateDDay()}
         </div>
       )}

@@ -24,3 +24,4 @@ export * from "./Chip";
 export * from "./Label";
 export * from "./Checkbox";
 export * from "./Form";
+export * from "./Toast";

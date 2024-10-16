@@ -1,11 +1,12 @@
 "use client";
 
-import { CarouselApi, Chip, Progress } from "@/shared/ui";
+import { CarouselApi, Chip, Progress, Skeleton } from "@/shared/ui";
 import {
   Description,
   IntroductionBanner,
   LectureCarousel,
   LectureList,
+  NotFoundLecture,
   SkeletonCard,
 } from "@/entities/lecture/ui";
 import {
@@ -34,7 +35,7 @@ import { useRouter } from "next/navigation";
 
 const Home = () => {
   const [lectureListData, setLectureListData] = useState<LectureInfo[]>();
-  const [pickLectureListData, sePickLectureListData] =
+  const [pickLectureListData, setPickLectureListData] =
     useState<PickLectureInfo[]>();
   const [markerLectureListData, setMarkerLectureListData] =
     useState<MarkerLectureInfo[]>();
@@ -84,8 +85,16 @@ const Home = () => {
   } = useLocationLectureList({
     params: locationLectureParams,
   });
-  const getHomeLectureList = useHomeLectureList();
-  const isLoading = getHomeLectureList.isIdle || getHomeLectureList.isPending;
+
+  const {
+    data: homeLectureList,
+    isLoading,
+    isSuccess,
+    refetch,
+  } = useHomeLectureList({
+    page: lectureSize.page,
+    size: lectureSize.size,
+  });
 
   const geolocation = useGeoLocation();
 
@@ -127,39 +136,25 @@ const Home = () => {
         };
       });
     }
-
+    refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [geolocation.curLocation]);
 
   useEffect(() => {
-    if (user.latitude && user.longitude) {
-      getHomeLectureList.mutate(
-        {
-          params: {
-            page: lectureSize.page,
-            size: lectureSize.size,
-            // dist: lectureSize.dist,
-          },
-          payload: {
-            latitude: user.latitude,
-            longitude: user.longitude,
-          },
-        },
-        {
-          onSuccess: (data) => {
-            const lectureListData = data.data.data.data;
-            const pickLectureListData = data.data.data.pickClasses;
-            const markerLectureListData = data.data.data.markerClasses;
-            setLectureListData(lectureListData);
-            sePickLectureListData(pickLectureListData);
-            setMarkerLectureListData(markerLectureListData);
-          },
-          onError: () => {},
-        },
-      );
+    if (isSuccess) {
+      const pickLectureListData = homeLectureList.data.pickClasses;
+      const markerLectureListData = homeLectureList.data.markerClasses;
+      setPickLectureListData(pickLectureListData);
+      setMarkerLectureListData(markerLectureListData);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lectureSize.page, lectureSize.size, user]);
+  }, [
+    user,
+    homeLectureList,
+    homeLectureList?.data.data,
+    homeLectureList?.data.markerClasses,
+    homeLectureList?.data.pickClasses,
+    isSuccess,
+  ]);
 
   useEffect(() => {
     if (
@@ -214,20 +209,26 @@ const Home = () => {
   const renderHomeLectureList = () => {
     if (isLoading || isLocationLectureListLoading) {
       return (
-        <div className="flex flex-row space-x-6 desktop:px-[120px] tablet:px-8 mobile:px-6">
-          <SkeletonCard type="homeLecture" />
-          <SkeletonCard type="homeLecture" />
-          <SkeletonCard type="homeLecture" />
+        <div className="flex flex-col">
+          <div className="flex flex-row space-x-6 desktop:px-[120px] tablet:px-8 mobile:px-6">
+            <SkeletonCard type="homeLecture" />
+            <SkeletonCard type="homeLecture" />
+            <SkeletonCard type="homeLecture" />
+          </div>
+          <div className="h-[58px]"></div>
         </div>
       );
     }
 
-    if (lectureListData && lectureListData.length > 0) {
+    if (
+      locationLectureListData?.data.data.data &&
+      locationLectureListData?.data.data.data.length > 0
+    ) {
       return (
-        <div className="flex flex-col desktop:w-full desktop:h-full tablet:w-full table:h-full mobile:w-full">
+        <div className="flex flex-col desktop:w-full desktop:h-full tablet:w-full tablet:h-full mobile:w-full">
           <div className="desktop:pl-[120px] tablet:px-8 mobile:px-6">
             <LectureCarousel
-              lectureInfo={lectureListData}
+              lectureInfo={locationLectureListData.data.data.data ?? []}
               setApi={setCarouselApi}
               isNextIcon
               isPreviousIcon
@@ -247,9 +248,7 @@ const Home = () => {
       );
     }
 
-    return (
-      <div className="text-2xl font-semibold">클래스가 존재하지 않습니다</div>
-    );
+    return <NotFoundLecture />;
   };
 
   const renderPickLectureList = () => {
@@ -265,13 +264,14 @@ const Home = () => {
 
     if (pickLectureListData && pickLectureListData.length > 0) {
       return (
-        <LectureList lectureListData={pickLectureListData} type="pickLecture" />
+        <LectureList
+          lectureListData={homeLectureList?.data.pickClasses ?? []}
+          type="pickLecture"
+        />
       );
     }
 
-    return (
-      <div className="text-2xl font-semibold">클래스가 존재하지 않습니다</div>
-    );
+    return <NotFoundLecture />;
   };
 
   return (
@@ -331,19 +331,18 @@ const Home = () => {
           </div>
         </div>
         <div className="desktop:px-[120px] tablet:px-8 mobile:px-6 ">
-          <IntroductionBanner />
+          {isLoading ? (
+            <Skeleton className="w-full desktop:h-[217px] tablet:h-[132px] mobile:h-[156px]" />
+          ) : (
+            <IntroductionBanner />
+          )}
         </div>
-        <div className="flex flex-col pb-4 desktop:px-[120px] tablet:px-8 mobile:px-6 gap-5">
-          <div className="flex flex-col">
-            <div className="flex flex-row gap-1">
-              <div className="font-bold desktop:text-2xl tablet:text-xl mobile:text-xl">
-                시:작 PICK
-              </div>
-              <div className="desktop:text-2xl tablet:text-xl mobile:text-xl">
-                클래스 📌
-              </div>
+        <div className="flex flex-col pb-4 desktop:px-[120px] tablet:px-8 mobile:px-6 desktop:gap-8 tablet:gap-5 mobile:gap-5">
+          <div className="flex flex-col gap-2">
+            <div className="font-bold desktop:text-2xl tablet:text-xl mobile:text-xl">
+              시:작 PICK 클래스 📌
             </div>
-            <div className="font-medium desktop:text-xl tablet:text-base mobile:text-base">
+            <div className="text-custom-tooltipBackground font-medium desktop:text-xl tablet:text-base mobile:text-base">
               조회 수 많은 추천 클래스를 소개할게요!
             </div>
           </div>

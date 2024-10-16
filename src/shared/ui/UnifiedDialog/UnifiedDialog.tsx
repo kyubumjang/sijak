@@ -9,8 +9,6 @@ import {
 } from "../Dialog";
 import { Dispatch, SetStateAction } from "react";
 
-import { Button } from "../Button";
-
 interface UnifiedDialogProps {
   open?: boolean;
   setOpen?: Dispatch<SetStateAction<boolean>>;
@@ -36,7 +34,9 @@ const UnifiedDialog = ({
           <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogDescription>{dialogDescription}</DialogDescription>
         </DialogHeader>
-        <DialogContent>{dialogContent}</DialogContent>
+        <DialogContent className="desktop:px-[28px] tablet:px-[20px] mobile:px-[20px] py-[20px]">
+          {dialogContent}
+        </DialogContent>
       </DialogPortal>
     </Dialog>
   );

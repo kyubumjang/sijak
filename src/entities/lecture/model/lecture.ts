@@ -125,7 +125,8 @@ export const lectureSummaryList: Array<LectureSummaryListProps> = [
   {
     src: "/icons/location.svg",
     type: "location",
-    render: (content) => `${content}`,
+    // FIXME: 임시 처리
+    render: (content) => `${content === "" ? " " : content}`,
   },
 ];
 
@@ -151,33 +152,38 @@ export interface LectureDetailListProps {
   render: (content: Lecture[keyof Lecture]) => string;
 }
 
+//FIXME: 임시 처리
 export const lectureDetailList: Array<LectureDetailListProps> = [
   {
     type: "condition",
-    render: (content) => `${content}`,
+    render: (content) => `${content === "" ? " " : content}`,
   },
   {
     type: "description",
-    render: (content) => `${content}`,
+    render: (content) => `${content === "" ? " " : content}`,
   },
   {
     type: "certification",
-    render: (content) => `${content}`,
+    render: (content) => `${content === "" ? " " : content}`,
   },
   {
     type: "text_book_name",
-    render: (content) => `${content}`,
+    render: (content) => `${content === "" ? " " : content}`,
   },
   {
     type: "text_book_price",
-    render: (content) => `${content}`,
+    render: (content) => `${content === "" ? " " : content}`,
   },
   {
     type: "need",
-    render: (content) => `${content}`,
+    render: (content) => `${content === "" ? " " : content}`,
   },
 ];
 
+export interface GetLectureListParams {
+  page: number;
+  size: number;
+}
 export interface GetLectureListDto {
   params: LectureSize;
   payload: LecturePayload;
@@ -215,8 +221,8 @@ export interface GetLectureListRes {
 
 export type GetLectureList = Payload<
   undefined,
+  GetLectureListParams,
   undefined,
-  GetLectureListDto,
   GetLectureListRes
 >;
 
@@ -270,8 +276,8 @@ export interface GetHomeLectureListRes {
 
 export type GetHomeLectureList = Payload<
   undefined,
+  GetLectureListParams,
   undefined,
-  GetLectureListDto,
   GetHomeLectureListRes
 >;
 

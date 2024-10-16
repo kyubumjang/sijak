@@ -40,6 +40,7 @@ const config: Config = {
           purple: "#4F118C",
           hoverPurple: "#2B0253",
           orange: "#FF501A",
+          textToastColor: "#FAFAFA",
           textBlackColor: "#171717",
           textSemiBoldBlackColor: "#404040",
           textGrayColor: "#737373",

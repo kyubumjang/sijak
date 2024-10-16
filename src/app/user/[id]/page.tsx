@@ -21,6 +21,7 @@ import useGetLoginUserInfo from "@/entities/user/api/useGetLoginUserInfo";
 import usePatchUserAddress from "@/entities/user/api/usePatchUserAddress";
 import usePatchUserInfo from "@/entities/user/api/usePatchUserInfo";
 import usePostLogout from "@/features/authentication/api/usePostLogout";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import useValidateNickname from "@/entities/user/api/useValidateNickname";
 
@@ -54,7 +55,7 @@ const UserInfoPage = () => {
   const postLogout = usePostLogout();
 
   const validateNickname = useValidateNickname();
-  const patchUserAddress = usePatchUserAddress();
+  // const patchUserAddress = usePatchUserAddress();
   const patchUserInfo = usePatchUserInfo();
 
   const {
@@ -73,6 +74,8 @@ const UserInfoPage = () => {
 
   const [status, setStatus] = useState<InputLabelStatus>("default");
   const [message, setMessage] = useState<string>("");
+
+  const queryClient = useQueryClient();
 
   const validationCheckNickname = debounce((nickname: string) => {
     validateNickname.mutate(
@@ -111,21 +114,21 @@ const UserInfoPage = () => {
     validationCheckNickname(nickname);
   };
 
-  const updateCurrentPosition = () => {
-    if (user) {
-      patchUserAddress.mutate(
-        {
-          latitude: user.latitude,
-          longitude: user.longitude,
-        },
-        {
-          onSuccess: (data) => {
-            setValue("address", data.data.data.address);
-          },
-        },
-      );
-    }
-  };
+  // const updateCurrentPosition = () => {
+  //   if (user) {
+  //     patchUserAddress.mutate(
+  //       {
+  //         latitude: user.latitude,
+  //         longitude: user.longitude,
+  //       },
+  //       {
+  //         onSuccess: (data) => {
+  //           setValue("address", data.data.data.address);
+  //         },
+  //       },
+  //     );
+  //   }
+  // };
 
   const updateUserInfo: SubmitHandler<UserInfoForm> = (data) => {
     patchUserInfo.mutate(
@@ -148,6 +151,7 @@ const UserInfoPage = () => {
         deleteCookie("accessToken");
         deleteCookie("refreshToken");
         toast("로그아웃 성공");
+        queryClient.clear();
         router.push("/");
       },
     });
@@ -186,7 +190,7 @@ const UserInfoPage = () => {
   const triggerItem = () => {
     return (
       <div className="flex items-center justify-center">
-        <div className="flex justify-center items-center text-center  desktop:w-[400px] tablet:w-[400px] mobile:w-[260px] max-w-[400px] h-14 bg-white hover:bg-custom-buttonGrayBackground text-xl font-semibold border border-custom-disabled rounded-md">
+        <div className="flex justify-center items-center text-center  desktop:w-[400px] tablet:w-[400px] mobile:w-[260px] max-w-[400px] h-14 bg-white hover:bg-custom-buttonGrayBackground desktop:text-2xl tablet:text-xl mobile:text-base font-semibold border border-custom-disabled rounded-md">
           로그아웃
         </div>
       </div>
@@ -195,13 +199,13 @@ const UserInfoPage = () => {
 
   const dialogContent = () => {
     return (
-      <div className="flex flex-col items-center justify-center gap-[69px]">
+      <div className="flex flex-col items-center justify-center desktop:pt-[49px] tablet:pt-[34px] mobile:pt-[34px] desktop:gap-[69px] tablet:gap-[54px] mobile:gap-[54px]">
         <div className="text-xl font-semibold">로그아웃 하시겠어요?</div>
         <div className="flex flex-row gap-2.5">
           <div>
             <Button
               variant="outline"
-              className="w-[125px] h-[52px] text-base font-semibold"
+              className="w-[125px] h-[52px] text-base font-semibold shadow-none"
               onClick={() => setOpenLogoutDialog(false)}
             >
               취소
@@ -209,7 +213,7 @@ const UserInfoPage = () => {
           </div>
           <div>
             <Button
-              className="w-[125px] h-[52px] bg-custom-purple hover:bg-custom-hoverPurple text-base font-semibold"
+              className="w-[125px] h-[52px] bg-custom-purple hover:bg-custom-hoverPurple text-base font-semibold shadow-none"
               onClick={handleLogout}
             >
               로그아웃
@@ -248,7 +252,9 @@ const UserInfoPage = () => {
                 </div>
                 {/* TODO: 연령대, 주소 조건문 처리 */}
                 <div className="desktop:h-[33px] tablet:h-[30px] mobile:h-[21px] desktop:text-[22px] tablet:text-[20px] mobile:text-sm text-custom-textGrayColor">
-                  {userAgeMap[loginedUser.age_range]}대, {loginedUser.location}
+                  {loginedUser.age_range &&
+                    `${userAgeMap[loginedUser.age_range]}대`}
+                  {/* , {loginedUser.location} */}
                 </div>
               </div>
             </div>
@@ -289,7 +295,7 @@ const UserInfoPage = () => {
                       />
                     )}
                   />
-                  <div className="flex flex-row gap-4">
+                  {/* <div className="flex flex-row desktop:h-[77px] tablet:h-[77px] mobile:h-[62px] gap-4">
                     <Controller
                       name="address"
                       control={control}
@@ -308,11 +314,11 @@ const UserInfoPage = () => {
                         />
                       )}
                     />
-                    <div className="flex items-end">
+                    <div className="flex items-end desktop:h-[77px] tablet:h-[67px] mobile:h-[62px]">
                       <Button
                         variant="ghost"
                         type="button"
-                        className="desktop:w-[112px] tablet:w-[112px] mobile:w-[92px] desktop:h-14 tablet:h-14 mobile:h-[41px] bg-custom-buttonGrayBackground hover:bg-custom-divGrayBackground text-base font-semibold px-3 py-4 rounded-md"
+                        className="desktop:w-[112px] tablet:w-[112px] mobile:w-[92px] desktop:h-14 tablet:h-14 mobile:h-[41px] bg-custom-buttonGrayBackground desktop:hover:bg-custom-divGrayBackground tablet:active:bg-custom-divGrayBackground mobile:active:bg-custom-divGrayBackground text-base font-semibold px-3 py-4 rounded-md"
                         onClick={updateCurrentPosition}
                       >
                         <div className="flex flex-row gap-1 mobile:text-sm">
@@ -328,7 +334,7 @@ const UserInfoPage = () => {
                         </div>
                       </Button>
                     </div>
-                  </div>
+                  </div> */}
                   <InputLabel
                     labelContent="이메일"
                     placeholder={loginedUser.email}
@@ -358,7 +364,7 @@ const UserInfoPage = () => {
                   disabled={
                     !isEmpty(errors.nickname) || !isEmpty(errors.address)
                   }
-                  className="desktop:w-[400px] tablet:w-[400px] mobile:w-[260px] h-14 font-semibold text-2xl bg-custom-purple hover:bg-custom-hoverPurple rounded-md"
+                  className="desktop:w-[400px] tablet:w-[400px] mobile:w-[260px] h-14 font-semibold desktop:text-2xl tablet:text-xl mobile:text-base bg-custom-purple hover:bg-custom-hoverPurple rounded-md"
                 >
                   저장하기
                 </Button>

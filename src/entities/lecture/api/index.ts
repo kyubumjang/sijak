@@ -12,32 +12,16 @@ const BASE_PATH = "/api/lectures";
 const HOME_BASE_PATH = "/api/home";
 const LOCATION_BASE_PATH = "/api/location";
 
-const accessToken = getCookie("accessToken");
-
 export const getLectureList = ({
   params,
-  payload,
 }: {
-  params: GetLectureList["Request"]["body"]["params"];
-  payload: GetLectureList["Request"]["body"]["payload"];
-}) =>
-  apiRequest.post<GetLectureList["Response"]>(`${BASE_PATH}`, payload, {
-    headers: {
-      Authorization: accessToken ? `Bearer ${accessToken}` : "",
-    },
-    params,
-  });
+  params: GetLectureList["Request"]["query"];
+}) => {
+  const accessToken = getCookie("accessToken");
 
-export const getHomeLectureList = ({
-  params,
-  payload,
-}: {
-  params: GetHomeLectureList["Request"]["body"]["params"];
-  payload: GetHomeLectureList["Request"]["body"]["payload"];
-}) =>
-  apiRequest.post<GetHomeLectureList["Response"]>(
-    `${HOME_BASE_PATH}`,
-    payload,
+  return apiRequest.post<GetLectureList["Response"]>(
+    `${BASE_PATH}`,
+    {},
     {
       headers: {
         Authorization: accessToken ? `Bearer ${accessToken}` : "",
@@ -45,13 +29,33 @@ export const getHomeLectureList = ({
       params,
     },
   );
+};
+
+export const getHomeLectureList = ({
+  params,
+}: {
+  params: GetHomeLectureList["Request"]["query"];
+}) => {
+  const accessToken = getCookie("accessToken");
+  return apiRequest.post<GetHomeLectureList["Response"]>(
+    `${HOME_BASE_PATH}`,
+    {},
+    {
+      headers: {
+        Authorization: accessToken ? `Bearer ${accessToken}` : "",
+      },
+      params,
+    },
+  );
+};
 
 export const getLocationLectureList = ({
   params,
 }: {
   params: GetLocationLectureList["Request"]["query"];
-}) =>
-  apiRequest.post<GetLocationLectureList["Response"]>(
+}) => {
+  const accessToken = getCookie("accessToken");
+  return apiRequest.post<GetLocationLectureList["Response"]>(
     `${LOCATION_BASE_PATH}`,
     {},
     {
@@ -61,6 +65,7 @@ export const getLocationLectureList = ({
       params,
     },
   );
+};
 
 export const getLectureInfo = ({
   lectureId,
@@ -68,8 +73,9 @@ export const getLectureInfo = ({
 }: {
   lectureId: number;
   payload: GetLecture["Request"]["body"];
-}) =>
-  apiRequest.post<GetLecture["Response"]>(
+}) => {
+  const accessToken = getCookie("accessToken");
+  return apiRequest.post<GetLecture["Response"]>(
     `${BASE_PATH}/${lectureId}`,
     payload,
     {
@@ -78,3 +84,4 @@ export const getLectureInfo = ({
       },
     },
   );
+};

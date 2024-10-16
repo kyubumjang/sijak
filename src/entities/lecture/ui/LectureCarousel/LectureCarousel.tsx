@@ -49,7 +49,7 @@ const LectureCarousel = ({
             className="bg-custom-homeTooltipBackground rotate-45"
           />
         </div>
-        <div className="font-bold text-sm text-white">
+        <div className="font-normal text-sm text-white">
           카드를 옆으로 넘겨보세요!
         </div>
       </div>
@@ -60,54 +60,45 @@ const LectureCarousel = ({
       setApi={setApi}
       className="flex items-center justify-start w-full"
     >
-      <CarouselContent className="desktop:gap-6 tablet:gap-4 mobile:gap-3 pb-[20px]">
-        {lectureInfo.map((lectureData, idx) => {
-          return idx === 0 ? (
-            <UnifiedTooltip
-              key={lectureData.id}
-              triggerItem={
-                <CarouselItem className="desktop:basis-[384px] tablet:basis-[280px] mobile:basis-[240px]">
+      <UnifiedTooltip
+        triggerItem={
+          <CarouselContent className="desktop:gap-6 tablet:gap-4 mobile:gap-3 pb-[20px]">
+            {lectureInfo.map((lectureData) => {
+              return (
+                <CarouselItem
+                  key={lectureData.id}
+                  className="desktop:basis-[384px] tablet:basis-[280px] mobile:basis-[240px]"
+                >
                   <LectureCard
                     key={lectureData.id}
                     lectureData={lectureData}
                     type="homeLecture"
                   />
                 </CarouselItem>
-              }
-              side="bottom"
-              sideOffset={-18}
-              align="start"
-              alignOffset={32}
-              open={openTooltip}
-              onOpenChange={setOpenTooltip}
-              defaultOpen
-              tooltipContent={tooltipContent()}
-              contentClassName="bg-custom-white px-0 pt-2"
-            />
-          ) : (
-            <CarouselItem
-              key={lectureData.id}
-              className="desktop:basis-[384px] tablet:basis-[280px] mobile:basis-[240px]"
-            >
-              <LectureCard
-                key={lectureData.id}
-                lectureData={lectureData}
-                type="homeLecture"
-              />
-            </CarouselItem>
-          );
-        })}
-      </CarouselContent>
+              );
+            })}
+          </CarouselContent>
+        }
+        side="bottom"
+        sideOffset={-40}
+        align="start"
+        alignOffset={32}
+        open={openTooltip}
+        onOpenChange={setOpenTooltip}
+        defaultOpen
+        tooltipContent={tooltipContent()}
+        contentClassName="bg-custom-white px-0 pt-2"
+      />
       {isPreviousIcon && (
         <CarouselPrevious
           variant="ghost"
-          className="hover:bg-transparent desktop:ml-[30px] tablet:ml-8 w-16 h-16"
+          className="desktop:ml-[30px] tablet:ml-8 w-16 h-16 bg-black hover:bg-black opacity-50 hover:opacity-70 disabled:opacity-20"
         />
       )}
       {isNextIcon && (
         <CarouselNext
           variant="ghost"
-          className="hover:bg-transparent desktop:mr-[30px] tablet:mr-8 w-16 h-16"
+          className="desktop:mr-[30px] tablet:mr-8 w-16 h-16 bg-black hover:bg-black opacity-50 hover:opacity-70 disabled:opacity-20"
         />
       )}
     </Carousel>

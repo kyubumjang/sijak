@@ -6,6 +6,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import {
@@ -43,10 +44,7 @@ const Map = ({
   markerLectureListData,
 }: MapProps) => {
   const [selectedLectureId, setSelectedLectureId] = useState<number | null>();
-  // TODO: Center 값 상태관리 필요(* Chip 클릭 시 중앙 값 해당 구 위도 경도로 바뀌게 처리 필요)
-  const [center, setCenter] = useState<naver.maps.LatLng>(
-    new naver.maps.LatLng(latitude, longitude),
-  );
+
   const markers: Array<naver.maps.Marker> = useMemo(() => {
     return [];
   }, []);
@@ -55,12 +53,11 @@ const Map = ({
     return [];
   }, []);
 
-  // 커스텀 훅을 만들어서 useMapInit() -> createPositionMarker 현재 위치 마커, 함수로 ClassMarker 클래스 마커 생성, infoWindow 도 훅으로 그 아래 마커 업데이트는 함수로 생성, 언마운트 하는 코드도 작성 필요성이 있음
-  const initMap = useCallback(() => {
-    // const location = new naver.maps.LatLng(latitude, longitude);
+  const mapRef = useRef<naver.maps.Map>();
 
+  useEffect(() => {
     const mapOptions: naver.maps.MapOptions = {
-      center: center,
+      center: { lat: latitude, lng: longitude },
       logoControl: true, // 네이버 로고 표시 X
       mapDataControl: false, // 지도 데이터 저작권 컨트롤 표시 X
       scaleControl: true, // 지도 축척 컨트롤의 표시 여부
@@ -72,10 +69,15 @@ const Map = ({
 
     const map = new naver.maps.Map("map_id", mapOptions);
 
+    mapRef.current = map;
+  }, [latitude, longitude]);
+
+  // 커스텀 훅을 만들어서 useMapInit() -> createPositionMarker 현재 위치 마커, 함수로 ClassMarker 클래스 마커 생성, infoWindow 도 훅으로 그 아래 마커 업데이트는 함수로 생성, 언마운트 하는 코드도 작성 필요성이 있음
+  const initMap = useCallback(() => {
     // 현재 위치 마커
     new naver.maps.Marker({
       position: new naver.maps.LatLng(latitude, longitude),
-      map: map,
+      map: mapRef.current,
       icon: {
         content:
           '<img src="/images/current_position.png" width="58" height="58" alt="현재 위치" />',
@@ -95,7 +97,7 @@ const Map = ({
           ),
           title: lectureData.hosted_by,
           clickable: true,
-          map: map,
+          map: mapRef.current,
           icon: {
             content: `<img src="/icons/marker.svg" width="44" height="51" alt="클래스 위치" />`,
             size: new naver.maps.Size(35, 35),
@@ -131,10 +133,12 @@ const Map = ({
         // 마커 클릭 시 InfoWindow 열기
         naver.maps.Event.addListener(classMarker, "click", function (e) {
           // 이미 열려있는 InfoWindow가 있다면 닫기
+          if (!mapRef.current) return;
+
           infoWindows.forEach((iw) => iw.close());
 
           // 클릭한 마커에 해당하는 InfoWindow 열기
-          infoWindow.open(map, classMarker);
+          infoWindow.open(mapRef.current, classMarker);
           setChipStatus(() => {
             return {
               "서울 송파구":
@@ -161,14 +165,15 @@ const Map = ({
               location: lectureData.short_address,
             };
           });
-          setCenter(e.coord);
+
+          mapRef.current.setCenter(e.coord);
         });
       }
     });
 
     // 지도 상태가 변경될 때 마커 업데이트
-    naver.maps.Event.addListener(map, "idle", function () {
-      updateMarkers(map, markers);
+    naver.maps.Event.addListener(mapRef.current, "idle", function () {
+      if (mapRef.current) updateMarkers(mapRef.current, markers);
     });
 
     const showMarker = (map: naver.maps.Map, marker: naver.maps.Marker) => {
@@ -197,6 +202,7 @@ const Map = ({
         }
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lectureListData, infoWindows, latitude, longitude, markers]);
 
   useEffect(() => {
@@ -207,7 +213,9 @@ const Map = ({
 
   useEffect(() => {
     if (markerLatitude && markerLongitude) {
-      setCenter(new naver.maps.LatLng(markerLatitude, markerLongitude));
+      mapRef.current?.setCenter(
+        new naver.maps.LatLng(markerLatitude, markerLongitude),
+      );
     }
   }, [markerLatitude, markerLongitude]);
 

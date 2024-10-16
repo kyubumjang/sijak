@@ -1,4 +1,4 @@
-import { GetAccessToken, PostLogout, PostLogoutRes } from "../model/token";
+import { GetAccessToken, PostLogout } from "../model/token";
 
 import apiRequest from "@/shared/api";
 import { getCookie } from "cookies-next";

@@ -82,10 +82,9 @@ const DisabledPickLectureCard = (props: PickLectureCardProps) => {
                 )}
               </Button>
             </div>
-            <div className="absolute inset-0 bg-black opacity-60 rounded-lg">
-              <div className="flex justify-center items-center w-full h-full text-white text-[28px] opacity-100 font-bold">
-                마감
-              </div>
+            <div className="absolute inset-0 rounded-lg bg-black opacity-60" />
+            <div className="absolute inset-0 flex justify-center items-center text-white text-[28px] font-bold">
+              마감
             </div>
           </div>
           <div className="flex flex-col desktop:px-[22px] tablet:px-4 mobile:px-4 desktop:py-5 tablet:pt-3 tablet:pb-[14px] mobile:pt-3 mobile:pb-[14px] desktop:gap-7 tablet:gap-4 mobile:gap-4">

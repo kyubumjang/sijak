@@ -106,7 +106,7 @@ const LectureFooter = ({
   const triggerItem = () => {
     return (
       <div className="flex items-center justify-center">
-        <div className="flex justify-center items-center text-center desktop:w-[912px] tablet:w-[481px] mobile:w-[173px] max-w-[912px] h-[69px] bg-custom-purple hover:bg-custom-hoverPurple text-white text-xl font-bold">
+        <div className="flex justify-center items-center text-center desktop:w-[912px] tablet:w-[481px] mobile:w-[173px] max-w-[912px] desktop:h-[69px] tablet:h-[69px] mobile:h-[54px] bg-custom-purple hover:bg-custom-hoverPurple text-white text-xl font-bold">
           신청하러 가기
         </div>
       </div>
@@ -115,7 +115,7 @@ const LectureFooter = ({
 
   const notFoundApplyPageDialogContent = () => {
     return (
-      <div className="flex flex-col items-center justify-center gap-[55px] pt-[30px] pb-5">
+      <div className="flex flex-col items-center justify-center gap-[55px] desktop:pt-[35px] tablet:pt-5 mobile:pt-5">
         <div className="flex flex-col items-center justify-center">
           <div className="font-bold text-[28px]">신청 페이지를</div>
           <div className="font-bold text-[28px]">불러오지 못했어요</div>
@@ -134,7 +134,7 @@ const LectureFooter = ({
 
   const needLoginDialogContent = () => {
     return (
-      <div className="flex flex-col gap-[55px] pt-[30px] pb-5">
+      <div className="flex flex-col gap-[55px] desktop:pt-[35px] tablet:pt-5 mobile:pt-5">
         <div className="flex flex-col items-center justify-center">
           <div className="font-bold text-[28px] content-center">
             로그인이 필요한
@@ -211,7 +211,7 @@ const LectureFooter = ({
   };
 
   return (
-    <div className="flex flex-row items-center w-full desktop:h-[70px] tablet:h-[70px] mobile:h-[55px] desktop:px-[120px] bg-white fixed bottom-0 border-t border-custom-disabled z-[101]">
+    <div className="flex flex-row items-center w-full desktop:max-w-[1440px] tablet:max-w-[768px] mobile:max-w-[360px] desktop:h-[70px] tablet:h-[70px] mobile:h-[55px] desktop:px-[120px] bg-white fixed bottom-0 border-t desktop:border-l-0 tablet:border-l mobile:border-l border-custom-disabled z-[101]">
       <div className="flex desktop:w-[98px] tablet:min-w-[98px] mobile:min-w-[76px] desktop:h-[69px] tablet:h-[69px] mobile:h-[54px] border-r border-custom-disabled justify-center items-center">
         {renderLikeIcon()}
       </div>

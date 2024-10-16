@@ -7,7 +7,6 @@ import {
 } from "../../model/lecture";
 
 import { LectureDetailItem } from "./LectureDetailItem";
-import { SquareLoader } from "react-spinners";
 
 interface LectureDetailProps {
   lectureInfo?: Lecture;
@@ -15,16 +14,9 @@ interface LectureDetailProps {
 }
 
 const LectureDetail = ({ lectureInfo, isLoading }: LectureDetailProps) => {
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center w-full h-screen">
-        <SquareLoader />
-      </div>
-    );
-  }
   return (
     <div className="flex flex-col w-full desktop:px-[120px] tablet:px-8 mobile:px-6 pb-[349px] desktop:gap-[140px] tablet:gap-[52px] mobile:gap-5">
-      <div className="flex flex-col justify-center desktop:w-full tablet:w-[704px] mobile:w-[312px] gap-[30px]">
+      <div className="flex flex-col justify-center desktop:w-full tablet:w-[704px] mobile:w-[312px] desktop:gap-[30px] tablet:gap-[20px] mobile:gap-[20px]">
         <div className="font-bold desktop:w-full h-[70px] desktop:text-[28px] tablet:text-[23px] mobile:text-[23px] border-b border-black content-center">
           클래스 내용
         </div>
@@ -43,8 +35,9 @@ const LectureDetail = ({ lectureInfo, isLoading }: LectureDetailProps) => {
                         ? lectureDetailItem.render(
                             lectureInfo[lectureDetailItem.type],
                           )
-                        : ""
+                        : " "
                     }
+                    images={lectureInfo?.images}
                   />
                   <Divider />
                 </div>
@@ -53,7 +46,7 @@ const LectureDetail = ({ lectureInfo, isLoading }: LectureDetailProps) => {
           )}
         </div>
       </div>
-      <div className="flex flex-col desktop:w-[1200px] tablet:w-[704px] mobile:w-[312px] gap-[30px]">
+      <div className="flex flex-col desktop:w-[1200px] tablet:w-[704px] mobile:w-[312px] desktop:gap-[30px] tablet:gap-[20px] mobile:gap-[20px]">
         <div className="font-bold content-center desktop:w-full tablet:w-[600px] h-[70px] desktop:text-[28px] tablet:text-[23px] mobile:text-[23px] border-b border-black">
           강사 이력
         </div>

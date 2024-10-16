@@ -1,4 +1,8 @@
-import { GetHeartsLectureList, LikeLecture } from "../model/like";
+import {
+  DeactivatesLikeLecture,
+  GetHeartsLectureList,
+  LikeLecture,
+} from "../model/like";
 
 import apiRequest from "@/shared/api";
 import { getCookie } from "cookies-next";
@@ -43,3 +47,13 @@ export const deleteLikeLecture = ({
     },
     params,
   });
+
+export const deleteDeactivatesLikeLecture = () =>
+  apiRequest.delete<DeactivatesLikeLecture["Response"]>(
+    `${BASE_PATH}/deactivates`,
+    {
+      headers: {
+        Authorization: `Bearer ${getCookie("accessToken")}`,
+      },
+    },
+  );

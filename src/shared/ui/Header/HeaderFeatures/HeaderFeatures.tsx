@@ -43,7 +43,7 @@ const HeaderFeatures = () => {
 
   const dialogContent = () => {
     return (
-      <div className="flex flex-col gap-[55px] pt-[30px] pb-5">
+      <div className="flex flex-col gap-[55px] desktop:pt-[35px] tablet:pt-5 mobile:pt-5">
         <div className="flex flex-col items-center justify-center">
           <div className="font-bold text-[28px] content-center">
             로그인이 필요한
@@ -172,7 +172,7 @@ const HeaderFeatures = () => {
   };
 
   return (
-    <div className="flex flex-row items-center justify-center desktop:gap-5 tablet:gap-5 mobile:gap-4 mobile:min-w-[80px] desktop:h-[43px] tablet:h-[43px] mobile:h-[25px]">
+    <div className="flex flex-row items-center desktop:justify-center tablet:justify-center mobile:justify-end desktop:gap-5 tablet:gap-5 mobile:gap-4 mobile:min-w-[80px] desktop:h-[43px] tablet:h-[43px] mobile:h-[25px]">
       {renderLikeIcon()}
       {renderUserIcon()}
     </div>

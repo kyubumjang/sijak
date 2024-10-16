@@ -38,7 +38,7 @@ const ImageCarousel = ({
             <CarouselItem key={image.alt}>
               <div className="flex items-center justify-center">
                 <Image
-                  className={`w-[${image.width}] h-[${image.height}] object-contain overflow-hidden mobile:object-cover`}
+                  className={`w-[${image.width}] h-[${image.height}] object-cover overflow-hidden mobile:object-cover`}
                   src={image.src}
                   alt={image.alt}
                   width={image.width}

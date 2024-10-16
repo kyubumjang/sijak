@@ -37,6 +37,13 @@ const InputLabel = forwardRef<HTMLInputElement, InputLabelProps>(
       return "flex flex-col w-full gap-2";
     };
 
+    const labelColor = () => {
+      if (disabled) {
+        return "text-custom-textSemiBoldBlackColor";
+      }
+      return "text-custom-purple";
+    };
+
     const borderColor = () => {
       if (disabled) {
         return "border-custom-disabled";
@@ -63,7 +70,12 @@ const InputLabel = forwardRef<HTMLInputElement, InputLabelProps>(
     return (
       <div className={containerClassName()}>
         <div className="flex flex-col w-full">
-          <div className="desktop:text-base tablet:text-sm desktop:h-[21px] tablet:h-[18px] text-custom-textSemiBoldBlackColor">
+          <div
+            className={twMerge(
+              "desktop:text-base tablet:text-sm desktop:h-[21px] tablet:h-[18px]",
+              labelColor(),
+            )}
+          >
             {labelContent}
           </div>
           <div className={twMerge(`flex w-full border-b-2`, borderColor())}>

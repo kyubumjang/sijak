@@ -8,10 +8,9 @@ const useLectureList = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (lectureListReq: GetLectureList["Request"]["body"]) =>
+    mutationFn: (params: GetLectureList["Request"]["query"]) =>
       getLectureList({
-        payload: lectureListReq.payload,
-        params: lectureListReq.params,
+        params,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: LECTURE_KEYS.lists() });

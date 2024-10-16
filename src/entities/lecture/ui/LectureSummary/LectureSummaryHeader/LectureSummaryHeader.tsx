@@ -3,6 +3,7 @@ import { IconDialog, ImageDescription, Skeleton } from "@/shared/ui";
 import Image from "next/image";
 import { Lecture } from "@/entities/lecture/model/lecture";
 import { handleCopyClipBoard } from "@/shared/lib/utils";
+import { useToast } from "@/shared/hooks/useToast";
 
 interface LectureInfoDetailHeaderProps {
   lectureInfo?: Lecture;
@@ -13,6 +14,8 @@ const LectureSummaryHeader = ({
   lectureInfo,
   isLoading,
 }: LectureInfoDetailHeaderProps) => {
+  const { toast } = useToast();
+
   const shareLinkToKakao = () => {
     // TODO: 카카오 링크 공유하기 API
   };
@@ -20,6 +23,9 @@ const LectureSummaryHeader = ({
   const shareLinkToURL = () => {
     const currentUrl = window.location.href;
     handleCopyClipBoard(currentUrl);
+    toast({
+      title: "링크를 복사했어요",
+    });
   };
 
   const renderDialogTriggerItem = () => {
@@ -58,11 +64,11 @@ const LectureSummaryHeader = ({
   };
 
   return (
-    <div className="flex flex-col w-full desktop:h-[42px] tablet:h-57px gap-4">
+    <div className="flex flex-col w-full desktop:h-[42px] tablet:h-[57px] mobile:h-[54px] gap-4">
       <div className="flex flex-row justify-between">
         {isLoading && <Skeleton className="w-[430px] h-[42px]" />}
         {lectureInfo && (
-          <div className="flex justify-start items-center desktop:text-[26px] tablet:text-xl desktop:w-[430px] tablet:w-[300px] tablet:text-ellipsis tablet:whitespace-nowrap tablet:overflow-hidden h-[42px] font-bold">
+          <div className=" flex justify-start items-center desktop:text-[26px] tablet:text-xl mobile: text-xl desktop:w-[520px] tablet:w-[300px] mobile:w-[268px] desktop:text-ellipsis desktop:leading-[37px] tablet:text-ellipsis tablet:whitespace-normal tablet:break-words mobile:whitespace-normal mobile:break-words desktop:line-clamp-1 tablet:line-clamp-2 mobile:line-clamp-2 desktop:h-[42px] tablet:h-[56px] mobile:h-[54px] font-bold">
             {lectureInfo.name}
           </div>
         )}

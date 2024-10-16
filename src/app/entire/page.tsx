@@ -5,12 +5,14 @@ import {
   LecturePayload,
   LectureSize,
 } from "@/entities/lecture/model/lecture";
-import { LectureList, SkeletonCard } from "@/entities/lecture/ui";
+import {
+  LectureList,
+  NotFoundLecture,
+  SkeletonCard,
+} from "@/entities/lecture/ui";
 import { useEffect, useState } from "react";
 
 import { BackToPrevious } from "@/shared/ui";
-import Image from "next/image";
-import { SquareLoader } from "react-spinners";
 import { useGeoLocation } from "@/shared/lib/useGeolocation";
 import { useInView } from "react-intersection-observer";
 import useLectureList from "@/entities/lecture/api/useLectureList";
@@ -38,13 +40,11 @@ const EntirePage = () => {
     if (user && user.latitude && user.longitude) {
       getLectureList.mutate(
         {
-          params: {
-            page: lectureSize.page,
-            size: lectureSize.size,
-            // dist: lectureSize.dist,
-          },
-          payload: { latitude: user.latitude, longitude: user.longitude },
+          page: lectureSize.page,
+          size: lectureSize.size,
+          // dist: lectureSize.dist,
         },
+
         {
           onSuccess: (data) => {
             const lectureListData = data.data.data.data;
@@ -94,7 +94,8 @@ const EntirePage = () => {
       return (
         <div>
           <LectureList lectureListData={lectureListData} type="pickLecture" />
-          <div ref={ref} className="h-[200px]" /> {/* 스크롤 감지 요소 */}
+          <div ref={ref} className="desktop:h-6 tablet:h-4 mobile:h-9" />{" "}
+          {/* 스크롤 감지 요소 */}
           {isLoading && (
             <div className="flex flex-row space-x-4">
               <SkeletonCard type="pickLecture" />
@@ -108,40 +109,16 @@ const EntirePage = () => {
 
     if (isLoading) {
       return (
-        <div className="flex justify-center items-center h-screen">
-          <SquareLoader color="#4F118C" />
+        <div className="grid desktop:grid-cols-3 tablet:grid-cols-2 mobile:grid-cols-1 desktop:gap-6 tablet:gap-4 mobile:gap-9">
+          <SkeletonCard type="pickLecture" />
+          <SkeletonCard type="pickLecture" />
+          <SkeletonCard type="pickLecture" />
         </div>
       );
     }
 
-    return (
-      <div className="flex flex-col items-center justify-center desktop:w-full tablet:w-full mobile:w-[180px] h-full gap-[6px] pt-[173px]">
-        <div className="">
-          <Image
-            src="/icons/x_circle.svg"
-            alt="x_circle"
-            width={40}
-            height={40}
-          />
-        </div>
-        <div className="flex flex-col items-center justify-center gap-[18px]">
-          <div className="flex items-center justify-center desktop:flex-row tablet:flex-row mobile:flex-col desktop:gap-2 tablet:gap-1.5 mobile:gap-0">
-            <div className="desktop:text-[32px] tablet:text-2xl mobile:text-2xl leading-[51px] font-bold">
-              클래스가
-            </div>
-            <div className="desktop:text-[32px] tablet:text-2xl mobile:text-2xl leading-[51px] font-bold">
-              존재하지 않습니다.
-            </div>
-          </div>
-          <div className="desktop:text-lg tablet:text-sm mobile:text-sm text-custom-textGrayColor font-medium">
-            이용에 불편을 드려 죄송합니다.
-          </div>
-        </div>
-      </div>
-    );
+    return <NotFoundLecture />;
   };
-
-  // TODO: 무한 스크롤
 
   return (
     <div className="flex flex-col w-full h-full justify-start items-center desktop:pt-20 tablet:pt-10 mobile:pt-10 bg-custom-homeMapBackground relative">
@@ -158,7 +135,7 @@ const EntirePage = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col pt-14 pb-[209px]">
+      <div className="flex flex-col desktop:pt-[50px] tablet:pt-10 pb-[209px]">
         <div className="flex desktop:px-[120px] tablet:px-8 mobile:px-6">
           {renderEntireCardContent()}
         </div>

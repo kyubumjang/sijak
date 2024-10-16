@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import LectureMinimap from "@/entities/lecture/ui/LectureSummary/LectureMinimap/LectureMinimap";
 import Link from "next/link";
+import { SquareLoader } from "react-spinners";
 import { useGeoLocation } from "@/shared/lib/useGeolocation";
 import useLectureInfo from "@/entities/lecture/api/useLectureInfo";
 import { useParams } from "next/navigation";
@@ -158,7 +159,7 @@ const LectureInfoPage = () => {
   const renderMobileSummary = () => {
     return (
       <div className="desktop:hidden tablet:hidden mobile:flex">
-        <div className="flex flex-col w-full mobile:px-6 gap-8">
+        <div className="flex flex-col w-full mobile:px-6 mobile:pt-[25px]  gap-8">
           {isLoading && (
             <Skeleton className="desktop:w-[588px] tablet:w-[330px] desktop:h-[588px] tablet:h-[330px]" />
           )}
@@ -177,8 +178,35 @@ const LectureInfoPage = () => {
     );
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex w-full h-screen desktop:max-w-[1440px] tablet:max-w-[768px] mobile:max-w-[360px]  mx-auto my-0">
+        <div className="flex items-center justify-center w-full h-full">
+          <SquareLoader color="#4F118C" />
+        </div>
+        <div className="flex flex-row items-center w-full desktop:h-[70px] tablet:h-[70px] mobile:h-[55px] desktop:px-[120px] bg-white fixed bottom-0 border-t border-l border-custom-disabled z-10">
+          <div className="flex desktop:w-[98px] tablet:min-w-[98px] mobile:min-w-[76px] desktop:h-[69px] tablet:h-[69px] mobile:h-[54px] border-r border-custom-disabled justify-center items-center">
+            <Skeleton>
+              <IconButton
+                src="/icons/like.svg"
+                alt="heart"
+                iconWidth={32}
+                iconHeight={32}
+                loading={isLoading}
+              />
+            </Skeleton>
+          </div>
+          <div className="flex desktop:w-[190px] tablet:min-w-[190px] mobile:min-w-[111px] desktop:h-[69px] tablet:h-[69px] mobile:h-[54px] justify-center items-center text-xl font-bold">
+            <Skeleton className="w-[100px] h-[33px]" />
+          </div>
+          <Skeleton className="desktop:w-[912px] tablet:w-[481px] mobile:w-[173px] desktop:h-[69px] tablet:h-[69px] mobile:h-[54px]" />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col w-full h-full justify-start items-start desktop:gap-8 tablet:gap-[34px] mobile:gap-[44px]">
+    <div className="flex flex-col w-full h-full justify-start items-start desktop:gap-8 tablet:gap-[34px] mobile:gap-[44px] desktop:max-w-[1440px] tablet:max-w-[768px] mobile:max-w-[360px] mx-auto my-0">
       <div className="w-full desktop:hidden tablet:flex mobile:hidden pl-4 pt-10">
         <Link href="/">
           <Image
@@ -189,8 +217,21 @@ const LectureInfoPage = () => {
           />
         </Link>
       </div>
+      {/* {isLoading && (
+        <div className="desktop:flex tablet:hidden mobile:hidden w-full">
+          <div className="flex flex-row w-full desktop:px-[120px] desktop:pt-[80px] gap-10">
+            <Skeleton className="desktop:w-[588px] tablet:w-[330px] desktop:h-[588px] tablet:h-[330px]" />
+            <div className="flex flex-col gap-6">
+              <LectureSummary lectureInfo={lectureInfo} isLoading={isLoading} />
+              <LectureMinimap lectureInfo={lectureInfo} isLoading={isLoading} />
+            </div>
+          </div>
+        </div>
+      )} */}
       {renderSummary()}
-      <LectureDetail lectureInfo={lectureInfo} isLoading={isLoading} />
+      {lectureInfo && (
+        <LectureDetail lectureInfo={lectureInfo} isLoading={isLoading} />
+      )}
       {isLoading && (
         <div className="flex flex-row items-center w-full desktop:h-[70px] tablet:h-[70px] mobile:h-[55px] desktop:px-[120px] bg-white fixed bottom-0 border-t border-custom-disabled z-10">
           <div className="flex desktop:w-[98px] tablet:min-w-[98px] mobile:min-w-[76px] desktop:h-[69px] tablet:h-[69px] mobile:h-[54px] border-r border-custom-disabled justify-center items-center">
@@ -207,7 +248,7 @@ const LectureInfoPage = () => {
           <div className="flex desktop:w-[190px] tablet:min-w-[190px] mobile:min-w-[111px] desktop:h-[69px] tablet:h-[69px] mobile:h-[54px] justify-center items-center text-xl font-bold">
             <Skeleton className="w-[100px] h-[33px]" />
           </div>
-          <Skeleton className="desktop:w-[917px] tablet:w-[560px] h-[56px]" />
+          <Skeleton className="desktop:w-[912px] tablet:w-[481px] mobile:w-[173px] desktop:h-[69px] tablet:h-[69px] mobile:h-[54px]" />
         </div>
       )}
       {lectureInfo && (

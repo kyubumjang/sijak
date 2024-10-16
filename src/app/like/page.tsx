@@ -1,13 +1,17 @@
 "use client";
 
-import { LectureList, SkeletonCard } from "@/entities/lecture/ui";
+import { BackToPrevious, Button } from "@/shared/ui";
+import {
+  LectureList,
+  NotFoundLecture,
+  SkeletonCard,
+} from "@/entities/lecture/ui";
 import { useEffect, useState } from "react";
 
-import { BackToPrevious } from "@/shared/ui";
 import { HeartsLectureListResDataInfo } from "@/features/like/model/like";
-import Image from "next/image";
 import { LectureSize } from "@/entities/lecture/model/lecture";
-import { SquareLoader } from "react-spinners";
+import { toast } from "sonner";
+import useDeleteDeactivatesLikeLecture from "@/features/like/api/useDeleteDeactivatesLikeLecture";
 import { useInView } from "react-intersection-observer";
 import useLikeLectureList from "@/features/like/api/useLikeLectureList";
 
@@ -30,6 +34,16 @@ const LikePage = () => {
     size: lectureSize.size,
     // dist: lectureSize.dist,
   });
+
+  const deleteDeactivatesLecture = useDeleteDeactivatesLikeLecture();
+
+  const deleteDeactivatesLectures = () => {
+    deleteDeactivatesLecture.mutate(undefined, {
+      onSuccess: () => {
+        toast("마감된 찜 클래스를 삭제했어요");
+      },
+    });
+  };
 
   useEffect(() => {
     if (isSuccess) {
@@ -56,7 +70,7 @@ const LikePage = () => {
           <LectureList lectureListData={lectureListData} type="pickLecture" />
           <div ref={ref} className="h-[200px]" /> {/* 스크롤 감지 요소 */}
           {isLoading && (
-            <div className="flex flex-row space-x-6">
+            <div className="flex desktop:grid-cols-3 tablet:grid-cols-2 mobile:grid-cols-1 desktop:gap-6 tablet:gap-4 mobile:gap-9">
               <SkeletonCard type="pickLecture" />
               <SkeletonCard type="pickLecture" />
               <SkeletonCard type="pickLecture" />
@@ -68,36 +82,22 @@ const LikePage = () => {
 
     if (isLoading) {
       return (
-        <div className="flex justify-center items-center h-screen">
-          <SquareLoader color="#4F118C" />
+        <div className="flex flex-col gap-2">
+          <div className="h-9" />
+          <div className="grid desktop:grid-cols-3 tablet:grid-cols-2 mobile:grid-cols-1 desktop:gap-6 tablet:gap-4 mobile:gap-9">
+            <SkeletonCard type="pickLecture" />
+            <SkeletonCard type="pickLecture" />
+            <SkeletonCard type="pickLecture" />
+          </div>
         </div>
       );
     }
 
     return (
-      <div className="flex flex-col items-center justify-center desktop:w-full tablet:w-full mobile:w-[180px] h-full gap-[6px] pt-[173px]">
-        <div className="">
-          <Image
-            src="/icons/x_circle.svg"
-            alt="x_circle"
-            width={40}
-            height={40}
-          />
-        </div>
-        <div className="flex flex-col items-center justify-center gap-[18px]">
-          <div className="flex items-center justify-center desktop:flex-row tablet:flex-row mobile:flex-col desktop:gap-2 tablet:gap-1.5 mobile:gap-0">
-            <div className="desktop:text-[32px] tablet:text-2xl mobile:text-2xl leading-[51px] font-bold">
-              클래스가
-            </div>
-            <div className="desktop:text-[32px] tablet:text-2xl mobile:text-2xl leading-[51px] font-bold">
-              존재하지 않습니다.
-            </div>
-          </div>
-          <div className="desktop:text-lg tablet:text-sm mobile:text-sm text-custom-textGrayColor font-medium">
-            이용에 불편을 드려 죄송합니다.
-          </div>
-        </div>
-      </div>
+      <NotFoundLecture
+        description="아직 찜한 클래스가 없습니다. 마음에 드는 강좌를 찾아 찜해보세요!"
+        isHideIcon
+      />
     );
   };
 
@@ -106,7 +106,7 @@ const LikePage = () => {
       <div className="desktop:hidden tablet:flex mobile:hidden absolute top-10 left-4">
         <BackToPrevious />
       </div>
-      <div className="flex flex-row w-full h-12 items-start justify-center">
+      <div className="desktop:flex tablet:flex mobile:hidden flex-row w-full h-12 items-start justify-center">
         <div className="flex flew-row gap-3">
           <div className="text-custom-textBlackColor desktop:text-[32px] tablet:text-[28px] mobile:text-base font-bold">
             내가 찜한 클래스
@@ -116,7 +116,17 @@ const LikePage = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col pt-14 pb-[209px]">
+      <div className="flex flex-col desktop:pt-[50px] tablet:pt-10 pb-[209px] gap-4">
+        {!isLoading && lectureListData && lectureListData.length > 0 && (
+          <div className="flex justify-end desktop:px-[120px] tablet:px-8 mobile:px-6">
+            <Button
+              className="bg-custom-purple hover:bg-custom-hoverPurple"
+              onClick={deleteDeactivatesLectures}
+            >
+              마감된 클래스 삭제하기
+            </Button>
+          </div>
+        )}
         <div className="flex desktop:px-[120px] tablet:px-8 mobile:px-6">
           {renderLikeCardContent()}
         </div>

@@ -16,7 +16,7 @@ const HeaderTitle = () => {
   };
 
   return (
-    <div className="desktop:hidden tablet:hidden mobile:flex min-w-[168px] justify-center items-center text-center text-base font-normal">
+    <div className="desktop:hidden tablet:hidden mobile:flex min-w-[168px] h-[22px] justify-center items-center text-center text-base font-normal">
       {urlToInfo[url]}
     </div>
   );

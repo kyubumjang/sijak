@@ -1,5 +1,6 @@
 // Hearts
 
+import { BearerAccessTokenHeader } from "@/features/authentication/model/token";
 import { LectureSize } from "@/entities/lecture/model/lecture";
 import { Payload } from "@/shared/model/api";
 
@@ -68,4 +69,17 @@ export type LikeLecture = Payload<
   LikeLectureQuery,
   undefined,
   LikeLectureRes
+>;
+
+export interface DeactivatesLikeLectureRes {
+  status: number;
+  message: string;
+  data: string;
+}
+
+export type DeactivatesLikeLecture = Payload<
+  BearerAccessTokenHeader,
+  undefined,
+  undefined,
+  DeactivatesLikeLectureRes
 >;

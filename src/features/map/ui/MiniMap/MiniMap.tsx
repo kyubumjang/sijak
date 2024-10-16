@@ -28,7 +28,7 @@ const MiniMap = ({ latitude, longitude }: MiniMapProps) => {
       map: map,
       icon: {
         content:
-          '<img src="/images/marker_icon.png" width="44" height="51" alt="클래스 위치" />',
+          '<img src="/icons/marker.svg" width="44" height="51" alt="클래스 위치" />',
         size: new naver.maps.Size(44, 51),
         anchor: new naver.maps.Point(11, 35),
       },

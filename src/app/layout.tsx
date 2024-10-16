@@ -1,6 +1,6 @@
 import "./globals.css";
 
-import { Footer, Header, Toaster } from "@/shared/ui";
+import { Footer, Header, ToastToaster, Toaster } from "@/shared/ui";
 
 import type { Metadata } from "next";
 import Providers from "@/features/provider/Provider";
@@ -47,6 +47,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <Toaster />
+          <ToastToaster />
         </Providers>
       </body>
     </html>

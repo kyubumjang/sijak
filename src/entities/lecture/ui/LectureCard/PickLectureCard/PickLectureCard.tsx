@@ -51,6 +51,10 @@ const PickLectureCard = (props: PickLectureCardProps) => {
   const token = getCookie("accessToken");
 
   useEffect(() => {
+    setHeart(initialHeart);
+  }, [initialHeart]);
+
+  useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
         setDimensions({ width: 312, height: 190 });
@@ -147,7 +151,7 @@ const PickLectureCard = (props: PickLectureCardProps) => {
 
   const dialogContent = () => {
     return (
-      <div className="flex flex-col gap-[55px] pt-[30px] pb-5">
+      <div className="flex flex-col gap-[55px] desktop:pt-[35px] tablet:pt-5 mobile:pt-5">
         <div className="flex flex-col items-center justify-center">
           <div className="font-bold text-[28px] content-center">
             로그인이 필요한
@@ -212,7 +216,7 @@ const PickLectureCard = (props: PickLectureCardProps) => {
                     {division}
                   </div>
                   <div className="flex justify-between items-center desktop:w-[340px] tablet:w-[304px] mobile:w-[272px]">
-                    <div className="text-custom-textBlackColor desktop:text-2xl tablet:text-base mobile:text-base font-semibold desktop:w-[340px] tablet:w-[248px] mobile:w-[208px] min-w-[208px] max-w-[340px] desktop:min-h-[62px] tablet:min-h-[42px] mobile:min-h-[42px]">
+                    <div className="text-custom-textBlackColor desktop:text-2xl tablet:text-base mobile:text-base font-semibold desktop:w-[340px] tablet:w-[248px] mobile:w-[272px] min-w-[272px] max-w-[340px] desktop:min-h-[62px] tablet:min-h-[42px] mobile:min-h-[42px] text-ellipsis line-clamp-2">
                       [{name}]
                     </div>
                   </div>
