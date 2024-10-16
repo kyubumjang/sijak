@@ -2,6 +2,7 @@ import "./globals.css";
 
 import { Footer, Header, ToastToaster, Toaster } from "@/shared/ui";
 
+import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import Providers from "@/features/provider/Provider";
 import Script from "next/script";
@@ -50,6 +51,9 @@ export default function RootLayout({
           <ToastToaster />
         </Providers>
       </body>
+      <GoogleAnalytics
+        gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_GA_ID ?? ""}
+      />
     </html>
   );
 }

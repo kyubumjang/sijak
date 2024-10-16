@@ -8,10 +8,13 @@ import { HeartsLectureListResDataInfo } from "@/features/like/model/like";
 import Image from "next/image";
 import Link from "next/link";
 import { getCookie } from "cookies-next";
+import moment from "moment";
 import { toast } from "sonner";
 import useDeleteLikeLecture from "@/features/like/api/useDeleteLikeLecture";
 import usePostLikeLecture from "@/features/like/api/usePostLikeLecture";
 import { useRouter } from "next/navigation";
+
+moment.locale("ko");
 
 interface PickLectureCardProps {
   lectureData: LectureInfo | PickLectureInfo | HeartsLectureListResDataInfo;
@@ -49,6 +52,10 @@ const PickLectureCard = (props: PickLectureCardProps) => {
 
   const router = useRouter();
   const token = getCookie("accessToken");
+
+  const dateString = start_date.replaceAll("-", ".");
+  const date = moment(dateString, "YYYY.MM.DD");
+  const shortDayOfWeek = date.format("ddd"); // 짧은 요일 이름 (예: "Wed")
 
   useEffect(() => {
     setHeart(initialHeart);
@@ -229,9 +236,8 @@ const PickLectureCard = (props: PickLectureCardProps) => {
                 </div>
                 <div className="text-custom-textGrayColor desktop:text-lg tablet:text-base mobile:text-base desktop:font-bold tablet:font-medium mobile:font-medium ">
                   {start_date.replaceAll("-", ".").split(".")[1]}.
-                  {start_date.replaceAll("-", ".").split(".")[2]}{" "}
-                  {/* TODO: ({day_of_week}){" "} */}
-                  {/* TODO: time to 오전 오후 시간 */}
+                  {start_date.replaceAll("-", ".").split(".")[2]}
+                  {`(${shortDayOfWeek})`}{" "}
                   {Number(time.split(":")[0]) / 12 ? "오후" : "오전"}{" "}
                   {Number(time.split(":")[0]) % 12}:
                   {time.split(":")[1].slice(0, 2)}

@@ -241,7 +241,7 @@ const HomeLectureCard = (props: HomeLectureCardProps) => {
                 <div className="text-custom-textGrayColor desktop:text-lg tablet:text-base mobile:text-base desktop:font-bold tablet:font-medium mobile:font-medium ">
                   {start_date.replaceAll("-", ".").split(".")[1]}.
                   {start_date.replaceAll("-", ".").split(".")[2]}
-                  {`(${shortDayOfWeek})`}
+                  {`(${shortDayOfWeek})`}{" "}
                   {Number(time.split(":")[0]) / 12 ? "오후" : "오전"}{" "}
                   {Number(time.split(":")[0]) % 12}:
                   {time.split(":")[1].slice(0, 2)}

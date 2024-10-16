@@ -229,6 +229,7 @@ export type GetLectureList = Payload<
 export interface LectureSize {
   page: number;
   size: number;
+  // statue: boolean;
 }
 
 export interface LecturePayload {
