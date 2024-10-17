@@ -93,7 +93,7 @@ const DisabledHomeLectureCard = (props: DisabledHomeLectureCardProps) => {
                 </div>
                 <div className="flex justify-between items-center desktop:w-[340px] tablet:w-[248px] mobile:w-[208px]">
                   <div className="text-custom-textDescriptionGrayColor desktop:text-2xl tablet:text-base mobile:text-base font-semibold desktop:w-[340px] tablet:w-[248px] mobile:w-[208px] min-w-[208px] max-w-[340px] desktop:min-h-[62px] tablet:min-h-[42px] mobile:min-h-[42px]">
-                    [{name}]
+                    {name}
                   </div>
                 </div>
               </div>
@@ -105,7 +105,7 @@ const DisabledHomeLectureCard = (props: DisabledHomeLectureCardProps) => {
               <div className="text-custom-textDescriptionGrayColor desktop:text-lg tablet:text-base mobile:text-base desktop:font-bold tablet:font-medium mobile:font-medium ">
                 {start_date.replaceAll("-", ".").split(".")[1]}.
                 {start_date.replaceAll("-", ".").split(".")[2]}
-                {`(${shortDayOfWeek})`}
+                {`(${shortDayOfWeek})`}{" "}
                 {Number(time.split(":")[0]) / 12 ? "오후" : "오전"}{" "}
                 {Number(time.split(":")[0]) % 12}:
                 {time.split(":")[1].slice(0, 2)}

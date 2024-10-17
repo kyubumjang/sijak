@@ -134,18 +134,18 @@ const EntirePage = () => {
   };
 
   return (
-    <div className="flex flex-col w-full h-full min-h-[calc(100vh_-_208px)] justify-start items-center desktop:pt-20 tablet:pt-10 mobile:pt-10 bg-custom-homeMapBackground relative">
+    <div className="flex flex-col w-full h-full min-h-[calc(100vh_-_208px)] justify-start items-center desktop:pt-20 tablet:pt-10 mobile:pt-10 bg-custom-homeMapBackground relative gap-[28px]">
       <div className="desktop:hidden tablet:flex mobile:hidden absolute top-10 left-4">
         <BackToPrevious />
       </div>
       <div className="flex flex-col w-full h-full desktop:px-[120px] tablet:px-8 mobile:px-6 desktop:gap-10 tablet:gap-[35px] mobile:gap-8">
         <div className="desktop:flex tablet:flex mobile:hidden flex-row w-full h-12 items-start justify-center">
           <div className="flex flew-row gap-1">
-            <div className="text-custom-textBlackColor text-[32px] font-bold">
+            <div className="text-custom-textBlackColor text-[32px]">
               전체 클래스
             </div>
-            <div className="text-custom-textBlackColor text-[32px]">
-              한번에 보기
+            <div className="desktop:flex tablet:flex mobile:hidden text-custom-textBlackColor text-[32px]">
+              리스트
             </div>
           </div>
         </div>
@@ -162,8 +162,8 @@ const EntirePage = () => {
           ))}
         </div>
       </div>
-      <div className="flex flex-col desktop:pt-[50px] tablet:pt-10 pb-[209px]">
-        <div className="flex desktop:px-[120px] tablet:px-8 mobile:px-6">
+      <div className="flex flex-col desktop:pt-0 tablet:pt-10 pb-[209px]">
+        <div className="flex items-center justify-center desktop:px-[120px] tablet:px-8 mobile:px-6">
           {renderEntireCardContent()}
         </div>
       </div>

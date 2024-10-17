@@ -138,22 +138,22 @@ const HomeLectureCard = (props: HomeLectureCardProps) => {
       <Button
         variant="ghost"
         size="icon"
-        className="flex items-center justify-center desktop:w-[32px] tablet:w-[24px] mobile:w-[24px] desktop:h-[32px] tablet:h-[24px] mobile:h-[24px] hover:bg-transparent"
+        className="flex items-center justify-center desktop:w-[36px] tablet:w-[36px] mobile:w-[36px] desktop:h-[32px] tablet:h-[24px] mobile:h-[24px] hover:bg-transparent"
         onClick={(e) => handleLikeClick(e)}
       >
         {heart ? (
           <Image
             src={isHoveredFilled ? "/icons/like_filled.svg" : "/icons/like.svg"}
             alt="heart"
-            width={32}
-            height={32}
+            width={36}
+            height={36}
           />
         ) : (
           <Image
             src={isHovered ? "/icons/like_filled.svg" : "/icons/like.svg"}
             alt="heart"
-            width={32}
-            height={32}
+            width={36}
+            height={36}
           />
         )}
       </Button>
@@ -169,7 +169,7 @@ const HomeLectureCard = (props: HomeLectureCardProps) => {
           </div>
           <div className="font-bold text-[28px] content-center">서비스에요</div>
         </div>
-        <div className="flex items-center justify-center ">
+        <div className="flex items-center justify-center">
           <Button
             className="h-[52px] text-base font-semibold bg-custom-purple hover:bg-custom-hoverPurple rounded"
             type="submit"
@@ -228,7 +228,7 @@ const HomeLectureCard = (props: HomeLectureCardProps) => {
                   </div>
                   <div className="flex justify-between items-center desktop:w-[340px] tablet:w-[248px] mobile:w-[208px]">
                     <div className="text-custom-textBlackColor desktop:text-2xl tablet:text-base mobile:text-base font-semibold desktop:w-[340px] tablet:w-[248px] mobile:w-[208px] min-w-[208px] max-w-[340px] desktop:min-h-[62px] tablet:min-h-[42px] mobile:min-h-[42px] text-ellipsis line-clamp-2">
-                      [{name}]
+                      {name}
                     </div>
                   </div>
                 </div>

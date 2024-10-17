@@ -41,6 +41,7 @@ const SignUpPage = () => {
     control,
     handleSubmit,
     formState: { errors },
+    watch,
     setError,
     setValue,
     clearErrors,
@@ -152,7 +153,7 @@ const SignUpPage = () => {
         onSubmit={handleSubmit(updateNickname)}
         className="flex flex-col desktop:w-[400px] tablet:w-[312px] mobile:w-[312px]  desktop:gap-[60px] tablet:gap-[64px] mobile:gap-[147px]"
       >
-        <div className="flex flex-col desktop:gap-8 tablet:gap-7 mobile:gap-7">
+        <div className="flex flex-col desktop:gap-[40px] tablet:gap-7 mobile:gap-7">
           <div className="flex flex-row desktop:h-[77px] tablet:h-[77px] mobile:h-[62px] gap-[14px]">
             <Controller
               name="nickname"
@@ -181,6 +182,7 @@ const SignUpPage = () => {
                   onBlur={field.onBlur} // react-hook-form의 onBlur 호출
                   value={field.value} // field.value를 통해 입력값 전달
                   status={status}
+                  required
                   message={errors.nickname?.message || message} // 메시지 처리
                 />
               )}
@@ -207,13 +209,26 @@ const SignUpPage = () => {
             </div>
           </div>
           <div className="flex flex-col w-full gap-2">
-            <div className="desktop:text-base tablet:text-sm desktop:h-[21px] tablet:h-[18px] text-custom-purple">
-              연령
+            <div className="flex desktop:text-base tablet:text-sm desktop:h-[21px] tablet:h-[18px] text-custom-purple">
+              <div className="flex items-center w-fit relative">
+                연령
+                <div className="absolute top-1 right-[-8px]">
+                  <Image
+                    src="/icons/required.svg"
+                    alt="required"
+                    width={5}
+                    height={5}
+                  />
+                </div>
+              </div>
             </div>
             <Controller
               name="ageRange"
               control={control}
               defaultValue=""
+              rules={{
+                required: true,
+              }}
               render={({ field }) => (
                 <Select
                   onValueChange={field.onChange}
@@ -237,12 +252,25 @@ const SignUpPage = () => {
           </div>
           <div className="flex flex-col w-full gap-2">
             <div className="desktop:text-base tablet:text-sm desktop:h-[21px] tablet:h-[18px] text-custom-purple">
-              성별
+              <div className="flex items-center w-fit relative">
+                성별
+                <div className="absolute top-1 right-[-8px]">
+                  <Image
+                    src="/icons/required.svg"
+                    alt="required"
+                    width={5}
+                    height={5}
+                  />
+                </div>
+              </div>
             </div>
             <Controller
               name="gender"
               control={control}
               defaultValue=""
+              rules={{
+                required: true,
+              }}
               render={({ field }) => (
                 <AgeRadioGroup
                   onValueChange={field.onChange}
@@ -272,8 +300,11 @@ const SignUpPage = () => {
         <Button
           className="flex justify-center items-center desktop:w-[400px] tablet:w-[312px] mobile:w-[312px] h-14 bg-custom-purple hover:bg-custom-hoverPurple rounded-sm"
           disabled={
-            (!!errors.nickname && status !== "correct") || status === "default"
-          } // 오류가 있을 경우 버튼 비활성화
+            (!!errors.nickname && status !== "correct") ||
+            status === "default" ||
+            !watch("ageRange") ||
+            !watch("gender")
+          }
         >
           <div className="desktop:text-2xl tablet:text-base mobile:text-base text-center">
             시ː작 하기

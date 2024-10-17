@@ -29,6 +29,7 @@ export interface HeartsLectureListResDataInfo {
 export interface HeartsLectureListResData {
   data: HeartsLectureListResDataInfo[];
   hasNext: boolean;
+  totalPage: number;
 }
 
 export interface LikeLectureParams extends LectureSize {

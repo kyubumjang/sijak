@@ -68,7 +68,7 @@ const HeaderFeatures = () => {
       return (
         <div>
           <Link href="/like">
-            <div className="flex flex-col items-center justify-center desktop:w-[36px] tablet:w-[36px] desktop:h-[43px] tablet:h-[43px]">
+            <div className="flex flex-col items-center justify-center desktop:w-[36px] tablet:w-[36px] mobile:w-[36px] desktop:h-[43px] tablet:h-[43px] mobile:h-[25px]">
               <div className="flex items-center justify-center desktop:w-[36px] tablet:w-[36px] mobile:w-[24px] desktop:h-[25px] tablet:h-[25px] mobile:h-[24px]">
                 <Image
                   src={"/icons/heart_default.svg"}
@@ -124,7 +124,7 @@ const HeaderFeatures = () => {
       return (
         <div>
           <Link href={`/user/${loginedUser.nickname}`}>
-            <div className="flex flex-col items-center justify-center w-[36px] h-[43px]">
+            <div className="flex flex-col items-center justify-center desktop:w-[36px] tablet:w-[36px] mobile:w-[36px] desktop:h-[43px] tablet:h-[43px] mobile:h-[25px]">
               <div className="flex items-center justify-center desktop:w-[36px] tablet:w-[36px] mobile:w-[24px] desktop:h-[25px] tablet:h-[25px] mobile:h-[24px]">
                 <Image
                   src={"/icons/user_default.svg"}
@@ -148,7 +148,7 @@ const HeaderFeatures = () => {
         dialogDescription="로그인 오류 알림"
         triggerItem={
           <div
-            className="flex flex-col items-center justify-center w-[36px] h-[43px]"
+            className="flex flex-col items-center justify-center desktop:w-[36px] tablet:w-[36px] mobile:w-6 desktop:h-[43px] tablet:h-[43px] mobile:h-6"
             onClick={handleOpenUserDialog}
           >
             <div className="flex items-center justify-center desktop:w-[36px] tablet:w-[36px] mobile:w-[24px] desktop:h-[25px] tablet:h-[25px] mobile:h-[24px]">
@@ -172,7 +172,7 @@ const HeaderFeatures = () => {
   };
 
   return (
-    <div className="flex flex-row items-center desktop:justify-center tablet:justify-center mobile:justify-end desktop:gap-5 tablet:gap-5 mobile:gap-4 mobile:min-w-[80px] desktop:h-[43px] tablet:h-[43px] mobile:h-[25px]">
+    <div className="flex flex-row desktop:items-center tablet:items-center mobile:items-center desktop:justify-center tablet:justify-center mobile:justify-end desktop:gap-5 tablet:gap-5 mobile:gap-0 mobile:min-w-[80px] desktop:h-[43px] tablet:h-[43px] mobile:h-[25px]">
       {renderLikeIcon()}
       {renderUserIcon()}
     </div>

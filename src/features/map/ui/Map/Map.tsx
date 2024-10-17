@@ -222,7 +222,10 @@ const Map = ({
 
   return (
     <div className="rounded-lg overflow-hidden">
-      <div id="map_id" style={{ height: "525px" }}></div>
+      <div
+        id="map_id"
+        className="desktop:h-[460px] tablet:h-[420px] mobile:h-[420px]"
+      ></div>
     </div>
   );
 };

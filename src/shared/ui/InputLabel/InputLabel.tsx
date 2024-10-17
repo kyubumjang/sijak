@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Input } from "..";
 import { forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
@@ -11,6 +12,7 @@ interface InputLabelProps {
   message?: string;
   value?: string;
   error?: boolean;
+  required?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // onChange 핸들러 추가
   onBlur?: () => void; // onBlur 핸들러 추가
 }
@@ -28,13 +30,14 @@ const InputLabel = forwardRef<HTMLInputElement, InputLabelProps>(
       type = "text",
       message,
       error,
+      required,
       onChange,
       onBlur,
     },
     ref,
   ) => {
     const containerClassName = () => {
-      return "flex flex-col w-full gap-2";
+      return "flex flex-col w-full gap-1";
     };
 
     const labelColor = () => {
@@ -76,7 +79,19 @@ const InputLabel = forwardRef<HTMLInputElement, InputLabelProps>(
               labelColor(),
             )}
           >
-            {labelContent}
+            <div className="flex items-center w-fit relative">
+              {labelContent}
+              {required && (
+                <div className="absolute top-1 right-[-8px]">
+                  <Image
+                    src="/icons/required.svg"
+                    alt="required"
+                    width={5}
+                    height={5}
+                  />
+                </div>
+              )}
+            </div>
           </div>
           <div className={twMerge(`flex w-full border-b-2`, borderColor())}>
             <Input

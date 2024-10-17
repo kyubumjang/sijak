@@ -64,11 +64,11 @@ const LectureSummaryHeader = ({
   };
 
   return (
-    <div className="flex flex-col w-full desktop:h-[42px] tablet:h-[57px] mobile:h-[54px] gap-4">
+    <div className="flex flex-col w-full desktop:h-[76px] tablet:h-[57px] mobile:h-[54px] gap-4">
       <div className="flex flex-row justify-between">
         {isLoading && <Skeleton className="w-[430px] h-[42px]" />}
         {lectureInfo && (
-          <div className=" flex justify-start items-center desktop:text-[26px] tablet:text-xl mobile: text-xl desktop:w-[520px] tablet:w-[300px] mobile:w-[268px] desktop:text-ellipsis desktop:leading-[37px] tablet:text-ellipsis tablet:whitespace-normal tablet:break-words mobile:whitespace-normal mobile:break-words desktop:line-clamp-1 tablet:line-clamp-2 mobile:line-clamp-2 desktop:h-[42px] tablet:h-[56px] mobile:h-[54px] font-bold">
+          <div className=" flex justify-start items-center desktop:text-[26px] tablet:text-xl mobile: text-xl desktop:w-[520px] tablet:w-[300px] mobile:w-[268px] desktop:text-ellipsis desktop:leading-[34px] tablet:text-ellipsis tablet:whitespace-normal tablet:break-words mobile:whitespace-normal mobile:break-words desktop:line-clamp-2 tablet:line-clamp-2 mobile:line-clamp-2 desktop:h-[76px] tablet:h-[56px] mobile:h-[54px] font-bold">
             {lectureInfo.name}
           </div>
         )}

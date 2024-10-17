@@ -46,6 +46,7 @@ const config: Config = {
           textGrayColor: "#737373",
           textDescriptionGrayColor: "#A3A3A3",
           textTitleGrayColor: "#797979",
+          textFooterColor: "#717171",
           correct: "#4CAF50",
           error: "#D32F2F",
           disabled: "#D4D4D4",

@@ -13,7 +13,7 @@ const useDeleteDeactivatesLikeLecture = () => {
         queryKey: LIKE_LECTURE_KEYS.list(),
       });
       queryClient.invalidateQueries({
-        queryKey: LIKE_LECTURE_KEYS.list({ page: 0, size: 9 }),
+        queryKey: LIKE_LECTURE_KEYS.lists(),
       });
     },
   });

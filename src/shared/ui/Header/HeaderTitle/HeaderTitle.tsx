@@ -12,7 +12,7 @@ const HeaderTitle = () => {
     class: "클래스 정보",
     user: "마이페이지",
     like: "찜 클래스",
-    entire: "클래스 리스트",
+    entire: "전체 클래스",
   };
 
   return (

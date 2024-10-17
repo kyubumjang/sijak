@@ -134,22 +134,22 @@ const PickLectureCard = (props: PickLectureCardProps) => {
       <Button
         variant="ghost"
         size="icon"
-        className="flex items-center justify-center desktop:w-[32px] tablet:w-[24px] mobile:w-[24px] desktop:h-[32px] tablet:h-[24px] mobile:h-[24px] hover:bg-transparent"
+        className="flex items-center justify-center desktop:w-[36px] tablet:w-[36px] mobile:w-[36px] desktop:h-[36px] tablet:h-[36px] mobile:h-[36px] hover:bg-transparent"
         onClick={(e) => handleLikeClick(e)}
       >
         {heart ? (
           <Image
             src={isHoveredFilled ? "/icons/like_filled.svg" : "/icons/like.svg"}
             alt="heart"
-            width={32}
-            height={32}
+            width={36}
+            height={36}
           />
         ) : (
           <Image
             src={isHovered ? "/icons/like_filled.svg" : "/icons/like.svg"}
             alt="heart"
-            width={32}
-            height={32}
+            width={36}
+            height={36}
           />
         )}
       </Button>
@@ -224,7 +224,7 @@ const PickLectureCard = (props: PickLectureCardProps) => {
                   </div>
                   <div className="flex justify-between items-center desktop:w-[340px] tablet:w-[304px] mobile:w-[272px]">
                     <div className="text-custom-textBlackColor desktop:text-2xl tablet:text-base mobile:text-base font-semibold desktop:w-[340px] tablet:w-[248px] mobile:w-[272px] min-w-[272px] max-w-[340px] desktop:min-h-[62px] tablet:min-h-[42px] mobile:min-h-[42px] text-ellipsis line-clamp-2">
-                      [{name}]
+                      {name}
                     </div>
                   </div>
                 </div>

@@ -58,8 +58,9 @@ const LectureCarousel = ({
   return (
     <Carousel
       setApi={setApi}
-      className="flex items-center justify-start w-full"
+      className="flex items-center justify-start w-full overflow-hidden"
     >
+      {/* FIXME: 툴팁 처리 수경, 지희님 확인 필요 */}
       <UnifiedTooltip
         triggerItem={
           <CarouselContent className="desktop:gap-6 tablet:gap-4 mobile:gap-3 pb-[20px]">

@@ -27,3 +27,4 @@ export * from "./Form";
 export * from "./Toast";
 export * from "./Select";
 export * from "./RadioGroup";
+export * from "./Pagination";
