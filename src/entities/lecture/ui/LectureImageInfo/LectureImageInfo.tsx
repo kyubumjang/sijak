@@ -163,7 +163,7 @@ const LectureImageInfo = ({
         </div>
       )}
       {lectureInfo && (
-        <div className="absolute desktop:top-5 tablet:top-3 mobile:top-3 left-[80px] w-[79px] h-[34px] content-center text-center text-white text-base font-semibold rounded bg-custom-textSemiBoldBlackColor">
+        <div className="absolute desktop:top-5 tablet:top-3 mobile:top-3 left-[88px] w-[79px] h-[34px] content-center text-center text-white text-base font-semibold rounded bg-custom-textSemiBoldBlackColor">
           {calculateDDay()}
         </div>
       )}
