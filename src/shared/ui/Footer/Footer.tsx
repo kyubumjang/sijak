@@ -38,9 +38,9 @@ const Footer = () => {
 
   return (
     isRenderFooter() && (
-      <div className="flex justify-between w-full h-[208px] bg-custom-footerBackground desktop:px-[120px] tablet:px-8 mobile:px-6 pt-[62px] border-t max-w-[1440px] mx-auto my-0">
+      <div className="flex justify-between w-full h-[208px] bg-custom-footerBackground desktop:px-[120px] tablet:px-8 mobile:px-6 pt-[62px] border-t max-w-[1440px] mx-auto my-0 mobile:gap-4">
         <div className="flex flex-row items-center justify-center h-[42px] gap-[10px] text-custom-textDescriptionGrayColor">
-          <div className="">
+          <div>
             <Image
               src="/images/sijak_footer_logo.png"
               alt="sijak footer logo"
@@ -57,7 +57,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="flex mb-10 desktop:gap-10 tablet:gap-10 mobile:gap-1 desktop:flex-row tablet:flex-row mobile:flex-col text-custom-textDescriptionGrayColor text-sm font-medium">
+        <div className="flex mb-10 desktop:gap-10 tablet:gap-2 mobile:gap-1 desktop:flex-row tablet:flex-col mobile:flex-col text-custom-textDescriptionGrayColor text-sm font-medium">
           {externalLinkList.map((externalLink) => {
             return (
               <div key={externalLink.content}>
