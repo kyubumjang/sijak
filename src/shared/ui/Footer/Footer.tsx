@@ -1,6 +1,5 @@
 "use client";
 
-import { Divider } from "../Divider";
 import { ExternalLink } from "../ExternalLink";
 import { ExternalLinkProps } from "../ExternalLink/ExternalLink";
 import Image from "next/image";

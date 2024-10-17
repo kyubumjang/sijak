@@ -47,8 +47,7 @@ const SignUpPage = () => {
     clearErrors,
   } = useForm<SignUpForm>();
 
-  // FIXME: 기본 값 false, 개발 편의상 true 처리 해둔거임 꼭 고쳐야됨
-  const [agree, setAgree] = useState<boolean>(true);
+  const [agree, setAgree] = useState<boolean>(false);
   const [status, setStatus] = useState<InputLabelStatus>("default");
   const [message, setMessage] = useState<string>("");
 
