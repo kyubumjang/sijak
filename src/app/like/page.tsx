@@ -1,6 +1,17 @@
 "use client";
 
-import { BackToPrevious, Button } from "@/shared/ui";
+import {
+  BackToPrevious,
+  Button,
+  Checkbox,
+  Label,
+  UnifiedDialog,
+} from "@/shared/ui";
+import { Controller, useForm } from "react-hook-form";
+import {
+  HeartsLectureListResDataInfo,
+  LikeLectureParams,
+} from "@/features/like/model/like";
 import {
   LectureList,
   NotFoundLecture,
@@ -8,67 +19,131 @@ import {
 } from "@/entities/lecture/ui";
 import { useEffect, useState } from "react";
 
-import { HeartsLectureListResDataInfo } from "@/features/like/model/like";
-import { LectureSize } from "@/entities/lecture/model/lecture";
 import { toast } from "sonner";
 import useDeleteDeactivatesLikeLecture from "@/features/like/api/useDeleteDeactivatesLikeLecture";
 import { useInView } from "react-intersection-observer";
 import useLikeLectureList from "@/features/like/api/useLikeLectureList";
 
 const LikePage = () => {
-  const [lectureListData, setLectureListData] =
-    useState<HeartsLectureListResDataInfo[]>();
-  const [lectureSize, setLectureSize] = useState<LectureSize>({
-    page: 0,
-    size: 9,
-    // dist: 500,
-  });
+  const [lectureListData, setLectureListData] = useState<
+    HeartsLectureListResDataInfo[]
+  >([]);
+  const [likeLectureParams, setLikeLectureParams] = useState<LikeLectureParams>(
+    {
+      page: 0,
+      size: 9,
+      mode: true,
+    },
+  );
   const [hasNext, setHasNext] = useState(true);
+
+  const [openDeleteLectureDialog, setOpenDeleteLectureDialog] =
+    useState<boolean>(false);
+
+  const { control, watch } = useForm({
+    defaultValues: {
+      onlyCanApply: likeLectureParams.mode,
+    },
+  });
 
   const { ref, inView } = useInView({
     threshold: 1.0, // 100% 보일 때 트리거
   });
 
   const { data, isLoading, isSuccess } = useLikeLectureList({
-    page: lectureSize.page,
-    size: lectureSize.size,
-    // dist: lectureSize.dist,
+    page: likeLectureParams.page,
+    size: likeLectureParams.size,
+    mode: likeLectureParams.mode,
   });
 
   const deleteDeactivatesLecture = useDeleteDeactivatesLikeLecture();
 
+  const onlyCanApply = watch("onlyCanApply");
+
   const deleteDeactivatesLectures = () => {
-    deleteDeactivatesLecture.mutate(undefined, {
-      onSuccess: () => {
-        toast("마감된 찜 클래스를 삭제했어요");
-      },
-    });
+    if (data?.data.data.some((lecture) => lecture.status === false)) {
+      deleteDeactivatesLecture.mutate(undefined, {
+        onSuccess: () => {
+          toast("마감된 찜 클래스를 삭제했어요");
+          setOpenDeleteLectureDialog(false);
+        },
+      });
+    } else {
+      toast("마감된 찜 클래스가 없어요");
+      setOpenDeleteLectureDialog(false);
+    }
   };
 
   useEffect(() => {
     if (isSuccess) {
-      setLectureListData(data.data.data);
+      setLectureListData((prev) => [...prev, ...data.data.data]);
       setHasNext(data.data.hasNext);
     }
   }, [data, isSuccess]);
 
   useEffect(() => {
+    setLikeLectureParams((prev) => ({
+      ...prev,
+      mode: !!onlyCanApply,
+      page: 0,
+    }));
+  }, [onlyCanApply]);
+
+  useEffect(() => {
     if (inView && hasNext && !isLoading) {
-      setLectureSize((prev) => {
+      setLikeLectureParams((prev) => {
         return {
           ...prev,
           page: prev.page + 1,
         };
-      }); // 다음 페이지 데이터 로드
+      });
     }
   }, [inView, hasNext, isLoading]);
+
+  const triggerItem = () => {
+    return (
+      <div className="flex justify-center items-center w-[183px] h-11 bg-white text-custom-textBlackColor hover:bg-white hover:font-semibold hover:text-custom-hoverPurple rounded-sm border border-custom-disabled">
+        마감된 클래스 삭제하기
+      </div>
+    );
+  };
+
+  const dialogContent = () => {
+    return (
+      <div className="flex flex-col items-center justify-center desktop:pt-[35px] tablet:pt-[34px] mobile:pt-[34px] desktop:gap-[69px] tablet:gap-[54px] mobile:gap-[54px]">
+        <div className="flex flex-col items-center justify-center">
+          <div className="text-xl font-semibold">마감된 클래스를</div>
+          <div className="text-xl font-semibold">삭제 하시겠습니까?</div>
+        </div>
+        <div className="flex flex-row gap-2.5">
+          <div>
+            <Button
+              variant="outline"
+              className="w-[125px] h-[52px] text-base font-semibold shadow-none"
+              onClick={() => setOpenDeleteLectureDialog(false)}
+            >
+              취소
+            </Button>
+          </div>
+          <div>
+            <Button
+              className="w-[125px] h-[52px] bg-custom-purple hover:bg-custom-hoverPurple text-base font-semibold shadow-none"
+              onClick={deleteDeactivatesLectures}
+            >
+              삭제
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const renderLikeCardContent = () => {
     if (lectureListData && lectureListData.length > 0) {
       return (
         <div>
           <LectureList lectureListData={lectureListData} type="pickLecture" />
-          <div ref={ref} className="h-[200px]" /> {/* 스크롤 감지 요소 */}
+          <div ref={ref} className="desktop:h-6 tablet:h-4 mobile:h-9" />
           {isLoading && (
             <div className="flex desktop:grid-cols-3 tablet:grid-cols-2 mobile:grid-cols-1 desktop:gap-6 tablet:gap-4 mobile:gap-9">
               <SkeletonCard type="pickLecture" />
@@ -102,7 +177,7 @@ const LikePage = () => {
   };
 
   return (
-    <div className="flex flex-col w-full h-full justify-start items-center desktop:pt-20 tablet:pt-10 mobile:pt-10 bg-custom-homeMapBackground relative">
+    <div className="flex flex-col w-full h-full min-h-[calc(100vh_-_208px)] justify-start items-center desktop:pt-20 tablet:pt-10 mobile:pt-10 bg-custom-homeMapBackground relative">
       <div className="desktop:hidden tablet:flex mobile:hidden absolute top-10 left-4">
         <BackToPrevious />
       </div>
@@ -118,13 +193,46 @@ const LikePage = () => {
       </div>
       <div className="flex flex-col desktop:pt-[50px] tablet:pt-10 pb-[209px] gap-4">
         {!isLoading && lectureListData && lectureListData.length > 0 && (
-          <div className="flex justify-end desktop:px-[120px] tablet:px-8 mobile:px-6">
-            <Button
-              className="bg-custom-purple hover:bg-custom-hoverPurple"
-              onClick={deleteDeactivatesLectures}
-            >
-              마감된 클래스 삭제하기
-            </Button>
+          <div className="flex justify-between desktop:px-[120px] tablet:px-8 mobile:px-6">
+            <div className="flex flex-row items-center gap-2">
+              {/* <Controller
+                name="onlyCanApply"
+                control={control}
+                rules={{ required: false }}
+                render={({ field: { onChange, onBlur, value, ref } }) => (
+                  // FIXME: 로직 확인 필요 - 멘토님 도움 필요
+                  <Checkbox
+                    id="onlyCanApply"
+                    className="w-6 h-6"
+                    checked={value}
+                    onCheckedChange={(checked) => {
+                      onChange(checked);
+                      setLikeLectureParams((prev) => ({
+                        ...prev,
+                        mode: !!checked,
+                        page: 0,
+                      }));
+                    }}
+                    onBlur={onBlur}
+                    ref={ref}
+                  />
+                )}
+              />
+              <Label
+                htmlFor="onlyCanApply"
+                className="text-base text-custom-textBlackColor"
+              >
+                신청 가능한 클래스만 보기
+              </Label> */}
+            </div>
+            <UnifiedDialog
+              open={openDeleteLectureDialog}
+              setOpen={setOpenDeleteLectureDialog}
+              triggerItem={triggerItem()}
+              dialogTitle="로그아웃 다이얼로그"
+              dialogDescription="로그아웃 확인 다이얼로그"
+              dialogContent={dialogContent()}
+            />
           </div>
         )}
         <div className="flex desktop:px-[120px] tablet:px-8 mobile:px-6">

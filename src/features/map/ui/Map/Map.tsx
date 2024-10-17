@@ -141,6 +141,7 @@ const Map = ({
           infoWindow.open(mapRef.current, classMarker);
           setChipStatus(() => {
             return {
+              전체: lectureData.short_address === "전체" ? "active" : "default",
               "서울 송파구":
                 lectureData.short_address === "서울특별시 송파구"
                   ? "active"

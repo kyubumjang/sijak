@@ -5,7 +5,7 @@ export interface LoginUserInfo {
   id: number;
   birth: string;
   email: string;
-  gender: "male" | "female";
+  gender: "남성" | "여성" | "";
   age_range: string;
   location: string;
   nickname: string;
@@ -27,8 +27,31 @@ export type GetLoginUserInfo = Payload<
   GetLoginUserInfoRes
 >;
 
+export interface GetRandomNicknameResData {
+  nickname: string;
+}
+
+export interface GetRandomNicknameRes {
+  data: GetRandomNicknameResData;
+  message: string;
+  status: string;
+}
+
+export type GetRandomNickname = Payload<
+  undefined,
+  undefined,
+  undefined,
+  GetRandomNicknameRes
+>;
+
 export interface ValidateNicknameParams {
   nickname: string;
+}
+
+export interface ValidateNicknameDto {
+  nickname: string;
+  age_range: string;
+  gender: string;
 }
 export interface ValidateNicknameRes {
   status: number;
@@ -51,8 +74,8 @@ export interface PostNicknameRes {
 
 export type PostNickname = Payload<
   BearerAccessTokenHeader,
-  ValidateNicknameParams,
   undefined,
+  ValidateNicknameDto,
   PostNicknameRes
 >;
 
@@ -123,3 +146,15 @@ export const userAgeMap: Record<string, number> = {
   "80~89": 80,
   "90~99": 90,
 };
+
+export const userAgeList = [
+  "10대",
+  "20대",
+  "30대",
+  "40대",
+  "50대",
+  "60대",
+  "70대",
+  "80대",
+  "90대",
+];

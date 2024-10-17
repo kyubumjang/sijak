@@ -1,9 +1,12 @@
 "use client";
 
+import Chip, { ChipStatus } from "@/shared/ui/Chip/Chip";
 import {
+  GetLocationLectureListParams,
   LectureInfo,
-  LecturePayload,
-  LectureSize,
+  lectureChipContentList,
+  lectureChipContentMap,
+  shortAddressList,
 } from "@/entities/lecture/model/lecture";
 import {
   LectureList,
@@ -13,17 +16,25 @@ import {
 import { useEffect, useState } from "react";
 
 import { BackToPrevious } from "@/shared/ui";
-import { useGeoLocation } from "@/shared/lib/useGeolocation";
 import { useInView } from "react-intersection-observer";
-import useLectureList from "@/entities/lecture/api/useLectureList";
+import useLocationLectureList from "@/entities/lecture/api/useLocationLectureList";
 
 const EntirePage = () => {
   const [lectureListData, setLectureListData] = useState<LectureInfo[]>([]);
-  const [user, setUser] = useState<LecturePayload>();
-  const [lectureSize, setLectureSize] = useState<LectureSize>({
-    page: 0,
-    size: 9,
-    // dist: 500,
+  const [locationLectureParams, setLocationLectureParams] =
+    useState<GetLocationLectureListParams>({
+      page: 0,
+      size: 9,
+      location: " ",
+    });
+  const [chipStatus, setChipStatus] = useState<
+    Record<shortAddressList, ChipStatus>
+  >({
+    전체: "active",
+    "서울 송파구": "default",
+    "서울 마포구": "default",
+    "서울 노원구": "default",
+    "서울 강서구": "default",
   });
   const [hasNext, setHasNext] = useState(true);
 
@@ -31,56 +42,58 @@ const EntirePage = () => {
     threshold: 1.0, // 100% 보일 때 트리거
   });
 
-  const getLectureList = useLectureList();
-  const isLoading = getLectureList.isIdle || getLectureList.isPending;
+  const {
+    data: locationLectureListData,
+    isLoading,
+    isSuccess,
+  } = useLocationLectureList({
+    params: locationLectureParams,
+  });
 
-  const geolocation = useGeoLocation();
+  const filterLectureListByShortAddress = (
+    lectureChipContent: shortAddressList,
+  ) => {
+    if (chipStatus[lectureChipContent] === "active") return;
+    setChipStatus(() => {
+      return {
+        전체: lectureChipContent === "전체" ? "active" : "default",
+        "서울 송파구":
+          lectureChipContent === "서울 송파구" ? "active" : "default",
+        "서울 마포구":
+          lectureChipContent === "서울 마포구" ? "active" : "default",
+        "서울 노원구":
+          lectureChipContent === "서울 노원구" ? "active" : "default",
+        "서울 강서구":
+          lectureChipContent === "서울 강서구" ? "active" : "default",
+      };
+    });
+    setLectureListData([]);
+    setLocationLectureParams(() => {
+      return {
+        page: 0,
+        size: 9,
+        location: lectureChipContentMap[lectureChipContent],
+      };
+    });
+  };
 
   useEffect(() => {
-    if (user && user.latitude && user.longitude) {
-      getLectureList.mutate(
-        {
-          page: lectureSize.page,
-          size: lectureSize.size,
-          // dist: lectureSize.dist,
-        },
-
-        {
-          onSuccess: (data) => {
-            const lectureListData = data.data.data.data;
-            setLectureListData((prev) => [...prev, ...lectureListData]);
-            setHasNext(data.data.data.hasNext);
-          },
-          onError: () => {},
-        },
-      );
+    if (isSuccess) {
+      setLectureListData((prev) => [
+        ...prev,
+        ...locationLectureListData.data.data.data,
+      ]);
+      setHasNext(locationLectureListData.data.data.hasNext);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lectureSize.page, lectureSize.size, user]);
-
-  useEffect(() => {
-    if (
-      geolocation.curLocation &&
-      geolocation.curLocation.latitude &&
-      geolocation.curLocation.longitude
-    ) {
-      setUser((prev) => {
-        return {
-          ...prev,
-          latitude: geolocation.curLocation
-            ? geolocation.curLocation.latitude
-            : 0,
-          longitude: geolocation.curLocation
-            ? geolocation.curLocation.longitude
-            : 0,
-        };
-      });
-    }
-  }, [geolocation.curLocation]);
+  }, [
+    isSuccess,
+    locationLectureListData?.data.data.data,
+    locationLectureListData?.data.data.hasNext,
+  ]);
 
   useEffect(() => {
     if (inView && hasNext && !isLoading) {
-      setLectureSize((prev) => {
+      setLocationLectureParams((prev) => {
         return {
           ...prev,
           page: prev.page + 1,
@@ -94,7 +107,7 @@ const EntirePage = () => {
       return (
         <div>
           <LectureList lectureListData={lectureListData} type="pickLecture" />
-          <div ref={ref} className="desktop:h-6 tablet:h-4 mobile:h-9" />{" "}
+          <div ref={ref} className="desktop:h-6 tablet:h-4 mobile:h-9" />
           {/* 스크롤 감지 요소 */}
           {isLoading && (
             <div className="flex flex-row space-x-4">
@@ -121,18 +134,32 @@ const EntirePage = () => {
   };
 
   return (
-    <div className="flex flex-col w-full h-full justify-start items-center desktop:pt-20 tablet:pt-10 mobile:pt-10 bg-custom-homeMapBackground relative">
+    <div className="flex flex-col w-full h-full min-h-[calc(100vh_-_208px)] justify-start items-center desktop:pt-20 tablet:pt-10 mobile:pt-10 bg-custom-homeMapBackground relative">
       <div className="desktop:hidden tablet:flex mobile:hidden absolute top-10 left-4">
         <BackToPrevious />
       </div>
-      <div className="desktop:flex tablet:flex mobile:hidden flex-row w-full h-12 items-start justify-center">
-        <div className="flex flew-row gap-1">
-          <div className="text-custom-textBlackColor text-[32px] font-bold">
-            전체 클래스
+      <div className="flex flex-col w-full h-full desktop:px-[120px] tablet:px-8 mobile:px-6 desktop:gap-10 tablet:gap-[35px] mobile:gap-8">
+        <div className="desktop:flex tablet:flex mobile:hidden flex-row w-full h-12 items-start justify-center">
+          <div className="flex flew-row gap-1">
+            <div className="text-custom-textBlackColor text-[32px] font-bold">
+              전체 클래스
+            </div>
+            <div className="text-custom-textBlackColor text-[32px]">
+              한번에 보기
+            </div>
           </div>
-          <div className="text-custom-textBlackColor text-[32px]">
-            한번에 보기
-          </div>
+        </div>
+        <div className="flex flex-row gap-2 desktop:max-w-[532px] tablet:max-w-[532px] mobile:max-w-[312px] overflow-x-scroll scrollbar-hide">
+          {lectureChipContentList.map((lectureChipContent, idx) => (
+            <Chip
+              key={idx}
+              content={lectureChipContent}
+              status={chipStatus[lectureChipContent]}
+              handleClick={() =>
+                filterLectureListByShortAddress(lectureChipContent)
+              }
+            />
+          ))}
         </div>
       </div>
       <div className="flex flex-col desktop:pt-[50px] tablet:pt-10 pb-[209px]">

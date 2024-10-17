@@ -1,9 +1,12 @@
 import { Button } from "../Button";
+import { MouseEvent } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface ChipProps {
   content: string;
-  handleClick?: () => void;
+  handleClick?:
+    | (() => void)
+    | ((e: React.MouseEvent<HTMLButtonElement>) => void);
   status: ChipStatus;
   className?: string;
 }

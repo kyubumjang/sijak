@@ -9,7 +9,7 @@ export const userHandlers = [
         profile_image:
           "https://avatars.githubusercontent.com/u/33307948?s=400&u=a642bbeb47b47e203f37b47db12d2d92d8f98580&v=4",
         name: "kyubumjang",
-        gender: "male",
+        gender: "",
         age_range: "20~29",
         applied_class: [
           {

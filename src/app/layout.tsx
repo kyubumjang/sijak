@@ -51,12 +51,16 @@ export default function RootLayout({
           <ToastToaster />
         </Providers>
       </body>
-      <GoogleTagManager
-        gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_GTM_ID ?? ""}
-      />
-      <GoogleAnalytics
-        gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_GA_ID ?? ""}
-      />
+      {process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_GTM_ID && (
+        <GoogleTagManager
+          gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_GTM_ID}
+        />
+      )}
+      {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_GA_ID && (
+        <GoogleAnalytics
+          gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_GA_ID}
+        />
+      )}
     </html>
   );
 }

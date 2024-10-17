@@ -1,5 +1,6 @@
 import {
   GetLoginUserInfo,
+  GetRandomNickname,
   PatchUserAddress,
   PatchUserInfo,
   PostNickname,
@@ -56,16 +57,17 @@ export const validateNickname = (
     },
   );
 
-export const postNickname = (params: PostNickname["Request"]["query"]) =>
-  apiRequest.post<PostNickname["Response"]>(
-    `${NICKNAME_BASE_PATH}`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${getCookie("accessToken")}`,
-      },
-      params,
+export const postNickname = (payload: PostNickname["Request"]["body"]) =>
+  apiRequest.post<PostNickname["Response"]>(`${NICKNAME_BASE_PATH}`, payload, {
+    headers: {
+      Authorization: `Bearer ${getCookie("accessToken")}`,
     },
+  });
+
+export const getRandomNickname = () =>
+  apiRequest.get<GetRandomNickname["Response"]>(
+    `${NICKNAME_BASE_PATH}/random`,
+    {},
   );
 
 export const postUserAgree = (payload: PostUserAgree["Request"]["body"]) =>

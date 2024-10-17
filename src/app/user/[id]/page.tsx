@@ -37,7 +37,7 @@ const UserInfoPage = () => {
     id: 0,
     email: "",
     nickname: "",
-    gender: "male",
+    gender: "",
     age_range: "",
     birth: "",
     phone_number: "",
@@ -187,6 +187,12 @@ const UserInfoPage = () => {
     }
   }, [geolocation.curLocation]);
 
+  const renderPlaceholder = () => {
+    if (loginedUser.gender === "남성") return "남성";
+    if (loginedUser.gender === "여성") return "여성";
+    return "";
+  };
+
   const triggerItem = () => {
     return (
       <div className="flex items-center justify-center">
@@ -253,7 +259,8 @@ const UserInfoPage = () => {
                 {/* TODO: 연령대, 주소 조건문 처리 */}
                 <div className="desktop:h-[33px] tablet:h-[30px] mobile:h-[21px] desktop:text-[22px] tablet:text-[20px] mobile:text-sm text-custom-textGrayColor">
                   {loginedUser.age_range &&
-                    `${userAgeMap[loginedUser.age_range]}대`}
+                    // `${userAgeMap[loginedUser.age_range]}대`}
+                    `${loginedUser.age_range}`}
                   {/* , {loginedUser.location} */}
                 </div>
               </div>
@@ -340,7 +347,7 @@ const UserInfoPage = () => {
                     placeholder={loginedUser.email}
                     disabled
                   />
-                  <InputLabel
+                  {/* <InputLabel
                     labelContent="휴대폰 번호"
                     placeholder={loginedUser.phone_number}
                     disabled
@@ -349,12 +356,10 @@ const UserInfoPage = () => {
                     labelContent="생년월일"
                     placeholder={loginedUser.birth}
                     disabled
-                  />
+                  /> */}
                   <InputLabel
                     labelContent="성별"
-                    placeholder={
-                      loginedUser.gender === "male" ? "남성" : "여성"
-                    }
+                    placeholder={renderPlaceholder()}
                     disabled
                   />
                 </div>

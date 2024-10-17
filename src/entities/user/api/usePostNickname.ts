@@ -8,8 +8,8 @@ const usePostNickname = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (params: PostNickname["Request"]["query"]) =>
-      postNickname(params),
+    mutationFn: (payload: PostNickname["Request"]["body"]) =>
+      postNickname(payload),
     onSuccess: () => {
       queryClient.refetchQueries({
         queryKey: USER_KEYS.lists(),

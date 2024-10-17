@@ -7,7 +7,11 @@ const useLikeLectureList = (
   params: GetHeartsLectureList["Request"]["query"]["params"],
 ) => {
   return useQuery({
-    queryKey: LIKE_LECTURE_KEYS.list({ page: params.page, size: params.size }),
+    queryKey: LIKE_LECTURE_KEYS.list({
+      page: params.page,
+      size: params.size,
+      mode: params.mode,
+    }),
     queryFn: () => getHeartsLectureList(params),
     select: (response) => response.data,
     meta: {

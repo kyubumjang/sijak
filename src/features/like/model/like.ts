@@ -31,8 +31,12 @@ export interface HeartsLectureListResData {
   hasNext: boolean;
 }
 
+export interface LikeLectureParams extends LectureSize {
+  mode: boolean;
+}
+
 export interface GetHeartsLectureListDto {
-  params: LectureSize;
+  params: LikeLectureParams;
 }
 
 export interface GetHeartsLectureListRes {

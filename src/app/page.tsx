@@ -54,7 +54,7 @@ const Home = () => {
     id: 0,
     email: "",
     nickname: "",
-    gender: "male",
+    gender: "",
     age_range: "",
     birth: "",
     phone_number: "",
@@ -66,6 +66,7 @@ const Home = () => {
   const [chipStatus, setChipStatus] = useState<
     Record<shortAddressList, ChipStatus>
   >({
+    전체: "active",
     "서울 송파구": "default",
     "서울 마포구": "default",
     "서울 노원구": "default",
@@ -182,6 +183,7 @@ const Home = () => {
   ) => {
     setChipStatus(() => {
       return {
+        전체: lectureChipContent === "전체" ? "active" : "default",
         "서울 송파구":
           lectureChipContent === "서울 송파구" ? "active" : "default",
         "서울 마포구":
@@ -194,8 +196,12 @@ const Home = () => {
     });
     setMarkerLocation(() => {
       return {
-        latitude: markerLocationMap[lectureChipContent]["latitude"],
-        longitude: markerLocationMap[lectureChipContent]["longitude"],
+        latitude: markerLocationMap(user.latitude, user.longitude)[
+          lectureChipContent
+        ]["latitude"],
+        longitude: markerLocationMap(user.latitude, user.longitude)[
+          lectureChipContent
+        ]["longitude"],
       };
     });
     setLocationLectureParams((prev) => {
@@ -280,28 +286,34 @@ const Home = () => {
       <div className="flex flex-col desktop:pt-[84px] tablet:pt-12 mobile:pt-12 desktop:pb-[120px] tablet:pb-[99px] mobile:pb-[82px] bg-custom-homeMapBackground desktop:gap-[120px] tablet:gap-[80px] mobile:gap-[80px]">
         <div className="flex flex-col desktop:gap-[46px] tablet:gap-6 mobile:gap-[28px]">
           <div className="flex flex-col desktop:px-[120px] tablet:px-8 mobile:px-6 desktop:gap-8 tablet:gap-6 mobile:gap-6">
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-row items-center gap-1.5">
               <div className="desktop:text-2xl tablet:text-xl mobile:text-xl font-bold">
-                내 주변 문화생활 클래스 ☺️
+                내 주변 문화생활 클래스
+              </div>
+              <div className="font-sans desktop:text-2xl tablet:text-xl mobile:text-xl font-bold">
+                ☺️
               </div>
             </div>
             {isLoading && <MapSkeleton />}
-            {lectureListData && markerLectureListData && (
-              <Map
-                latitude={user.latitude}
-                longitude={user.longitude}
-                markerLatitude={markerLocation?.latitude}
-                markerLongitude={markerLocation?.longitude}
-                setLocationLectureParams={setLocationLectureParams}
-                setChipStatus={setChipStatus}
-                lectureListData={lectureListData}
-                markerLectureListData={markerLectureListData}
-              />
-            )}
+            {lectureListData &&
+              markerLectureListData &&
+              user.latitude !== 0 &&
+              user.longitude !== 0 && (
+                <Map
+                  latitude={user.latitude}
+                  longitude={user.longitude}
+                  markerLatitude={markerLocation?.latitude}
+                  markerLongitude={markerLocation?.longitude}
+                  setLocationLectureParams={setLocationLectureParams}
+                  setChipStatus={setChipStatus}
+                  lectureListData={lectureListData}
+                  markerLectureListData={markerLectureListData}
+                />
+              )}
           </div>
           <div className="flex flex-col desktop:gap-[46px] tablet:gap-6 mobile:gap-[28px]">
             <div className="flex desktop:flex-row tablet:flex-row mobile:flex-col justify-between desktop:px-[120px] tablet:px-8 mobile:px-6 mobile:gap-[14px]">
-              <div className="flex flex-row gap-2 desktop:max-w-[460px] tablet:max-w-[460px] mobile:max-w-[312px] overflow-x-scroll scrollbar-hide">
+              <div className="flex flex-row gap-2 desktop:max-w-[532px] tablet:max-w-[532px] mobile:max-w-[312px] overflow-x-scroll scrollbar-hide">
                 {lectureChipContentList.map((lectureChipContent, idx) => (
                   <Chip
                     key={idx}

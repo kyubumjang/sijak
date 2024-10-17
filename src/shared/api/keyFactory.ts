@@ -128,6 +128,7 @@ export const LIKE_LECTURE_KEYS = {
     status?: string;
     page?: number;
     size?: number;
+    mode?: boolean;
   }) => [...LIKE_LECTURE_KEYS.all, "list", filters],
   details: () => [...LIKE_LECTURE_KEYS.all, "detail"],
   detail: (filters: { classId: number }) => [
@@ -143,4 +144,5 @@ export const USER_KEYS = {
   details: () => [...USER_KEYS.all, "detail"],
   detail: (filters: { userId: number }) => [...USER_KEYS.details(), filters],
   loginUser: () => [...USER_KEYS.all, "login"],
+  random: () => [...USER_KEYS.all, "random"],
 };

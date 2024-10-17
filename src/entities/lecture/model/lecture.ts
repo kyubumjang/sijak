@@ -229,7 +229,6 @@ export type GetLectureList = Payload<
 export interface LectureSize {
   page: number;
   size: number;
-  // statue: boolean;
 }
 
 export interface LecturePayload {
@@ -324,12 +323,14 @@ export type GetLocationLectureList = Payload<
 >;
 
 export type shortAddressList =
+  | "전체"
   | "서울 송파구"
   | "서울 마포구"
   | "서울 노원구"
   | "서울 강서구";
 
 export const lectureChipContentList: Array<shortAddressList> = [
+  "전체",
   "서울 송파구",
   "서울 마포구",
   "서울 노원구",
@@ -337,6 +338,7 @@ export const lectureChipContentList: Array<shortAddressList> = [
 ];
 
 export const lectureChipContentMap = {
+  전체: " ",
   "서울 송파구": "서울특별시 송파구",
   "서울 마포구": "서울특별시 마포구",
   "서울 노원구": "서울특별시 노원구",

@@ -40,7 +40,7 @@ const usePostLikeLecture = (lectureId: number) => {
         queryKey: LIKE_LECTURE_KEYS.list({ page: 0, size: 9 }),
       });
       queryClient.refetchQueries({
-        queryKey: LIKE_LECTURE_KEYS.list({ page: 0, size: 9 }),
+        queryKey: LIKE_LECTURE_KEYS.list({ page: 0, size: 9, mode: true }),
       });
     },
   });

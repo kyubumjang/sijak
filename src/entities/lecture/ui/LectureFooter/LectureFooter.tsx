@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 
 import { Lecture } from "../../model/lecture";
 import { getCookie } from "cookies-next";
+import { sendGAEvent } from "@next/third-parties/google";
 import { toast } from "sonner";
 import useDeleteLikeLecture from "@/features/like/api/useDeleteLikeLecture";
 import usePostLikeLecture from "@/features/like/api/usePostLikeLecture";

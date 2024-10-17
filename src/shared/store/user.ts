@@ -14,7 +14,7 @@ const initialState: LoginedUserState = {
     id: 0,
     email: "",
     nickname: "",
-    gender: "male",
+    gender: "",
     age_range: "",
     birth: "",
     phone_number: "",
