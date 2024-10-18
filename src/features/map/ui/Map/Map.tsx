@@ -221,7 +221,7 @@ const Map = ({
   }, [markerLatitude, markerLongitude]);
 
   return (
-    <div className="rounded-lg overflow-hidden">
+    <div className="desktop:rounded-xl tablet:rounded-lg mobile:rounded-lg overflow-hidden">
       <div
         id="map_id"
         className="desktop:h-[460px] tablet:h-[420px] mobile:h-[420px]"

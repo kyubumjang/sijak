@@ -39,12 +39,14 @@ const IntroductionBanner = () => {
   }
 
   return (
-    <Link
-      href="https://ebony-specialist-cf1.notion.site/f34337d192d54efd818663cbeb2ad77c?pvs=4"
-      target="_blank"
-    >
-      <Image src={src} alt="sub banner" width={width} height={height} />
-    </Link>
+    <div className="rounded-lg overflow-hidden">
+      <Link
+        href="https://ebony-specialist-cf1.notion.site/f34337d192d54efd818663cbeb2ad77c?pvs=4"
+        target="_blank"
+      >
+        <Image src={src} alt="sub banner" width={width} height={height} />
+      </Link>
+    </div>
   );
 };
 
