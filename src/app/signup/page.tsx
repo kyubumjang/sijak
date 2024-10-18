@@ -304,7 +304,7 @@ const SignUpPage = () => {
             !watch("gender")
           }
         >
-          <div className="desktop:text-2xl tablet:text-base mobile:text-base text-center">
+          <div className="desktop:text-xl tablet:text-base mobile:text-base text-center">
             시ː작 하기
           </div>
         </Button>

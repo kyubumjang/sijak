@@ -267,12 +267,12 @@ const Home = () => {
               isPreviousIcon
             />
           </div>
-          <div className="flex flex-row items-center justify-center desktop:px-[120px] tablet:px-8 mobile:px-6 gap-[18px]">
+          <div className="flex flex-row items-center justify-center desktop:px-[120px] tablet:px-8 mobile:px-6 gap-6">
             <Progress
               value={calculateProgressBar()}
               className="h-[3px] rounded-none"
             />
-            <div className="flex flex-row items-center justify-center w-[60px] h-[38px] gap-1">
+            <div className="flex flex-row items-center justify-end min-w-[32px] h-[38px] gap-1">
               <div className="text-custom-textBlackColor text-sm font-bold">{`${current}`}</div>
               <div className="text-custom-textDescriptionGrayColor text-sm font-bold">{`/ ${count}`}</div>
             </div>

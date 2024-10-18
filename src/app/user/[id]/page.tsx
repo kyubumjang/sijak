@@ -192,7 +192,7 @@ const UserInfoPage = () => {
   const triggerItem = () => {
     return (
       <div className="flex items-center justify-center">
-        <div className="flex justify-center items-center text-center  desktop:w-[400px] tablet:w-[400px] mobile:w-[260px] max-w-[400px] h-14 bg-white hover:bg-custom-buttonGrayBackground desktop:text-2xl tablet:text-xl mobile:text-base font-semibold border border-custom-disabled rounded-md">
+        <div className="flex justify-center items-center text-center  desktop:w-[400px] tablet:w-[400px] mobile:w-[260px] max-w-[400px] h-14 bg-white hover:bg-custom-buttonGrayBackground desktop:text-xl tablet:text-xl mobile:text-base font-semibold border border-custom-disabled rounded-md">
           로그아웃
         </div>
       </div>
@@ -245,7 +245,7 @@ const UserInfoPage = () => {
             마이페이지
           </div>
         </div>
-        <div className="flex flex-col justify-center items-center desktop:gap-6 tablet:gap-2 mobile:gap-2">
+        <div className="flex flex-col justify-center items-center desktop:gap-3 tablet:gap-3 mobile:gap-3">
           <div className="flex flex-col desktop:gap-14 tablet:gap-5 mobile:gap-6">
             <div className="flex flex-col justify-center items-center gap-4">
               <div className="flex flex-col justify-center items-center gap-1">
@@ -365,7 +365,7 @@ const UserInfoPage = () => {
                   disabled={
                     !isEmpty(errors.nickname) || !isEmpty(errors.address)
                   }
-                  className="desktop:w-[400px] tablet:w-[400px] mobile:w-[260px] h-14 font-semibold desktop:text-2xl tablet:text-xl mobile:text-base bg-custom-purple hover:bg-custom-hoverPurple rounded-md"
+                  className="desktop:w-[400px] tablet:w-[400px] mobile:w-[260px] desktop:h-14 tablet:h-14 mobile:h-[52px] font-semibold desktop:text-xl tablet:text-xl mobile:text-base bg-custom-purple hover:bg-custom-hoverPurple disabled:bg-custom-textDescriptionGrayColor disabled:opacity-100 rounded-md"
                 >
                   저장하기
                 </Button>

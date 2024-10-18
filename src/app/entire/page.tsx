@@ -110,7 +110,7 @@ const EntirePage = () => {
           <div ref={ref} className="desktop:h-6 tablet:h-4 mobile:h-9" />
           {/* 스크롤 감지 요소 */}
           {isLoading && (
-            <div className="flex flex-row space-x-4">
+            <div className="grid desktop:grid-cols-3 tablet:grid-cols-2 mobile:grid-cols-1 desktop:gap-6 tablet:gap-4 mobile:gap-9">
               <SkeletonCard type="pickLecture" />
               <SkeletonCard type="pickLecture" />
               <SkeletonCard type="pickLecture" />
