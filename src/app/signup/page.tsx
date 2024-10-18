@@ -6,8 +6,6 @@ import {
   BackToPrevious,
   Button,
   InputLabel,
-  RadioGroup,
-  RadioGroupItem,
   Select,
   SelectContent,
   SelectGroup,
@@ -23,10 +21,10 @@ import { InputLabelStatus } from "@/shared/ui/InputLabel/InputLabel";
 import { UserServiceAgreeDialog } from "@/entities/user/ui";
 import axios from "axios";
 import { debounce } from "lodash";
-import { toast } from "sonner";
 import useGetRandomNickname from "@/entities/user/api/useGetRandomNickname";
 import usePostNickname from "@/entities/user/api/usePostNickname";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/shared/hooks/useToast";
 import useValidateNickname from "@/entities/user/api/useValidateNickname";
 import { userAgeList } from "@/entities/user/model/user";
 
@@ -56,6 +54,7 @@ const SignUpPage = () => {
   const getRandomNickname = useGetRandomNickname();
   const validateNickname = useValidateNickname();
   const postNickname = usePostNickname();
+  const { toast } = useToast();
 
   const makeRandomNickname = () => {
     getRandomNickname.mutate(undefined, {
@@ -115,7 +114,7 @@ const SignUpPage = () => {
       },
       {
         onSuccess: () => {
-          toast("닉네임이 성공적으로 업데이트됐어요");
+          toast({ title: "시ː작에 오신 걸 환영합니다." });
           router.push("/");
         },
       },

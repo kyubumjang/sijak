@@ -18,12 +18,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/shared/ui";
-import { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import Image from "next/image";
 import Link from "next/link";
-import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import usePostUserAgree from "../../api/usePostUserAgree";
 import { z } from "zod";
@@ -64,7 +63,7 @@ const agreeItems = [
   },
   {
     id: "locationBasedServiceAgree",
-    label: "[필수] 위치기반서비스동의",
+    label: "[필수] 위치정보 이용약관",
     externalLink:
       "https://www.notion.so/17e92e6c1188429cb17ad92d84f65103?pvs=4",
   },
@@ -112,7 +111,6 @@ const UserServiceAgreeDialog = ({ setAgree }: UserServiceAgreeDialogProps) => {
         {
           onSuccess: () => {
             setAgree(true);
-            toast("서비스 동의 완료");
           },
         },
       );

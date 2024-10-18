@@ -277,7 +277,11 @@ const Home = () => {
       );
     }
 
-    return <NotFoundLecture />;
+    return (
+      <div className="flex w-full items-center justify-center">
+        <NotFoundLecture />
+      </div>
+    );
   };
 
   return (
@@ -339,7 +343,9 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div>{renderHomeLectureList()}</div>
+            <div className="flex justify-center items-center">
+              {renderHomeLectureList()}
+            </div>
           </div>
         </div>
         <div className="desktop:px-[120px] tablet:px-8 mobile:px-6 ">
@@ -349,8 +355,8 @@ const Home = () => {
             <IntroductionBanner />
           )}
         </div>
-        <div className="flex flex-col pb-4 desktop:items-start tablet:items-start mobile:items-center desktop:justify-start tablet:justify-start mobile:justify-center desktop:px-[120px] tablet:px-8 mobile:px-6 desktop:gap-8 tablet:gap-5 mobile:gap-5">
-          <div className="flex flex-col mobile:w-[312px] gap-2">
+        <div className="flex flex-col pb-4 desktop:items-start tablet:items-center mobile:items-center desktop:justify-start tablet:justify-start mobile:justify-center desktop:px-[120px] tablet:px-8 mobile:px-6 desktop:gap-8 tablet:gap-5 mobile:gap-5">
+          <div className="flex flex-col tablet:w-[704px] mobile:w-[312px] gap-2">
             <div className="font-bold desktop:text-2xl tablet:text-xl mobile:text-xl">
               시ː작 PICK 클래스 📌
             </div>
@@ -358,7 +364,9 @@ const Home = () => {
               조회 수 많은 추천 클래스를 소개할게요!
             </div>
           </div>
-          <div>{renderPickLectureList()}</div>
+          <div className="flex justify-center items-center">
+            {renderPickLectureList()}
+          </div>
         </div>
       </div>
     </div>

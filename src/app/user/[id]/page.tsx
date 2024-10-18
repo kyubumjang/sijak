@@ -2,27 +2,21 @@
 
 import { BackToPrevious, Button, InputLabel, UnifiedDialog } from "@/shared/ui";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import {
-  LoginUserInfo,
-  PatchUserAddress,
-  userAgeMap,
-} from "@/entities/user/model/user";
+import { LoginUserInfo, PatchUserAddress } from "@/entities/user/model/user";
 import { debounce, isEmpty } from "lodash";
 import { useEffect, useState } from "react";
 
-import Image from "next/image";
 import { InputLabelStatus } from "@/shared/ui/InputLabel/InputLabel";
 import { SquareLoader } from "react-spinners";
 import axios from "axios";
 import { deleteCookie } from "cookies-next";
-import { toast } from "sonner";
 import { useGeoLocation } from "@/shared/lib/useGeolocation";
 import useGetLoginUserInfo from "@/entities/user/api/useGetLoginUserInfo";
-import usePatchUserAddress from "@/entities/user/api/usePatchUserAddress";
 import usePatchUserInfo from "@/entities/user/api/usePatchUserInfo";
 import usePostLogout from "@/features/authentication/api/usePostLogout";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/shared/hooks/useToast";
 import useValidateNickname from "@/entities/user/api/useValidateNickname";
 
 export const runtime = "edge";
@@ -76,6 +70,8 @@ const UserInfoPage = () => {
   const [message, setMessage] = useState<string>("");
 
   const queryClient = useQueryClient();
+
+  const { toast } = useToast();
 
   const validationCheckNickname = debounce((nickname: string) => {
     validateNickname.mutate(
@@ -138,7 +134,7 @@ const UserInfoPage = () => {
       },
       {
         onSuccess: () => {
-          toast("유저 정보 업데이트가 성공적으로 됐어요.");
+          toast({ title: "닉네임이 변경 완료됐습니다." });
           window.location.reload();
         },
       },
@@ -150,7 +146,7 @@ const UserInfoPage = () => {
       onSuccess: () => {
         deleteCookie("accessToken");
         deleteCookie("refreshToken");
-        toast("로그아웃 성공");
+        toast({ title: "다음에 또 봐요~!" });
         queryClient.clear();
         router.push("/");
       },

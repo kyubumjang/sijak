@@ -217,17 +217,6 @@ const LectureInfoPage = () => {
           />
         </Link>
       </div>
-      {/* {isLoading && (
-        <div className="desktop:flex tablet:hidden mobile:hidden w-full">
-          <div className="flex flex-row w-full desktop:px-[120px] desktop:pt-[80px] gap-10">
-            <Skeleton className="desktop:w-[588px] tablet:w-[330px] desktop:h-[588px] tablet:h-[330px]" />
-            <div className="flex flex-col gap-6">
-              <LectureSummary lectureInfo={lectureInfo} isLoading={isLoading} />
-              <LectureMinimap lectureInfo={lectureInfo} isLoading={isLoading} />
-            </div>
-          </div>
-        </div>
-      )} */}
       {renderSummary()}
       {lectureInfo && (
         <LectureDetail lectureInfo={lectureInfo} isLoading={isLoading} />

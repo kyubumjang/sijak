@@ -57,9 +57,7 @@ const LectureFooter = ({
           lectureId: lectureInfo.id,
         },
         {
-          onSuccess: () => {
-            toast("찜한 클래스를 삭제했어요");
-          },
+          onSuccess: () => {},
           onError: () => {
             setHeart(true);
           },
@@ -73,9 +71,7 @@ const LectureFooter = ({
           lectureId: lectureInfo.id,
         },
         {
-          onSuccess: () => {
-            toast("클래스를 찜 했어요");
-          },
+          onSuccess: () => {},
           onError: () => {
             setHeart(false);
           },
@@ -116,7 +112,7 @@ const LectureFooter = ({
 
   const notFoundApplyPageDialogContent = () => {
     return (
-      <div className="flex flex-col items-center justify-center gap-[55px] desktop:pt-[35px] tablet:pt-5 mobile:pt-5">
+      <div className="flex flex-col items-center justify-center desktop:gap-[55px] tablet:gap-5 mobile:gap-5 desktop:pt-[35px] tablet:pt-5 mobile:pt-5">
         <div className="flex flex-col items-center justify-center">
           <div className="font-bold text-[28px]">신청 페이지를</div>
           <div className="font-bold text-[28px]">불러오지 못했어요</div>
@@ -135,12 +131,12 @@ const LectureFooter = ({
 
   const needLoginDialogContent = () => {
     return (
-      <div className="flex flex-col gap-[55px] desktop:pt-[35px] tablet:pt-5 mobile:pt-5">
+      <div className="flex flex-col desktop:gap-[55px] tablet:gap-5 mobile:gap-5 desktop:pt-[35px] tablet:pt-5 mobile:pt-5">
         <div className="flex flex-col items-center justify-center">
-          <div className="font-bold text-[28px] content-center">
+          <div className="font-bold text-xl content-center">
             로그인이 필요한
           </div>
-          <div className="font-bold text-[28px] content-center">서비스에요</div>
+          <div className="font-bold text-xl content-center">서비스에요</div>
         </div>
         <div className="flex items-center justify-center ">
           <Button

@@ -21,7 +21,7 @@ const chipStatusStyle: Record<ChipStatus, string> = {
 
 const Chip = ({ content, handleClick, status, className }: ChipProps) => {
   const containerClassName = twMerge(
-    "flex justify-center items-center rounded-[100px] shadow-none",
+    "flex justify-center items-center text-center content-center rounded-[100px] shadow-none",
     className,
   );
   const activeChip = chipStatusStyle[status];

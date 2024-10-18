@@ -3,14 +3,16 @@ import Image from "next/image";
 interface NotFoundLectureProps {
   isHideIcon?: boolean;
   description?: string;
+  subDescription?: string;
 }
 
 const NotFoundLecture = ({
   isHideIcon = false,
   description = "이용에 불편을 드려 죄송합니다.",
+  subDescription = "",
 }: NotFoundLectureProps) => {
   return (
-    <div className="flex flex-col items-center justify-center desktop:w-full tablet:w-full mobile:w-[180px] h-full gap-[6px] pt-[173px]">
+    <div className="flex flex-col items-center justify-center desktop:w-full tablet:w-full mobile:w-[200px] h-full gap-[6px] pt-[173px]">
       <div className="">
         {!isHideIcon && (
           <Image
@@ -30,8 +32,13 @@ const NotFoundLecture = ({
             존재하지 않습니다.
           </div>
         </div>
-        <div className="desktop:text-lg tablet:text-sm mobile:text-sm text-custom-textGrayColor font-medium">
-          {description}
+        <div className="flex flex-col items-center justify-center">
+          <div className="desktop:text-lg tablet:text-sm mobile:text-sm text-custom-textGrayColor font-medium">
+            {description}
+          </div>
+          <div className="desktop:text-lg tablet:text-sm mobile:text-sm text-custom-textGrayColor font-medium">
+            {subDescription}
+          </div>
         </div>
       </div>
     </div>

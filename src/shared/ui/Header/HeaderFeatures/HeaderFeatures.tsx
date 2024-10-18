@@ -43,12 +43,12 @@ const HeaderFeatures = () => {
 
   const dialogContent = () => {
     return (
-      <div className="flex flex-col gap-[55px] desktop:pt-[35px] tablet:pt-5 mobile:pt-5">
+      <div className="flex flex-col desktop:gap-[55px] tablet:gap-5 mobile:gap-5 desktop:pt-[35px] tablet:pt-5 mobile:pt-5">
         <div className="flex flex-col items-center justify-center">
-          <div className="font-bold text-[28px] content-center">
+          <div className="font-bold text-xl content-center">
             로그인이 필요한
           </div>
-          <div className="font-bold text-[28px] content-center">서비스에요</div>
+          <div className="font-bold text-xl content-center">서비스에요</div>
         </div>
         <div className="flex items-center justify-center ">
           <Button

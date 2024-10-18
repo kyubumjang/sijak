@@ -27,7 +27,7 @@ const HeaderPrevious = () => {
 
   return (
     isRenderMobileArrow() && (
-      <div className="desktop:hidden tablet:hidden mobile:flex justify-center items-center">
+      <div className="desktop:hidden tablet:hidden mobile:flex justify-start items-center mobile:w-[80px] mobile:h-[25px]">
         <div onClick={backToPreviousPage} className="w-12 h-12">
           <Image
             src="/icons/back_arrow_left.svg"
