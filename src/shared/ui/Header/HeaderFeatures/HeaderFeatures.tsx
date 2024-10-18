@@ -123,7 +123,7 @@ const HeaderFeatures = () => {
     ) {
       return (
         <div>
-          <Link href={`/user/${loginedUser.nickname}`}>
+          <Link href={`/user/${loginedUserInfo.nickname}`}>
             <div className="flex flex-col items-center justify-center desktop:w-[36px] tablet:w-[36px] mobile:w-[36px] desktop:h-[43px] tablet:h-[43px] mobile:h-[25px]">
               <div className="flex items-center justify-center desktop:w-[36px] tablet:w-[36px] mobile:w-[24px] desktop:h-[25px] tablet:h-[25px] mobile:h-[24px]">
                 <Image

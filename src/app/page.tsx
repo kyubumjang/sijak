@@ -26,11 +26,14 @@ import { ChipStatus } from "@/shared/ui/Chip/Chip";
 import { LoginUserInfo } from "@/entities/user/model/user";
 import Map from "@/features/map/ui/Map/Map";
 import MapSkeleton from "@/features/map/ui/MapSkeleton/MapSkeleton";
+import { deleteCookie } from "cookies-next";
 import { useCarouselApi } from "@/shared/lib/useCarouselApi";
 import { useGeoLocation } from "@/shared/lib/useGeolocation";
+import useGetLoginUserInfo from "@/entities/user/api/useGetLoginUserInfo";
 import useHomeLectureList from "@/entities/lecture/api/useHomeLectureList";
 import useLocationLectureList from "@/entities/lecture/api/useLocationLectureList";
 import useLoginedUserStore from "@/shared/store/user";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 const Home = () => {
@@ -79,6 +82,10 @@ const Home = () => {
   const { loginedUser: loginedUserState, setLoginedUser: setLoginedUserStore } =
     useLoginedUserStore();
 
+  const queryClient = useQueryClient();
+  const { data: loginUserData, isSuccess: isLoginUserSuccess } =
+    useGetLoginUserInfo();
+
   const {
     data: locationLectureListData,
     isLoading: isLocationLectureListLoading,
@@ -91,6 +98,8 @@ const Home = () => {
     data: homeLectureList,
     isLoading,
     isSuccess,
+    isError,
+    error,
     refetch,
   } = useHomeLectureList({
     page: lectureSize.page,
@@ -100,6 +109,15 @@ const Home = () => {
   const geolocation = useGeoLocation();
 
   const router = useRouter();
+
+  const { setLoginedUser } = useLoginedUserStore();
+
+  // FIXME: 유저 정보 업데이트를 여기서 하는게 맞는지..
+  useEffect(() => {
+    if (isLoginUserSuccess) {
+      setLoginedUser(loginUserData.data.data);
+    }
+  }, []);
 
   useEffect(() => {
     if (
@@ -148,6 +166,14 @@ const Home = () => {
       setPickLectureListData(pickLectureListData);
       setMarkerLectureListData(markerLectureListData);
     }
+    if (isError) {
+      // TODO: 임시 방편 쿠키 만료 됐을 때 유효한지 체크 후 재발급 해주는 API 필요
+      if (error.message === "Request failed with status code 401") {
+        deleteCookie("accessToken");
+        deleteCookie("refreshToken");
+        queryClient.clear();
+      }
+    }
   }, [
     user,
     homeLectureList,
@@ -155,6 +181,7 @@ const Home = () => {
     homeLectureList?.data.markerClasses,
     homeLectureList?.data.pickClasses,
     isSuccess,
+    isError,
   ]);
 
   useEffect(() => {
@@ -364,7 +391,7 @@ const Home = () => {
               조회 수 많은 추천 클래스를 소개할게요!
             </div>
           </div>
-          <div className="flex justify-center items-center">
+          <div className="flex desktop:w-full tablet:w-[704px] mobile:w-[312px] justify-center items-center">
             {renderPickLectureList()}
           </div>
         </div>
