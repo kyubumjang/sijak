@@ -152,14 +152,14 @@ const LectureImageInfo = ({
   return (
     <div className="relative flex flex-col desktop:w-[588px] tablet:w-[330px] mobile:w-[312px] desktop:h-[588px] tablet:h-[330px] mobile:h-[316px] rounded-lg  overflow-hidden">
       {lectureInfo && (
-        <div className="absolute desktop:top-5 tablet:top-3 mobile:top-3 desktop:left-5 tablet:left-3 mobile:left-3 w-16 h-[34px] content-center text-center text-white text-base font-semibold rounded bg-custom-purple">
+        <div className="flex items-center justify-center absolute desktop:top-5 tablet:top-3 mobile:top-3 desktop:left-5 tablet:left-3 mobile:left-3 w-16 h-[34px] content-center text-center text-white text-base font-semibold rounded bg-custom-purple">
           {lectureInfo.category && lectureInfo.category !== "미정"
             ? lectureInfo.category
             : "문화"}
         </div>
       )}
       {lectureInfo && (
-        <div className="absolute desktop:top-5 tablet:top-3 mobile:top-3 left-[88px] w-[79px] h-[34px] content-center text-center text-white text-base font-semibold rounded bg-custom-textSemiBoldBlackColor">
+        <div className="flex items-center justify-center absolute desktop:top-5 tablet:top-3 mobile:top-3 left-[88px] w-[79px] h-[34px] content-center text-center text-white text-base font-semibold rounded bg-custom-textSemiBoldBlackColor">
           {calculateDDay()}
         </div>
       )}

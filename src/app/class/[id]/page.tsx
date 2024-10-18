@@ -171,8 +171,8 @@ const LectureInfoPage = () => {
               setHeart={setHeart}
             />
           )}
-          <LectureMinimap lectureInfo={lectureInfo} isLoading={isLoading} />
           <LectureSummary lectureInfo={lectureInfo} isLoading={isLoading} />
+          <LectureMinimap lectureInfo={lectureInfo} isLoading={isLoading} />
         </div>
       </div>
     );

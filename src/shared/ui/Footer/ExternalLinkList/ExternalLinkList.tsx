@@ -23,7 +23,7 @@ export const externalLinkList: Array<ExternalLinkProps> = [
 
 const ExternalLinkList = () => {
   return (
-    <div className="flex flex-row h-[21px] desktop:gap-5 tablet:gap-5 mobile:gap-[5px] text-custom-textDescriptionGrayColor text-sm font-medium">
+    <div className="flex flex-row h-[21px] desktop:gap-5 tablet:gap-5 mobile:gap-[5px] text-custom-textDescriptionGrayColor desktop:text-sm tablet:text-sm mobile:text-[12px] font-medium">
       {externalLinkList.map((externalLink, idx) => (
         <div className="flex flex-row items-center h-full" key={idx}>
           <div key={externalLink.content}>
@@ -33,7 +33,7 @@ const ExternalLinkList = () => {
             />
           </div>
           {idx !== externalLinkList.length - 1 && (
-            <div className="h-[10px] border-custom-textDescriptionGrayColor text-base border-r desktop:pl-5 tablet:pl-5 mobile:pl-[5px] py-[5.5px]" />
+            <div className="h-[10px] border-custom-textDescriptionGrayColor desktop:text-base tablet:text-base mobile:text-[12px] border-r desktop:pl-5 tablet:pl-5 mobile:pl-[5px] py-[5.5px]" />
           )}
         </div>
       ))}
