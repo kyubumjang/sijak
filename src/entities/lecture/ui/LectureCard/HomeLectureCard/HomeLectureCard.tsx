@@ -139,6 +139,7 @@ const HomeLectureCard = (props: HomeLectureCardProps) => {
       >
         {heart ? (
           <Image
+            className="home-lecture-card-like-filled-btn"
             src={isHoveredFilled ? "/icons/like_filled.svg" : "/icons/like.svg"}
             alt="heart"
             width={36}
@@ -146,6 +147,7 @@ const HomeLectureCard = (props: HomeLectureCardProps) => {
           />
         ) : (
           <Image
+            className="home-lecture-card-like-btn"
             src={isHovered ? "/icons/like_filled.svg" : "/icons/like.svg"}
             alt="heart"
             width={36}

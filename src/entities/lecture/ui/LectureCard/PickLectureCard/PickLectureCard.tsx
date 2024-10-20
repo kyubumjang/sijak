@@ -135,6 +135,7 @@ const PickLectureCard = (props: PickLectureCardProps) => {
       >
         {heart ? (
           <Image
+            className="pick-lecture-card-like-filled-btn"
             src={isHoveredFilled ? "/icons/like_filled.svg" : "/icons/like.svg"}
             alt="heart"
             width={36}
@@ -142,6 +143,7 @@ const PickLectureCard = (props: PickLectureCardProps) => {
           />
         ) : (
           <Image
+            className="pick-lecture-card-like-btn"
             src={isHovered ? "/icons/like_filled.svg" : "/icons/like.svg"}
             alt="heart"
             width={36}
