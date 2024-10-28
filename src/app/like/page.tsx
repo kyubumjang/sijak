@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 
 import Paginator from "@/shared/ui/Pagination/Paginator";
 import useDeleteDeactivatesLikeLecture from "@/features/like/api/useDeleteDeactivatesLikeLecture";
-import { useInView } from "react-intersection-observer";
+// import { useInView } from "react-intersection-observer";
 import useLikeLectureList from "@/features/like/api/useLikeLectureList";
 import { useToast } from "@/shared/hooks/useToast";
 
@@ -36,7 +36,7 @@ const LikePage = () => {
       mode: true,
     },
   );
-  const [hasNext, setHasNext] = useState(true);
+  // const [hasNext, setHasNext] = useState(true);
 
   const [openDeleteLectureDialog, setOpenDeleteLectureDialog] =
     useState<boolean>(false);
@@ -99,7 +99,7 @@ const LikePage = () => {
   useEffect(() => {
     if (isSuccess) {
       setLectureListData(data.data.data);
-      setHasNext(data.data.hasNext);
+      // setHasNext(data.data.hasNext);
     }
   }, [data, isSuccess]);
 
@@ -212,17 +212,14 @@ const LikePage = () => {
       <div className="desktop:hidden tablet:flex mobile:hidden absolute top-10 left-4">
         <BackToPrevious />
       </div>
-      <div className="desktop:flex tablet:flex mobile:hidden flex-row w-full h-12 items-start justify-center">
+      <section className="desktop:flex tablet:flex mobile:hidden flex-row w-full h-12 items-start justify-center">
         <div className="flex flex-row gap-3">
-          <div className="desktop:flex tablet:flex mobile:hidden text-custom-textBlackColor desktop:text-[32px] tablet:text-[28px] mobile:text-base">
+          <h1 className="desktop:flex tablet:flex mobile:hidden text-custom-textBlackColor desktop:text-[32px] tablet:text-[28px] mobile:text-base">
             내가 찜한 클래스 리스트
-          </div>
-          <div className="desktop:hidden tablet:hidden mobile:flex text-custom-textBlackColor desktop:text-[32px] tablet:text-[28px] mobile:text-base">
-            찜 클래스
-          </div>
+          </h1>
         </div>
-      </div>
-      <div className="flex flex-col w-full desktop:pt-0 tablet:pt-10 pb-[209px] gap-20">
+      </section>
+      <section className="flex flex-col w-full desktop:pt-0 tablet:pt-10 pb-[209px] gap-20">
         <div className="flex  flex-col gap-4">
           <div className="flex  justify-between desktop:px-[120px] tablet:px-8 mobile:px-6">
             <div className="flex flex-row items-center gap-2">
@@ -286,7 +283,7 @@ const LikePage = () => {
             showPreviousNext
           />
         )}
-      </div>
+      </section>
     </div>
   );
 };

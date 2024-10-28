@@ -3,7 +3,6 @@
 import {
   AgeRadioGroup,
   AgeRadioGroupItem,
-  BackToPrevious,
   Button,
   InputLabel,
   Select,
@@ -14,6 +13,7 @@ import {
   SelectValue,
 } from "@/shared/ui";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { redirect, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 import Image from "next/image";
@@ -22,8 +22,8 @@ import { UserServiceAgreeDialog } from "@/entities/user/ui";
 import axios from "axios";
 import { debounce } from "lodash";
 import useGetRandomNickname from "@/entities/user/api/useGetRandomNickname";
+import useLoginedUserStore from "@/shared/store/user";
 import usePostNickname from "@/entities/user/api/usePostNickname";
-import { useRouter } from "next/navigation";
 import { useToast } from "@/shared/hooks/useToast";
 import useValidateNickname from "@/entities/user/api/useValidateNickname";
 import { userAgeList } from "@/entities/user/model/user";
@@ -48,6 +48,8 @@ const SignUpPage = () => {
   const [agree, setAgree] = useState<boolean>(false);
   const [status, setStatus] = useState<InputLabelStatus>("default");
   const [message, setMessage] = useState<string>("");
+
+  const { loginedUser } = useLoginedUserStore();
 
   const router = useRouter();
 
@@ -123,7 +125,14 @@ const SignUpPage = () => {
 
   useEffect(() => {
     makeRandomNickname();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (loginedUser && loginedUser.id !== 0) {
+      redirect("/");
+    }
+  }, [loginedUser]);
 
   if (!agree) {
     return <UserServiceAgreeDialog setAgree={setAgree} />;
@@ -131,10 +140,7 @@ const SignUpPage = () => {
 
   return (
     <div className="flex flex-col w-full desktop:h-[calc(100vh-70px)] tablet:h-[calc(100vh-70px)] justify-center items-center p-4 gap-12">
-      <div className="desktop:hidden tablet:hidden mobile:flex absolute top-3 left-4">
-        <BackToPrevious />
-      </div>
-      <div className="flex w-full flex-col desktop:justify-center tablet:justify-center mobile:justify-start desktop:items-center tablet:items-center mobile:items-start gap-2">
+      <section className="flex desktop:w-[400px] tablet:w-[312px] mobile:w-[312px] flex-col desktop:justify-center tablet:justify-center mobile:justify-start desktop:items-center tablet:items-center mobile:items-start gap-2">
         <div className="text-custom-purple font-bold desktop:text-[40px] tablet:text-[28px] mobile:text-[28px] desktop:leading-[64px] tablet:leading-[44px] mobile:leading-[44px]">
           시ː작 할 수 있어요!
         </div>
@@ -146,7 +152,7 @@ const SignUpPage = () => {
             맞춤형 클래스를 제공해 드려요🙂
           </div>
         </div>
-      </div>
+      </section>
       <form
         onSubmit={handleSubmit(updateNickname)}
         className="flex flex-col desktop:w-[400px] tablet:w-[312px] mobile:w-[312px]  desktop:gap-[60px] tablet:gap-[64px] mobile:gap-[147px]"

@@ -24,14 +24,14 @@ const LoginCallback = () => {
     isSuccess: isTokenSuccess,
   } = useGetAccessToken(code ? code : "");
 
+  const { loginedUser, setLoginedUser } = useLoginedUserStore();
+
   // 사용자 정보를 가져오는 훅
   const {
     data: loginUserData,
     isSuccess: isLoginUserSuccess,
     refetch,
-  } = useGetLoginUserInfo();
-
-  const { setLoginedUser } = useLoginedUserStore();
+  } = useGetLoginUserInfo(loginedUser ? loginedUser.nickname : "");
 
   useEffect(() => {
     if (isTokenSuccess && tokenData) {

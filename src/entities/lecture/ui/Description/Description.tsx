@@ -75,7 +75,7 @@ const Description = () => {
   }, []);
 
   return (
-    <div className="flex w-full flex-col justify-center items-center ">
+    <section className="flex w-full flex-col justify-center items-center ">
       <div className="flex flex-col justify-center items-center gap-4">
         <div className="flex flex-col gap-3">
           <div className="flex relative flex-col desktop:w-full desktop:h-full tablet:w-full tablet:h-full mobile:w-full ">
@@ -92,7 +92,7 @@ const Description = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

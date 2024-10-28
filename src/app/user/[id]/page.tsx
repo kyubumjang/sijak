@@ -5,6 +5,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { LoginUserInfo, PatchUserAddress } from "@/entities/user/model/user";
 import { debounce, isEmpty } from "lodash";
 import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 
 import { InputLabelStatus } from "@/shared/ui/InputLabel/InputLabel";
 import { SquareLoader } from "react-spinners";
@@ -12,10 +13,10 @@ import axios from "axios";
 import { deleteCookie } from "cookies-next";
 import { useGeoLocation } from "@/shared/lib/useGeolocation";
 import useGetLoginUserInfo from "@/entities/user/api/useGetLoginUserInfo";
+import useLoginedUserStore from "@/shared/store/user";
 import usePatchUserInfo from "@/entities/user/api/usePatchUserInfo";
 import usePostLogout from "@/features/authentication/api/usePostLogout";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useToast } from "@/shared/hooks/useToast";
 import useValidateNickname from "@/entities/user/api/useValidateNickname";
 
@@ -43,9 +44,11 @@ const UserInfoPage = () => {
   const [openLogoutDialog, setOpenLogoutDialog] = useState<boolean>(false);
 
   const router = useRouter();
+  const params = useParams<{ id: string }>();
   const geolocation = useGeoLocation();
 
-  const { data, isLoading, isSuccess } = useGetLoginUserInfo();
+  const { data, isLoading, isSuccess } = useGetLoginUserInfo(params.id);
+
   const postLogout = usePostLogout();
 
   const validateNickname = useValidateNickname();
@@ -71,6 +74,7 @@ const UserInfoPage = () => {
 
   const queryClient = useQueryClient();
 
+  const { setLoginedUser: setLoginedUserStore } = useLoginedUserStore();
   const { toast } = useToast();
 
   const validationCheckNickname = debounce((nickname: string) => {
@@ -146,6 +150,18 @@ const UserInfoPage = () => {
       onSuccess: () => {
         deleteCookie("accessToken");
         deleteCookie("refreshToken");
+        setLoginedUserStore({
+          id: 0,
+          email: "",
+          nickname: "",
+          gender: "",
+          age_range: "",
+          birth: "",
+          phone_number: "",
+          latitude: 0,
+          longitude: 0,
+          location: "",
+        });
         toast({ title: "다음에 또 봐요~!" });
         queryClient.clear();
         router.push("/");
@@ -240,14 +256,12 @@ const UserInfoPage = () => {
         <div className="desktop:hidden tablet:flex mobile:hidden absolute top-8 left-4">
           <BackToPrevious />
         </div>
-        <div className="desktop:flex tablet:flex mobile:hidden flex-row justify-center items-center h-14 desktop:px-[120px] tablet:px-[184px] mobile:px-[50px]">
-          <div className="desktop:text-[32px] tablet:text-[28px]">
-            마이페이지
-          </div>
-        </div>
+        <section className="desktop:flex tablet:flex mobile:hidden flex-row justify-center items-center h-14 desktop:px-[120px] tablet:px-[184px] mobile:px-[50px]">
+          <h1 className="desktop:text-[32px] tablet:text-[28px]">마이페이지</h1>
+        </section>
         <div className="flex flex-col justify-center items-center desktop:gap-3 tablet:gap-3 mobile:gap-3">
           <div className="flex flex-col desktop:gap-14 tablet:gap-5 mobile:gap-6">
-            <div className="flex flex-col justify-center items-center gap-4">
+            <section className="flex flex-col justify-center items-center gap-4">
               <div className="flex flex-col justify-center items-center gap-1">
                 <div className="font-bold desktop:h-12 tablet:h-[42px] mobile:h-6 desktop:text-[32px] tablet:text-[28px] mobile:text-base leading-[42px]">
                   {loginedUser.nickname}님
@@ -260,7 +274,7 @@ const UserInfoPage = () => {
                   {/* , {loginedUser.location} */}
                 </div>
               </div>
-            </div>
+            </section>
             <form
               className="flex flex-col h-full desktop:gap-16 tablet:gap-16 mobile:gap-[42px]"
               onSubmit={handleSubmit(updateUserInfo)}

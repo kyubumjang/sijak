@@ -87,7 +87,7 @@ const PickLectureCard = (props: PickLectureCardProps) => {
     router.push("/login");
   };
 
-  const handleLikeClick = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleLikeClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     e.preventDefault();
     if (!token) {
@@ -127,10 +127,8 @@ const PickLectureCard = (props: PickLectureCardProps) => {
 
   const triggerItem = () => {
     return (
-      <Button
-        variant="ghost"
-        size="icon"
-        className="flex items-center justify-center desktop:w-[36px] tablet:w-[36px] mobile:w-[36px] desktop:h-[36px] tablet:h-[36px] mobile:h-[36px] hover:bg-transparent"
+      <div
+        className="flex items-center justify-center desktop:w-[36px] tablet:w-[36px] mobile:w-[36px] desktop:h-[36px] tablet:h-[36px] mobile:h-[36px] hover:bg-transparent focus:outline-none"
         onClick={(e) => handleLikeClick(e)}
       >
         {heart ? (
@@ -150,7 +148,7 @@ const PickLectureCard = (props: PickLectureCardProps) => {
             height={36}
           />
         )}
-      </Button>
+      </div>
     );
   };
 
@@ -164,13 +162,12 @@ const PickLectureCard = (props: PickLectureCardProps) => {
           <div className="font-bold text-xl content-center">서비스에요</div>
         </div>
         <div className="flex items-center justify-center ">
-          <Button
-            className="desktop:w-[300px] tablet:w-[260px] mobile:w-[260px] h-[52px] text-base font-semibold bg-custom-purple hover:bg-custom-hoverPurple rounded"
-            type="submit"
+          <div
+            className="flex justify-center items-center text-white desktop:w-[300px] tablet:w-[260px] mobile:w-[260px] h-[52px] text-base font-semibold bg-custom-purple hover:bg-custom-hoverPurple rounded cursor-pointer"
             onClick={linkToLogin}
           >
             회원가입 / 로그인 하기
-          </Button>
+          </div>
         </div>
       </div>
     );

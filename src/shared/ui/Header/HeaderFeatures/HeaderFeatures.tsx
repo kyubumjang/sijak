@@ -172,10 +172,10 @@ const HeaderFeatures = () => {
   };
 
   return (
-    <div className="flex flex-row desktop:items-center tablet:items-center mobile:items-center desktop:justify-center tablet:justify-center mobile:justify-end desktop:gap-5 tablet:gap-5 mobile:gap-0 mobile:min-w-[80px] desktop:h-[43px] tablet:h-[43px] mobile:h-[25px]">
+    <nav className="flex flex-row desktop:items-center tablet:items-center mobile:items-center desktop:justify-center tablet:justify-center mobile:justify-end desktop:gap-5 tablet:gap-5 mobile:gap-0 mobile:min-w-[80px] desktop:h-[43px] tablet:h-[43px] mobile:h-[25px]">
       {renderLikeIcon()}
       {renderUserIcon()}
-    </div>
+    </nav>
   );
 };
 

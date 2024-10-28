@@ -117,6 +117,10 @@ const UserServiceAgreeDialog = ({ setAgree }: UserServiceAgreeDialogProps) => {
     }
   };
   const isError = form.formState.errors.agreeItems?.message;
+  const isDisabled =
+    !form.getValues("agreeItems").includes("serviceAgree") ||
+    !form.getValues("agreeItems").includes("personalInformationAgree") ||
+    !form.getValues("agreeItems").includes("locationBasedServiceAgree");
 
   const handleAllAgreeChange = (checked: boolean) => {
     const allAgreeItems = checked ? agreeItems.map((item) => item.id) : [];
@@ -169,9 +173,15 @@ const UserServiceAgreeDialog = ({ setAgree }: UserServiceAgreeDialogProps) => {
         className=""
         onEscapeKeyDown={(e) => e.preventDefault()}
         onPointerDownOutside={(e) => e.preventDefault()}
+        hideCloseButton
       >
         <DialogHeader>
-          <DialogTitle>서비스를 시작하기 위해 동의가 필요해요</DialogTitle>
+          <DialogTitle className="text-xl">
+            <div className="flex flex-col items-start justify-start gap-1">
+              <div>서비스를 시작하기 위해</div>
+              <div>동의가 필요해요</div>
+            </div>
+          </DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="pt-1">
@@ -298,6 +308,7 @@ const UserServiceAgreeDialog = ({ setAgree }: UserServiceAgreeDialogProps) => {
                 <Button
                   type="submit"
                   className="flex w-full h-[52px] bg-custom-purple hover:bg-custom-hoverPurple rounded-sm"
+                  disabled={isDisabled}
                 >
                   동의하고 시작하기
                 </Button>

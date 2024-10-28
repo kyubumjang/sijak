@@ -83,8 +83,11 @@ const Home = () => {
     useLoginedUserStore();
 
   const queryClient = useQueryClient();
+
+  const { loginedUser, setLoginedUser } = useLoginedUserStore();
+
   const { data: loginUserData, isSuccess: isLoginUserSuccess } =
-    useGetLoginUserInfo();
+    useGetLoginUserInfo(loginedUser ? loginedUser.nickname : "");
 
   const {
     data: locationLectureListData,
@@ -109,8 +112,6 @@ const Home = () => {
   const geolocation = useGeoLocation();
 
   const router = useRouter();
-
-  const { setLoginedUser } = useLoginedUserStore();
 
   // FIXME: 유저 정보 업데이트를 여기서 하는게 맞는지..
   useEffect(() => {
@@ -155,7 +156,6 @@ const Home = () => {
         };
       });
     }
-    refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [geolocation.curLocation]);
 
@@ -315,7 +315,7 @@ const Home = () => {
     <div className="flex w-full h-full flex-col 16">
       <Description />
       <div className="flex flex-col desktop:pt-[84px] tablet:pt-12 mobile:pt-12 desktop:pb-[120px] tablet:pb-[99px] mobile:pb-[82px] bg-custom-homeMapBackground desktop:gap-[120px] tablet:gap-[80px] mobile:gap-[80px]">
-        <div className="flex flex-col desktop:gap-[46px] tablet:gap-6 mobile:gap-[28px]">
+        <section className="flex flex-col desktop:gap-[46px] tablet:gap-6 mobile:gap-[28px]">
           <div className="flex flex-col desktop:px-[120px] tablet:px-8 mobile:px-6 desktop:gap-8 tablet:gap-6 mobile:gap-6">
             <div className="flex flex-row items-center gap-1.5">
               <div className="desktop:text-2xl tablet:text-xl mobile:text-xl font-bold">
@@ -326,25 +326,22 @@ const Home = () => {
               </div>
             </div>
             {isLoading && <MapSkeleton />}
-            {lectureListData &&
-              markerLectureListData &&
-              user.latitude !== 0 &&
-              user.longitude !== 0 && (
-                <Map
-                  latitude={user.latitude}
-                  longitude={user.longitude}
-                  markerLatitude={markerLocation?.latitude}
-                  markerLongitude={markerLocation?.longitude}
-                  setLocationLectureParams={setLocationLectureParams}
-                  setChipStatus={setChipStatus}
-                  lectureListData={lectureListData}
-                  markerLectureListData={markerLectureListData}
-                />
-              )}
+            {lectureListData && markerLectureListData && (
+              <Map
+                latitude={user.latitude}
+                longitude={user.longitude}
+                markerLatitude={markerLocation?.latitude}
+                markerLongitude={markerLocation?.longitude}
+                setLocationLectureParams={setLocationLectureParams}
+                setChipStatus={setChipStatus}
+                lectureListData={lectureListData}
+                markerLectureListData={markerLectureListData}
+              />
+            )}
           </div>
           <div className="flex flex-col desktop:gap-[46px] tablet:gap-6 mobile:gap-[28px]">
-            <div className="flex desktop:flex-row tablet:flex-row mobile:flex-col justify-between desktop:px-[120px] tablet:px-8 mobile:px-6 mobile:gap-[14px]">
-              <div className="flex flex-row gap-2 desktop:max-w-[532px] tablet:max-w-[532px] mobile:max-w-[312px] overflow-x-scroll scrollbar-hide">
+            <div className="flex desktop:flex-row tablet:flex-row mobile:flex-col justify-between desktop:px-[120px] tablet:px-8 mobile:pl-6 mobile:gap-[14px]">
+              <div className="flex flex-row gap-2 desktop:max-w-[532px] tablet:max-w-[532px] mobile:w-full overflow-x-scroll scrollbar-hide">
                 {lectureChipContentList.map((lectureChipContent, idx) => (
                   <Chip
                     key={idx}
@@ -359,7 +356,7 @@ const Home = () => {
               <div className="flex desktop:justify-center tablet:justify-center mobile:justify-end desktop:items-center tablet:items-center content-center text-base">
                 <div
                   onClick={linkToEntireLecture}
-                  className="px-3 cursor-pointer"
+                  className="px-3 cursor-pointer mobile:pr-6"
                 >
                   <div className="flex justify-center items-center gap-1 border-b border-custom-textBlackColor">
                     <div className="desktop:flex tablet:flex mobile:hidden text-sm">
@@ -374,15 +371,15 @@ const Home = () => {
               {renderHomeLectureList()}
             </div>
           </div>
-        </div>
-        <div className="desktop:px-[120px] tablet:px-8 mobile:px-6 ">
+        </section>
+        <section className="desktop:px-[120px] tablet:px-8 mobile:px-6 ">
           {isLoading ? (
             <Skeleton className="w-full desktop:h-[217px] tablet:h-[132px] mobile:h-[156px]" />
           ) : (
             <IntroductionBanner />
           )}
-        </div>
-        <div className="flex flex-col pb-4 desktop:items-start tablet:items-center mobile:items-center desktop:justify-start tablet:justify-start mobile:justify-center desktop:px-[120px] tablet:px-8 mobile:px-6 desktop:gap-8 tablet:gap-5 mobile:gap-5">
+        </section>
+        <section className="flex flex-col pb-4 desktop:items-start tablet:items-center mobile:items-center desktop:justify-start tablet:justify-start mobile:justify-center desktop:px-[120px] tablet:px-8 mobile:px-6 desktop:gap-8 tablet:gap-5 mobile:gap-5">
           <div className="flex flex-col tablet:w-[704px] mobile:w-[312px] gap-2">
             <div className="font-bold desktop:text-2xl tablet:text-xl mobile:text-xl">
               시ː작 PICK 클래스 📌
@@ -394,7 +391,7 @@ const Home = () => {
           <div className="flex desktop:w-full tablet:w-[704px] mobile:w-[312px] justify-center items-center">
             {renderPickLectureList()}
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );

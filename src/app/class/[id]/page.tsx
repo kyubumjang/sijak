@@ -108,7 +108,7 @@ const LectureInfoPage = () => {
 
   const renderDesktopSummary = () => {
     return (
-      <div className="desktop:flex tablet:hidden mobile:hidden w-full">
+      <section className="desktop:flex tablet:hidden mobile:hidden w-full">
         <div className="flex flex-row w-full desktop:px-[120px] desktop:pt-[80px] gap-10">
           {isLoading && (
             <Skeleton className="desktop:w-[588px] tablet:w-[330px] desktop:h-[588px] tablet:h-[330px]" />
@@ -126,13 +126,13 @@ const LectureInfoPage = () => {
             <LectureMinimap lectureInfo={lectureInfo} isLoading={isLoading} />
           </div>
         </div>
-      </div>
+      </section>
     );
   };
 
   const renderTabletSummary = () => {
     return (
-      <div className="desktop:hidden tablet:flex mobile:hidden">
+      <section className="desktop:hidden tablet:flex mobile:hidden">
         <div className="flex flex-col tablet:px-8 gap-[35px]">
           <div className="flex flex-row w-full gap-[31px]">
             {isLoading && (
@@ -152,13 +152,13 @@ const LectureInfoPage = () => {
             <LectureMinimap lectureInfo={lectureInfo} isLoading={isLoading} />
           </div>
         </div>
-      </div>
+      </section>
     );
   };
 
   const renderMobileSummary = () => {
     return (
-      <div className="desktop:hidden tablet:hidden mobile:flex">
+      <section className="desktop:hidden tablet:hidden mobile:flex">
         <div className="flex flex-col w-full mobile:px-6 mobile:pt-[25px]  gap-8">
           {isLoading && (
             <Skeleton className="desktop:w-[588px] tablet:w-[330px] desktop:h-[588px] tablet:h-[330px]" />
@@ -174,7 +174,7 @@ const LectureInfoPage = () => {
           <LectureSummary lectureInfo={lectureInfo} isLoading={isLoading} />
           <LectureMinimap lectureInfo={lectureInfo} isLoading={isLoading} />
         </div>
-      </div>
+      </section>
     );
   };
 
@@ -207,7 +207,7 @@ const LectureInfoPage = () => {
 
   return (
     <div className="flex flex-col w-full h-full justify-start items-start desktop:gap-8 tablet:gap-[34px] mobile:gap-[44px] desktop:max-w-[1440px] tablet:max-w-[768px] mobile:max-w-[360px] mx-auto my-0">
-      <div className="w-full desktop:hidden tablet:flex mobile:hidden pl-4 pt-10">
+      <section className="w-full desktop:hidden tablet:flex mobile:hidden pl-4 pt-10">
         <Link href="/">
           <Image
             src="/icons/back_arrow_left.svg"
@@ -216,7 +216,7 @@ const LectureInfoPage = () => {
             height={48}
           />
         </Link>
-      </div>
+      </section>
       {renderSummary()}
       {lectureInfo && (
         <LectureDetail lectureInfo={lectureInfo} isLoading={isLoading} />

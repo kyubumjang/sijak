@@ -15,7 +15,7 @@ const BASE_PATH = "/api/mypage";
 const NICKNAME_BASE_PATH = "/api/nickname";
 const AGREE_BASE_PATH = "/api/agree";
 
-// FIXME: 테스트 필요
+// FIXME: Bearer ${getCookie("accessToken")} 코드 전부 token 없으면 빈 값으로 수정 필요
 export const getLoginUserInfo = () =>
   apiRequest.get<GetLoginUserInfo["Response"]>(`${BASE_PATH}`, {
     headers: {

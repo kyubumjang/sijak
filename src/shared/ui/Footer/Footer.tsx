@@ -86,9 +86,9 @@ const Footer = () => {
 
   return (
     isRenderFooter() && (
-      <div className="flex justify-between w-full h-[208px] bg-custom-footerBackground desktop:px-[120px] tablet:px-8 mobile:px-6 pt-8 border-t max-w-[1440px] mx-auto my-0 mobile:gap-4">
+      <footer className="flex justify-between w-full h-[208px] bg-custom-footerBackground desktop:px-[120px] tablet:px-8 mobile:px-6 pt-8 border-t max-w-[1440px] mx-auto my-0 mobile:gap-4">
         {renderFooter()}
-      </div>
+      </footer>
     )
   );
 };
