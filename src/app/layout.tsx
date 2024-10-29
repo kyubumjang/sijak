@@ -19,6 +19,27 @@ const pretendard = localFont({
 export const metadata: Metadata = {
   title: "시작",
   description: "주변의 기회를 찾다, 시니어를 위한 맞춤형 프로그램",
+  openGraph: {
+    title: "시작",
+    description: "주변의 기회를 찾다, 시니어를 위한 맞춤형 프로그램",
+    url: "https://sijak.app",
+    images: [
+      {
+        url: "https://s3.ap-northeast-2.amazonaws.com/sijak.app/twitter/og_url.png",
+        width: 800,
+        height: 418,
+        alt: "이미지 설명",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "시작",
+    description: "주변의 기회를 찾다, 시니어를 위한 맞춤형 프로그램",
+    images: [
+      "https://s3.ap-northeast-2.amazonaws.com/sijak.app/twitter/og_url.png",
+    ],
+  },
 };
 
 export default function RootLayout({
